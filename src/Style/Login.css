@@ -1,0 +1,101 @@
+.login-section {
+    background-image: url(../Assets/login-bg.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 100dvh;
+    background-size: cover;
+}
+.login-section .container .login-row .login-brand-logo {
+    max-width: 111px;
+        max-height: 56px;
+        padding: 20px 0px;
+}
+.login-section .container .login-row .login-brand-logo img {
+    width: 100%;
+    height: 100%;
+}
+.login-section .container .login-row .login-col-form {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100dvh;
+}
+.login-section .container .login-row .login-form {
+        width: 539px;
+        height: 540px;
+        -o-border-radius: 40px;
+        -webkit-border-radius: 40px;
+        -moz-border-radius: 40px;
+        -ms-border-radius: 40px;
+        border-radius: 40px;
+        background-color: rgba(255, 255, 255, 0.75);
+        padding: 20px 30px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-around;
+        flex-direction: column;
+}
+.login-section .container .login-row .login-form__group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.login-section .container .login-row .login-form__group input {
+    width: 100%;
+    height: 47px;
+    border-radius: 9px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    -ms-border-radius: 9px;
+    -o-border-radius: 9px;
+    outline: none;
+    text-align: right;
+    background-color: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(66, 133, 244, 1);
+    padding-right: 20px;
+}
+.login-section .container .login-row .login-form__group input::placeholder {
+        font-size: 14px;
+        font-weight: 300;
+        padding-right: 5px;
+}
+.login-section .container .login-row .login-form__group .login-form__label{
+        font-size: 16px;
+        font-weight: 400;
+        color: rgba(0, 0, 0, 1);
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+}
+.login-section .container .login-row .login-form__button {
+        max-width: 236px;
+        height: 44px;
+        border-radius: 10px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        -o-border-radius: 10px;
+        background-color: rgba(169, 65, 29, 1);
+        border: none;
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+            padding: 10px 55px;
+}
+.login-form__logo {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+.login-form__logo h1 {
+        font-size: 45px;
+        font-weight: 500;
+}
+.login-form__login-text {
+    text-align: right;
+    margin-left: auto;
+    margin: 10px 0px;
+}
