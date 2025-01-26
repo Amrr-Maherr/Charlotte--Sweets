@@ -98,14 +98,15 @@ function Login() {
                     id="password"
                   />
                 </div>
-                <button
+                <motion.button whileHover={{ scale: 1.1 }}
+                  whileTap={{scale:0.8}}
                   className="login-form__button"
                   onClick={(event) => {
                     handelLogin(event);
                   }}
                 >
                   تسجيل الدخول
-                </button>
+                </motion.button>
               </form>
             </motion.div>
           </div>
