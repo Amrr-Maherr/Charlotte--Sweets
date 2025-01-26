@@ -4,10 +4,12 @@ import "../Style/Login.css";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
 function Login() {
   const [Email,setEmail] = useState("")
   const [Password, setPassword] = useState("")
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const Navigate = useNavigate()
   const handelLogin = (event) => {
     event.preventDefault();
     if (!Email || !Password) {
@@ -21,6 +23,9 @@ function Login() {
         .post("/api/login",formData)
         .then((response) => {
           toast.success(response.data);
+          setEmail("")
+          setPassword("")
+          setImmediate(Navigate("/dashboard/home"), 2000);
         })
         .catch((error) => {
           toast.error(error.response.data.message);
