@@ -2,8 +2,8 @@
     background-image: url(../Assets/login-bg.png);
     background-position: center center;
     background-repeat: no-repeat;
-    height: 100dvh;
     background-size: cover;
+    font-family: "Cairo", serif;
 }
 .login-section .container .login-row .login-brand-logo {
     max-width: 111px;
