@@ -10,5 +10,21 @@
   "github.copilot.chat.startDebugging.enabled": false,
   "github.copilot.chat.edits.suggestRelatedFilesForTests": false,
   "github.copilot.chat.edits.suggestRelatedFilesFromGitHistory": false,
-  "github.copilot.chat.setupTests.enabled": false
+  "github.copilot.chat.setupTests.enabled": false,
+  "cSpell.words": [
+    "ادخل",
+    "الإلكتروني",
+    "البريد",
+    "الحقول",
+    "الدخول",
+    "السر",
+    "المرور",
+    "اهلا",
+    "بريدك",
+    "تسجيل",
+    "جميع",
+    "كلمة",
+    "كلمه",
+    "يرجي"
+  ]
 }

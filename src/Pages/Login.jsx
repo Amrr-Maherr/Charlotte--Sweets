@@ -3,6 +3,7 @@ import logo from "../Assets/brand-logo.png";
 import "../Style/Login.css"; 
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import { motion } from "framer-motion";
 function Login() {
   const [Email,setEmail] = useState("")
   const [Password, setPassword] = useState("")
@@ -31,13 +32,28 @@ function Login() {
       <section className="login-section">
         <div className="container">
           <div className="row login-row">
-            <div className="col-12 login-col">
+            <motion.div
+              initial={{ y: "-100vh" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1 }}
+              className="col-12 login-col"
+            >
               <div className="login-brand-logo">
                 <img src={logo} alt="Brand Logo" />
               </div>
-            </div>
-            <div className="col-12 login-col-form">
-              <form className="login-form" onSubmit={(event)=>{handelLogin(event)}}>
+            </motion.div>
+            <motion.div
+              initial={{ x: "100vh" }}
+              animate={{ x: 0 }}
+              transition={{ duration: 1}}
+              className="col-12 login-col-form"
+            >
+              <form
+                className="login-form"
+                onSubmit={(event) => {
+                  handelLogin(event);
+                }}
+              >
                 <div className="login-form__header">
                   <div className="login-form__logo">
                     <img
@@ -82,15 +98,20 @@ function Login() {
                     id="password"
                   />
                 </div>
-                <button  className="login-form__button" onClick={(event)=>{handelLogin(event)}}>
+                <button
+                  className="login-form__button"
+                  onClick={(event) => {
+                    handelLogin(event);
+                  }}
+                >
                   تسجيل الدخول
                 </button>
               </form>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
-      <Toaster/>
+      <Toaster />
     </>
   );
 }
