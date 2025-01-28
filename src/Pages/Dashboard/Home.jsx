@@ -15,25 +15,25 @@ function Home() {
     <section>
       <div className="container">
         <div className="row my-5 text-center  d-flex align-items-center justify-content-center">
-          <div className="col-xl-3 my-3">
+          <div className="col-xl-3 my-3 d-flex align-items-center justify-content-center">
             <OrderBox />
           </div>
-          <div className="col-xl-3 my-3">
+          <div className="col-xl-3 my-3 d-flex align-items-center justify-content-center">
             <OrderBox />
           </div>
-          <div className="col-xl-3 my-3">
+          <div className="col-xl-3 my-3 d-flex align-items-center justify-content-center">
             <OrderBox />
           </div>
-          <div className="col-xl-3 my-3">
+          <div className="col-xl-3 my-3 d-flex align-items-center justify-content-center">
             <OrderBox />
           </div>
-          <div className="col-xl-3 my-3">
+          <div className="col-xl-3 my-3 d-flex align-items-center justify-content-center">
             <OrderBox />
           </div>
-          <div className="col-xl-3 my-3">
+          <div className="col-xl-3 my-3 d-flex align-items-center justify-content-center">
             <OrderBox />
           </div>
-          <div className="col-xl-3 my-3">
+          <div className="col-xl-3 my-3 d-flex align-items-center justify-content-center">
             <OrderBox />
           </div>
         </div>
