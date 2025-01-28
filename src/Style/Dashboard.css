@@ -1,0 +1,28 @@
+.dashboard-container {
+    height: 100vh;
+}
+
+.dashboard-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+.dashboard-content-area {
+    display: flex;
+    flex: 1;
+}
+
+.dashboard-outlet {
+  flex: 1; 
+}
+
+.dashboard-sidebar {
+  width: auto;
+    padding: 0;
+}
+.dashboard-outlet {
+  background-color: rgba(245, 247, 250, 1);
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
