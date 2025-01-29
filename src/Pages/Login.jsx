@@ -20,12 +20,14 @@ function Login() {
         password:Password
       }
       axios
-        .post("/api/login",formData)
+        .post("https://management.mlmcosmo.com/api/login", formData)
         .then((response) => {
-          toast.success(response.data);
-          setEmail("")
-          setPassword("")
-          setImmediate(Navigate("/dashboard/home"), 2000);
+          const token = response.data.token
+          localStorage.setItem("AuthToken",JSON.stringify(token))
+          toast.success("Login success");
+          setEmail("");
+          setPassword("");
+          setTimeout(Navigate("/dashboard/home"), 2000);
         })
         .catch((error) => {
           toast.error(error.response.data.message);
