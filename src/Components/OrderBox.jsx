@@ -1,18 +1,19 @@
 import "../Style/OrderBox.css";
 
-function OrderBox() {
+function OrderBox({ title, count, iconColor,icon }) {
   return (
-    <>
-      <div className="card">
-        <div className="card-body">
-          <div className="card-text">
-            <p className="card-num">8</p>
-            <p className="card-num-text">طلبات جديده</p>
-          </div>
-          <i className="fa fa-shopping-cart fa-lg me-3"></i>
+    <div className="card">
+      <div className="card-body">
+        <div className="card-text">
+          <p className="card-num">{count}</p>
+          <p className="card-num-text">{title}</p>
         </div>
+        <i
+          className={`fa ${icon} fa-lg me-3`}
+          style={{ backgroundColor: iconColor}}
+        ></i>
       </div>
-    </>
+    </div>
   );
 }
 

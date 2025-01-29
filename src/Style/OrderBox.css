@@ -12,7 +12,7 @@
 .card .card-body {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 .card .card-body .card-text {
     display: flex;
