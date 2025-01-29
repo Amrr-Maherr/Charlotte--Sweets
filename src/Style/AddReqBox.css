@@ -1,0 +1,9 @@
+.request-box .request-content .managers-section .manager-card{
+    background-color: blueviolet;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.sale-section .sale-card {
+    background-color: black;
+}

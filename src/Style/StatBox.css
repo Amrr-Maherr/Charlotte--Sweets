@@ -1,0 +1,51 @@
+.stat-box {
+        width: 297px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 0px auto;
+        background-color: #FFFFFF;
+}
+
+.stat-box .stat-box-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+}
+
+.stat-box .stat-box-number {
+        font-size: 25px;
+        font-weight: 600;
+        color: #4D4D4D;
+}
+
+.stat-box .stat-box-title {
+        font-family: Cairo, sans-serif;
+        font-size: 20px;
+        color: #65647C;
+}
+
+.stat-box .stat-box-icon {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+}
+
+.stat-box .stat-box-icon i {
+                font-size: 22px;
+                font-weight: 600;
+                color: white;
+                width: 54px;
+                height: 54px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                -ms-border-radius: 50%;
+                -o-border-radius: 50%;
+}
