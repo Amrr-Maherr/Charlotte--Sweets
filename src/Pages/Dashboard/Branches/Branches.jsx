@@ -1,4 +1,6 @@
 function Branches() {
-  return <h1>Branches</h1>;
+  return <>
+  
+  </>;
 }
 export default Branches;

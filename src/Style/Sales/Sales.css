@@ -1,0 +1,39 @@
+.Sales-table-container .Sales-table-row {
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.Sales-table-container .Sales-table-row .Sales-table-col .Sales-table {
+    text-align: center;
+}
+
+.Sales-table-container .Sales-table-row .Sales-table-col .Sales-table th {
+    font-family: "Cairo";
+    font-size: 20px;
+    font-weight: 700;
+    color: #667085;
+}
+
+.Sales-table-container .Sales-table-row .Sales-table-col .Sales-table td {
+    font-family: "Cairo";
+    font-size: 20px;
+    font-weight: 700;
+    color: #48505E;
+}
+
+.Sales-table th,
+.Sales-table td {
+    padding: 15px 0px;
+}
+.Sales-table-title {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        text-align: right;
+}
+.Sales-table-title-col {
+    margin: 15px 0px;
+}

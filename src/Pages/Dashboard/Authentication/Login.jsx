@@ -1,6 +1,6 @@
 import { useState } from "react";
-import logo from "../Assets/brand-logo.png";
-import "../Style/Login.css"; 
+import logo from "../../../Assets/brand-logo.png"
+import "../../../Style/Login.css"; 
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { motion } from "framer-motion";

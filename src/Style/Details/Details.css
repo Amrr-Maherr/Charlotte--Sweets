@@ -1,0 +1,25 @@
+.Details-container  .Details-row {
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.Details-container .Details-row .Details-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.Details-container .Details-row .Details-col .card {
+    width: 500px;
+    height: auto;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    padding: 10px 20px;
+}
+.Details-container .Details-row .Details-col .card .card-title {
+    text-align: right;
+    margin-bottom: 30px;
+}
