@@ -13,6 +13,7 @@ import Sales from "../src/Pages/Dashboard/Sales/Sales.jsx";
 import SalesRepresentatives from "../src/Pages/Dashboard/SalesRepresentatives/SalesRepresentatives.jsx";
 import Chefs from "../src/Pages/Dashboard/Chefs/Chefs.jsx";
 import Details from "./Pages/Dashboard/Details/Details.jsx";
+import NotFound from "./Pages/Dashboard/NotFound/NotFound.jsx";
 
 function App() {
   return (
@@ -37,7 +38,7 @@ function App() {
 
           </Route>
 
-          <Route path="*" element={<h1>404 - الصفحة غير موجودة</h1>} />
+          <Route path="*" element={<NotFound/>} />
         </Routes>
       </div>
     </BrowserRouter>
