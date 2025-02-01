@@ -27,7 +27,7 @@ function Login() {
           toast.success("Login success");
           setEmail("");
           setPassword("");
-          setTimeout(Navigate("/dashboard/home"), 2000);
+          setTimeout(Navigate("/dashboard/home"), 3000);
         })
         .catch((error) => {
           toast.error(error.response.data.message);
