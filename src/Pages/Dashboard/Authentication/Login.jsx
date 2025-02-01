@@ -45,14 +45,14 @@ function Login() {
               transition={{ duration: 1 }}
               className="col-12 login-col"
             >
-              <div className="login-brand-logo">
+              <div className="login-brand-logo d-none d-xl-block">
                 <img src={logo} alt="Brand Logo" />
               </div>
             </motion.div>
             <motion.div
               initial={{ x: "100vh" }}
               animate={{ x: 0 }}
-              transition={{ duration: 1}}
+              transition={{ duration: 1 }}
               className="col-12 login-col-form"
             >
               <form
@@ -105,8 +105,9 @@ function Login() {
                     id="password"
                   />
                 </div>
-                <motion.button whileHover={{ scale: 1.1 }}
-                  whileTap={{scale:0.8}}
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.8 }}
                   className="login-form__button"
                   onClick={(event) => {
                     handelLogin(event);

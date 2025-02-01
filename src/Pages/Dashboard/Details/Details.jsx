@@ -36,7 +36,7 @@ function Details() {
                   }}
                 />
                 <div className="card-body">
-                  <table className="table table-bordered">
+                  <table className="table table-bordered text-end">
                     <tbody>
                       <tr>
                         <td>{manager.name}</td>

@@ -1,3 +1,6 @@
+nav .container-fluid {
+    flex-wrap: nowrap !important;
+}
 nav .container-fluid .profile-image {
         width: 60px;
         height: 60px;
@@ -53,5 +56,36 @@ nav .logo-image .nav-item {
     width: 222px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
+}
+.offcanvas-header .offcanvas-title {
+    font-size: 25px;
+    color: rgba(52, 60, 106, 1);
+}
+.offcanvas-body ul {
+    height: 100%;
+        padding: 0;
+}
+.offcanvas-body ul li {
+    list-style: none;
+        padding: 0;
+}
+.offcanvas-body ul li a {
+    text-decoration: none;
+        font-size: 20px;
+        font-weight: 500;
+        color: rgba(134, 131, 125, 1);
+        padding: 10px 18px;
+        margin: 10px 0px;
+        display: block;
+        text-align: right;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: row-reverse;
+        gap: 15px;
+}
+.active {
+    border-right: 4px solid rgba(44, 76, 87, 1);
+    background-color: rgba(203, 222, 228, 0.66);
 }

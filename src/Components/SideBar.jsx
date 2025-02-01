@@ -13,7 +13,7 @@ function SideBar() {
 
   return (
     <>
-      <aside>
+      <aside className="d-none d-lg-block">
         <ul>
           <motion.li whileTap={{ scale: 0.9 }}>
             <Link
