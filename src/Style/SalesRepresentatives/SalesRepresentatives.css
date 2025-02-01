@@ -1,0 +1,15 @@
+.sales-reps-table {
+    text-align: center;
+}
+.sales-reps-table th {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        color: #667085;
+}
+.sales-reps-table td {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        color: #48505E;
+}

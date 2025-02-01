@@ -1,9 +1,3 @@
-.Managers-table-container .Managers-table-row {
-    height: 100dvh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 .Managers-table-container .Managers-table-row .Managers-table-col .Managers-table {
     text-align: center;
 }
