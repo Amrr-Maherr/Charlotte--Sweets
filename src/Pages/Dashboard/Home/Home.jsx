@@ -1,92 +1,93 @@
 import { useEffect, useState } from "react";
-import OrderBox from "../../../Components/HomeOrderBox/OrderBox"
+import { motion } from "framer-motion";
+import OrderBox from "../../../Components/HomeOrderBox/OrderBox";
 import axios from "axios";
-import Loader from "../Loader/Loader"
+import Loader from "../Loader/Loader";
+
 function Home() {
-  const [Orders, setOrders] = useState({})
-  const [loading,setLoading] = useState(true)
-  const token = JSON.parse(localStorage.getItem("AuthToken"))
+  const [Orders, setOrders] = useState({});
+  const [loading, setLoading] = useState(true);
+  const token = JSON.parse(localStorage.getItem("AuthToken"));
+
   useEffect(() => {
     axios
       .get("https://management.mlmcosmo.com/api/orders-stats", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        setLoading(false)
-        setOrders(response.data)
+        setLoading(false);
+        setOrders(response.data);
       })
-      .catch((error) => {
-        setLoading(true)
+      .catch(() => {
+        setLoading(true);
       });
-  },[token])
+  }, [token]);
+
   return (
-    <>
-      <section>
-        {loading ? (
-          <><Loader/></>
-        ) : (
-          <>
-            <div className="container">
-              <div className="row d-flex justify-content-center my-4">
-                <div className="col-xl-3 my-3">
-                  <OrderBox
-                    icon="fa-check-circle"
-                    iconBg="#FFE3B9"
-                    orderStatus="الطلبات المكتمله"
-                    orderNumber={Orders.completedOrders}
-                  />
-                </div>
-                <div className="col-xl-3 my-3">
-                  <OrderBox
-                    icon="fa-times-circle"
-                    iconBg="#E4BCD5"
-                    orderStatus="الطلبات المرفوضه"
-                    orderNumber={Orders.declinedOrders}
-                  />
-                </div>
-                <div className="col-xl-3 my-3">
-                  <OrderBox
-                    icon="fa-truck"
-                    iconBg="#D4C6F1"
-                    orderStatus="الطلبات الموصله"
-                    orderNumber={Orders.deliveredOrders}
-                  />
-                </div>
-                <div className="col-xl-3 my-3">
-                  <OrderBox
-                    icon="fa-plus-circle"
-                    iconBg="#AEEDFB"
-                    orderStatus="الطلبات الجديده"
-                    orderNumber={Orders.newOrders}
-                  />
-                </div>
-                <div className="col-xl-3 my-3">
-                  <OrderBox
-                    icon="fa-clock-o"
-                    iconBg="#FBC3CD"
-                    orderStatus="الطلبات المعلقه"
-                    orderNumber={Orders.pendingOrders}
-                  />
-                </div>
-                <div className="col-xl-3 my-3">
-                  <OrderBox
-                    icon="fa-undo"
-                    iconBg="#A8AFDF"
-                    orderStatus="الطلبات المرتجعه"
-                    orderNumber={Orders.returnedOrders}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="container">
-              <div className="row">
-                <div className="col-12"></div>
-              </div>
-            </div>
-          </>
-        )}
-      </section>
-    </>
+    <section>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="container">
+          <div className="row d-flex justify-content-center my-4">
+            {[
+              {
+                key: "completedOrders",
+                icon: "fa-check-circle",
+                bg: "#FFE3B9",
+                label: "الطلبات المكتمله",
+              },
+              {
+                key: "declinedOrders",
+                icon: "fa-times-circle",
+                bg: "#E4BCD5",
+                label: "الطلبات المرفوضه",
+              },
+              {
+                key: "deliveredOrders",
+                icon: "fa-truck",
+                bg: "#D4C6F1",
+                label: "الطلبات الموصله",
+              },
+              {
+                key: "newOrders",
+                icon: "fa-plus-circle",
+                bg: "#AEEDFB",
+                label: "الطلبات الجديده",
+              },
+              {
+                key: "pendingOrders",
+                icon: "fa-clock-o",
+                bg: "#FBC3CD",
+                label: "الطلبات المعلقه",
+              },
+              {
+                key: "returnedOrders",
+                icon: "fa-undo",
+                bg: "#A8AFDF",
+                label: "الطلبات المرتجعه",
+              },
+            ].map((order, index) => (
+              <motion.div
+                key={order.key}
+                className="col-xl-3 my-3"
+                initial={{ opacity: 0, translateY: 50 }}
+                animate={{ opacity: 1, translateY: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <OrderBox
+                  icon={order.icon}
+                  iconBg={order.bg}
+                  orderStatus={order.label}
+                  orderNumber={Orders[order.key]}
+                />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
+    </section>
   );
 }
-export default Home
+
+export default Home;
