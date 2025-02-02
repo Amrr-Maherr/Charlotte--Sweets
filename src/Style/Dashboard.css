@@ -19,9 +19,9 @@
 .dashboard-sidebar {
   width: auto;
     padding: 0;
+    background-color: #FFFFFF;
 }
 .dashboard-outlet {
-  background-color: rgba(245, 247, 250, 1);
   width: 100%;
   padding: 0;
   margin: 0;
