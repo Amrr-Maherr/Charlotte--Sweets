@@ -16,3 +16,6 @@
 .Managers-table th , .Managers-table td {
     padding: 15px 0px;
 }
+.Managers-table .action-icon {
+    cursor: pointer;
+}
