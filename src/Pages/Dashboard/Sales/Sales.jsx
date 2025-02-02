@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import eye from "../../../Assets/eye.svg";
 import Loader from "../Loader/Loader";
+import { motion } from "framer-motion";
 function Sales() {
   const [Data, seData] = useState([])
   const [loading,setloading] = useState(true)
@@ -14,6 +15,7 @@ function Sales() {
       .then((response) => {
         seData(response.data)
         setloading(false)
+
       })
       .catch((error) => {
         setloading(true)
@@ -23,7 +25,9 @@ function Sales() {
     <>
       <section>
         {loading ? (
-          <><Loader/></>
+          <>
+            <Loader />
+          </>
         ) : (
           <>
             <div className="container Sales-table-container">
@@ -36,7 +40,8 @@ function Sales() {
                     <thead>
                       <tr>
                         <th scope="col">الاجرائات</th>
-                        <th scope="col">عدد الاوردرات</th>
+                        <th scope="col">البريد الالكتروني</th>
+                        <th scope="col">الجوال</th>
                         <th scope="col">الاسم</th>
                       </tr>
                     </thead>
@@ -50,7 +55,11 @@ function Sales() {
                       ) : (
                         <>
                           {Data.map((sale) => (
-                            <tr key={sale.id}>
+                            <motion.tr
+                              initial={{ translateX: "-100vw" }}
+                              animate={{ translateX: "0" }}
+                              key={sale.id}
+                            >
                               <td className="actions">
                                 <Link
                                   to={`/dashboard/sales-details/${sale.id}`}
@@ -61,13 +70,14 @@ function Sales() {
                                   </div>
                                 </Link>
                               </td>
-                              <td>{sale.orders_count}</td>
+                              <td>{sale.email}</td>
+                              <td>{sale.phone}</td>
                               <td>
                                 {sale.first_name}
                                 {""}
                                 {sale.first_name}
                               </td>
-                            </tr>
+                            </motion.tr>
                           ))}
                         </>
                       )}

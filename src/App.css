@@ -1,6 +1,7 @@
 body {
     font-family: "Cairo", serif;
     overflow-x: hidden;
+    background-color:#F5F7FA !important;
 }
 /* Style the scrollbar */
 ::-webkit-scrollbar {
