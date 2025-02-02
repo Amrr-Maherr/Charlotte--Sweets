@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import Loader from "../../Loader/Loader";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "../../../../Style/BranchDetails/BranchDetails.css"; // إضافة ملف التنسيق المخصص
-
+import { motion } from "framer-motion";
 function BranchDetails() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,9 +19,7 @@ function BranchDetails() {
       .then((response) => {
         setData(response.data);
         console.log(response.data);
-        setTimeout(() => {
           setLoading(false);
-        }, 2000);
       })
       .catch((error) => {
         console.error("Error fetching branch details:", error);
@@ -35,7 +33,11 @@ function BranchDetails() {
       ) : (
         <div className="container">
           <div className="row">
-            <div className="col-md-6 mb-4">
+            <motion.div
+              initial={{ translateX: "-100vw" }}
+              animate={{ translateX: "0" }}
+              className="col-md-6 mb-4"
+            >
               <h3 className="card-title mb-3 text-end">الخريطة</h3>
               <div className="card shadow-lg">
                 <div className="card-body map-card">
@@ -47,8 +49,12 @@ function BranchDetails() {
                   </MapContainer>
                 </div>
               </div>
-            </div>
-            <div className="col-md-6 mb-4">
+            </motion.div>
+            <motion.div
+              initial={{ translateX: "100vw" }}
+              animate={{ translateX: "0" }}
+              className="col-md-6 mb-4"
+            >
               <h3 className="card-title mb-3 text-end">تفاصيل الفرع</h3>
               <div className="card shadow-lg branch-card">
                 <div className="card-body">
@@ -74,8 +80,12 @@ function BranchDetails() {
                   )}
                 </div>
               </div>
-            </div>
-            <div className="col-12 chefs-list my-5">
+            </motion.div>
+            <motion.div
+              initial={{ translateX: "-100vw" }}
+              animate={{ translateX: "0" }}
+              className="col-12 chefs-list my-5"
+            >
               <div className="chefs-container">
                 <div className="chefs-grid container">
                   <h3 className="chefs-title text-end">الشيفات</h3>
@@ -101,9 +111,12 @@ function BranchDetails() {
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div className="col-12 sales my-5">
+            </motion.div>
+            <motion.div
+              initial={{ translateX: "100vw" }}
+              animate={{ translateX: "0" }}
+              className="col-12 sales my-5"
+            >
               <div className="container">
                 <div className="row gy-4">
                   <h3 className="delivery-title text-end">مناديب المبيعات</h3>
@@ -126,7 +139,7 @@ function BranchDetails() {
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       )}
