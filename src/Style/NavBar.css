@@ -1,5 +1,9 @@
+nav {
+    background-color: #FFFFFF ;
+}
 nav .container-fluid {
     flex-wrap: nowrap !important;
+    
 }
 nav .container-fluid .profile-image {
         width: 60px;

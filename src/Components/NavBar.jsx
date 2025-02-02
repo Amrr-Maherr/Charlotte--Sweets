@@ -15,7 +15,7 @@ function NavBar() {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary custom-navbar">
+      <nav className="navbar navbar-expand-lg  custom-navbar">
         <div className="container-fluid">
           <a className="navbar-brand profile-image d-none d-lg-block" href="/">
             <img src={profile_image} alt="Profile" />

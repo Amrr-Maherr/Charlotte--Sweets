@@ -46,7 +46,7 @@ function Branches() {
   return (
     <>
       <div className="branches-component">
-        <section className="branches-section vh-100">
+        <section className="branches-section h-100">
           {loading ? (
             <Loader />
           ) : (
@@ -107,8 +107,9 @@ function Branches() {
                               </Link>
                             </td>
                             <td>
-                              {branch.manager.first_name}{" "}
-                              {branch.manager.last_name}
+                              {branch.manager
+                                ? `${branch.manager.first_name} ${branch.manager.last_name}`
+                                : "لا يوجد مدير"}
                             </td>
                             <td>{branch.address.slice(0, 10)}...</td>
                             <td>{branch.name.slice(0, 10)}...</td>

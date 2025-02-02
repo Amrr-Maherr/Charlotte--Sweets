@@ -1,0 +1,44 @@
+.order-box-card {
+        background-color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        flex-direction: row;
+        height: 120px;
+        -o-border-radius: 25px;
+        -webkit-border-radius: 25px;
+        -moz-border-radius: 25px;
+        -ms-border-radius: 25px;
+        border-radius: 25px;
+        border: none;
+}
+.order-box-card .card-info {
+    text-align: center;
+}
+.order-box-card .card-info .card-number {
+        font-size: 25px;
+        font-weight: 600;
+        color: #4D4D4D;
+}
+.order-box-card .card-info .card-text {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 400;
+        color: #65647C;
+}
+.order-box-card .card-icon{
+        width: 54px;
+        height: 54px;
+        -o-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+}
+.order-box-card .card-icon .fa {
+        font-size: 21px;
+        color: #FFFFFF;
+}
