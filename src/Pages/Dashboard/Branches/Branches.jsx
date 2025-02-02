@@ -22,9 +22,7 @@ function Branches() {
           }
         );
         setBranchesData(response.data);
-        setTimeout(() => {
           setLoading(false);
-        },2000)
       } catch (error) {
         console.log(error.response.data.message);
         setLoading(false);
@@ -82,7 +80,12 @@ function Branches() {
                         </tr>
                       ) : (
                         branchesData.map((branch) => (
-                          <tr key={branch.id} className="branches-table-row">
+                          <motion.tr
+                            initial={{ translateX: "-100vw" }}
+                            animate={{ translateX: "0" }}
+                            key={branch.id}
+                            className="branches-table-row"
+                          >
                             <td className="actions">
                               <motion.div
                                 onClick={() => {
@@ -113,7 +116,7 @@ function Branches() {
                             </td>
                             <td>{branch.address.slice(0, 10)}...</td>
                             <td>{branch.name.slice(0, 10)}...</td>
-                          </tr>
+                          </motion.tr>
                         ))
                       )}
                     </tbody>

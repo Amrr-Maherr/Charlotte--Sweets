@@ -115,7 +115,7 @@ function Products() {
                       <div className="card-body">
                         <h5 className="card-title">{product.name}</h5>
                         <p className="card-text">
-                          {product.description || "لا يوجد فرع"}
+                          {product.branch.name || "لا يوجد فرع"}
                         </p>
                       </div>
                     </div>
