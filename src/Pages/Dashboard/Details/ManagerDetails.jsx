@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../../../Style/Details/ManagerDetails.css";
+import "../../../Style/Details/Details.css";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Loader from "../Loader/Loader";

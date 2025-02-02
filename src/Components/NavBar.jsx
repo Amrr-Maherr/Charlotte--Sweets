@@ -91,6 +91,13 @@ function NavBar() {
                 label: "السيلز",
               },
               { to: "/dashboard/ads", icon: "fa-bullhorn", label: "الاعلانات" },
+              {
+                to: "/dashboard/specialties",
+                icon: "fa-briefcase",
+                label: "التخصصات",
+              },
+              { to: "/dashboard/flowers", icon: "fa-leaf", label: "الورود" },
+              { to: "/dashboard/products", icon: "fa-cogs", label: "المنتجات" },
             ].map((item, index) => (
               <motion.li key={index} whileTap={{ scale: 0.9 }}>
                 <Link

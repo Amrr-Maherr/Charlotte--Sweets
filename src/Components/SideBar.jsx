@@ -94,6 +94,39 @@ function SideBar() {
               <i className="fa fa-bullhorn"></i> الاعلانات
             </Link>
           </motion.li>
+          <motion.li whileTap={{ scale: 0.9 }}>
+            <Link
+              to="/dashboard/specialties"
+              className={
+                location.pathname === "/dashboard/specialties" ? "active" : ""
+              }
+              onClick={() => handleLinkClick("/dashboard/specialties")}
+            >
+              <i className="fa fa-briefcase"></i> التخصصات
+            </Link>
+          </motion.li>
+          <motion.li whileTap={{ scale: 0.9 }}>
+            <Link
+              to="/dashboard/flowers"
+              className={
+                location.pathname === "/dashboard/flowers" ? "active" : ""
+              }
+              onClick={() => handleLinkClick("/dashboard/flowers")}
+            >
+              <i className="fa fa-leaf"></i> الورود
+            </Link>
+          </motion.li>
+          <motion.li whileTap={{ scale: 0.9 }}>
+            <Link
+              to="/dashboard/products"
+              className={
+                location.pathname === "/dashboard/products" ? "active" : ""
+              }
+              onClick={() => handleLinkClick("/dashboard/products")}
+            >
+              <i className="fa fa-cogs"></i> المنتجات
+            </Link>
+          </motion.li>
         </ul>
       </aside>
     </>

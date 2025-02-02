@@ -21,7 +21,6 @@ function Branches() {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log(response.data);
         setBranchesData(response.data);
         setTimeout(() => {
           setLoading(false);
