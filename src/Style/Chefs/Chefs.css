@@ -1,0 +1,38 @@
+.chef-container .chef-row .chef-col .chef-table  {
+    text-align: center;
+}
+.chef-container .chef-row .chef-col .chef-table th {
+font-family: "Cairo";
+    font-size: 20px;
+    font-weight: 700;
+    color: #667085;
+}
+.chef-container .chef-row .chef-col .chef-table td {
+font-family: "Cairo";
+    font-size: 20px;
+    font-weight: 700;
+    color: #48505E;
+}
+.chef-table th,
+.chef-table td {
+    padding: 15px 0px;
+}
+
+.chef-table .action-icon {
+    cursor: pointer;
+}
+.chef-container .add-chef {
+        width: 131px;
+        height: 47px;
+        -o-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        -ms-border-radius: 5px;
+        border-radius: 5px;
+        background-color: #37CD2F;
+        border: none;
+        font-family: "Cairo";
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+}
