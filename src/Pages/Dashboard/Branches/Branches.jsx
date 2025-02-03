@@ -56,7 +56,7 @@ function Branches() {
                     data-bs-target="#exampleModal"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.7 }}
-                    className="add-manager-button"
+                    className="add-manager-button shadow-sm"
                   >
                     اضافه
                   </motion.button>
