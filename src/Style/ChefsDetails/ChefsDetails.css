@@ -1,22 +1,18 @@
-.sales-reps-table {
-    text-align: center;
-}
-.sales-reps-table th {
+.chef-details__table tr th {
     font-family: "Cairo";
         font-size: 20px;
         font-weight: 700;
         color: #667085;
 }
-.sales-reps-table td {
+.chef-details__table tr td {
     font-family: "Cairo";
         font-size: 20px;
         font-weight: 700;
         color: #48505E;
 }
-.sales-representatives-title {
+.chef-details__title {
+    text-align: end;
     font-family: "Cairo";
         font-size: 20px;
         font-weight: 700;
-        color: #000000;
-        text-align: right;
 }

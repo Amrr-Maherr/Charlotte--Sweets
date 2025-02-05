@@ -49,3 +49,9 @@ tr .actions .view-icon , tr .actions .delete-icon {
             color: white;
             border: none;
 }
+.branches-title {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        color: #000000;
+}

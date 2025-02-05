@@ -1,71 +1,72 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../../Style/SalesRepresentatives/SalesRepresentatives.css"
-import { Link } from "react-router-dom";
+import Loader  from "../../../Pages/Dashboard/Loader/Loader"
+import axios from "axios";
 function SalesRepresentatives() {
-  const salesRepsData = [
-    {
-      id: 1,
-      name: "محمد علي",
-      phone: "0551234567",
-      email: "mohammed.ali@example.com",
-      totalDeliveries: 150,
-    },
-    {
-      id: 2,
-      name: "أحمد سعيد",
-      phone: "0509876543",
-      email: "ahmed.saeed@example.com",
-      totalDeliveries: 200,
-    },
-    {
-      id: 3,
-      name: "سارة خالد",
-      phone: "0534567890",
-      email: "sara.khaled@example.com",
-      totalDeliveries: 100,
-    },
-    {
-      id: 4,
-      name: "ليلى عبدالله",
-      phone: "0567890123",
-      email: "layla.abdullah@example.com",
-      totalDeliveries: 120,
-    },
-  ];
-
+  const [Data, setData] = useState([])
+  const [Loading, setLoading] = useState(true)
+  const token = JSON.parse(localStorage.getItem("AuthToken"))
+  useEffect(() => {
+    axios
+      .get("https://management.mlmcosmo.com/api/deliveries",{headers:{Authorization:`Bearer ${token}`}})
+      .then((response) => {
+        console.log(response.data);
+        setData(response.data)
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+        setLoading(true)
+      });
+  },[token])
   return (
     <>
       <section className="sales-representatives-section">
-        <div className="container sales-reps-table-container">
-          <div className="row sales-reps-table-row">
-            <div className="col-12 sales-reps-table-col mt-5">
-              <table className="table sales-reps-table  table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">الاجراءات</th>
-                    <th scope="col">اجمالى التوصيلات</th>
-                    <th scope="col">البريد الالكتروني</th>
-                    <th scope="col">الجوال</th>
-                    <th scope="col">الاسم</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {salesRepsData.map((rep) => (
-                    <tr key={rep.id} className="sales-reps-table-row">
-                      <th scope="row">{rep.id}</th>
-                      <td>{rep.totalDeliveries}</td>
-                      <td>{rep.email}</td>
-                      <td>{rep.phone}</td>
-                      <td>
-                        <Link>{rep.name}</Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        {Loading ? (
+          <>
+          <Loader/>
+          </>
+        ) : (
+          <>
+            <div className="container sales-reps-table-container">
+              <div className="row sales-reps-table-row">
+                <div className="col-12 mt-5">
+                  <h1 className="sales-representatives-title">
+                    قائمه توصيل الطلبات
+                  </h1>
+                </div>
+                <div className="col-12 sales-reps-table-col mt-3">
+                  <table className="table sales-reps-table  table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">الفرع</th>
+                        <th scope="col">عدد الطلب</th>
+                        <th scope="col">تاريخ الطلب</th>
+                        <th scope="col">الاسم</th>
+                        <th scope="col">رقم الطلب</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Data.map((rep) => (
+                        <tr key={rep.id} className="sales-reps-table-row">
+                          <th scope="row">{rep.branch.name}</th>
+                          <th scope="row">{rep.orders_count}</th>
+                          <th scope="row">
+                            {rep.branch.created_at.slice(0, 10)}
+                          </th>
+                          <th scope="row">
+                            {rep.first_name} {rep.last_name}
+                          </th>
+                          <th scope="row">{rep.id}</th>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </section>
     </>
   );

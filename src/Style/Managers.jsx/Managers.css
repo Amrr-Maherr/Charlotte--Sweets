@@ -19,3 +19,10 @@
 .Managers-table .action-icon {
     cursor: pointer;
 }
+.Managers-title {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        color: #000000;
+        text-align: right;
+}

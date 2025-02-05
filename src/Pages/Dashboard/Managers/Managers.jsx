@@ -45,7 +45,10 @@ function Managers() {
           <>
             <div className="container Managers-table-container vh-100">
               <div className="row Managers-table-row">
-                <div className="col-12 Managers-table-col  mt-5">
+                <div className="col-12 mt-5">
+                  <h1 className="Managers-title">المديرين</h1>
+                </div>
+                <div className="col-12 Managers-table-col  mt-3">
                   <table class="table Managers-table  table-hover">
                     <thead>
                       <tr>
@@ -70,7 +73,9 @@ function Managers() {
                             <tr>
                               <td className="actions">
                                 <div
-                                  onClick={() => {handelDelete(manager.id)}}
+                                  onClick={() => {
+                                    handelDelete(manager.id);
+                                  }}
                                   whileHover={{ scale: 1.3 }}
                                   whileTap={{ scale: 0.8 }}
                                   className="action-icon delete-icon"
@@ -103,7 +108,7 @@ function Managers() {
           </>
         )}
       </section>
-      <Toaster/>
+      <Toaster />
     </>
   );
 }

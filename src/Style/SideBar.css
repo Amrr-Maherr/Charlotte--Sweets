@@ -1,6 +1,6 @@
 aside {
     width: 212px;
-    height: auto;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;

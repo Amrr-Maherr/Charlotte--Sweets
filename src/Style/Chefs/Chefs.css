@@ -36,3 +36,9 @@ font-family: "Cairo";
             font-weight: 700;
             color: white;
 }
+.chef-title {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        text-align: right;
+}

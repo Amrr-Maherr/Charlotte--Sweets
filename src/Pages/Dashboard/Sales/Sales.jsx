@@ -32,10 +32,10 @@ function Sales() {
           <>
             <div className="container Sales-table-container">
               <div className="row Sales-table-row">
-                <div className="col-12 Sales-table-title-col">
+                <div className="col-12 Sales-table-title-col mt-5">
                   <h2 className="Sales-table-title">قائمة المبيعات</h2>
                 </div>
-                <div className="col-12 Sales-table-col">
+                <div className="col-12 Sales-table-col mt-3">
                   <table className="table Sales-table table-hover">
                     <thead>
                       <tr>

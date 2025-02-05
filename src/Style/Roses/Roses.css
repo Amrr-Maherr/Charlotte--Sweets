@@ -1,0 +1,33 @@
+.Roses-container .Roses-col .Roses-title {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        color: #383E49;
+        text-align: right;
+}
+.Roses-container .Roses-table-col .Roses-table tr th {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        color: #667085;
+        padding: 15px;
+}
+.Roses-container .Roses-table-col .Roses-table tr td {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        color: #48505E;
+        padding: 15px 0px;
+}
+.Roses-container .Roses-table-col .Roses-table .no-data-message {
+    font-size: 30px;
+}
+.Roses-container .Roses-table-col .Roses-table tr .actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.Roses-container .Roses-table-col .Roses-table tr .actions .delete-icon {
+    padding: 5px;
+    cursor: pointer;
+}

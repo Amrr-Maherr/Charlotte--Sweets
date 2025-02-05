@@ -77,15 +77,15 @@
 .chefs-list .chefs-container .chefs-grid .chef-card .chef-image {
         width: 60px;
         height: 60px;
-        -o-border-radius: 50%;
-        -webkit-border-radius: 50%;
-        -moz-border-radius: 50%;
-        -ms-border-radius: 50%;
-        border-radius: 50%;
 }
 .chefs-list .chefs-container .chefs-grid .chef-card .chef-image img {
     width: 100%;
     height: 100%;
+    -o-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        border-radius: 50%;
 }
 /*  */
 .delivery-title {
@@ -122,16 +122,16 @@
  .delivery-card .delivery-image {
     width: 60px;
     height: 60px;
-    border-radius: 50%;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -ms-border-radius: 50%;
-    -o-border-radius: 50%;
 }
 
  .delivery-card .delivery-image img {
     width: 100%;
     height: 100%;
+    -o-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        border-radius: 50%;
 }
 .delivery-col , .chef-col {
     display: flex;

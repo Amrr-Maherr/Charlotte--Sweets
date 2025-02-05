@@ -1,0 +1,40 @@
+.specialties-section .section-title {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        text-align: right;
+}
+.specialties-section .specialties-table {
+    text-align: center;
+}
+.specialties-section .specialties-table tr th {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        color: #667085;
+        /* padding: 15px 0px; */
+}
+.specialties-section .specialties-table tr td {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        color: #48505E;
+        /* padding: 15px 0px; */
+}
+.specialties-section .specialties-table .no-data-message {
+    font-size: 30px;
+}
+.specialties-section .specialties-table .actions-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.specialties-section .specialties-table .actions-cell .deleteIcon {
+    cursor: pointer;
+    padding: 10px;
+    -o-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+}

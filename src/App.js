@@ -19,6 +19,7 @@ import SalesDetails from "./Pages/Dashboard/Sales/SalesDetails.jsx";
 import Specialties from "./Pages/Dashboard/Specialties/Specialties.jsx";
 import Roses from "./Pages/Dashboard/Roses/Roses.jsx";
 import Products from "./Pages/Dashboard/Products/Products.jsx";
+import ChefsDetails from "./Pages/Dashboard/Chefs/ChefsDetails.jsx";
 
 function App() {
   return (
@@ -52,6 +53,10 @@ function App() {
             <Route
               path="sales-representatives"
               element={<SalesRepresentatives />}
+            />
+            <Route
+              path="/dashboard/chef-details/:id"
+              element={<ChefsDetails />}
             />
           </Route>
 
