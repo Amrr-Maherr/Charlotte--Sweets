@@ -43,10 +43,10 @@ function Specialties() {
         ) : (
           <>
             <div className="row">
-              <div className="col-12 mt-4">
+              <div className="col-12 mt-5">
                 <h3 className="section-title">التخصصات</h3>
               </div>
-              <div className="col-12 my-4">
+              <div className="col-12 mt-3">
                 <table className="table specialties-table table-hover text-center">
                   <thead>
                     <tr>

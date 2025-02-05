@@ -1,9 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
 import "./App.css";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import Login from "./Pages/Dashboard/Authentication/Login.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min";
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import "font-awesome/css/font-awesome.min.css";
 import Home from "./Pages/Dashboard/Home/Home.jsx";
 import Ads from "./Pages/Dashboard/Ads/Ads.jsx";

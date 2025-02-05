@@ -6,7 +6,7 @@ function AddButton({ ButtonText, onClick }) {
     <motion.button
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.8 }}
-      className="addButton"
+      className="addButton shadow-sm"
       onClick={onClick}
       transition={{ type: "spring", stiffness: 300 }}
     >

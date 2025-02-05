@@ -135,11 +135,11 @@ const handleSubmit = async () => {
             <div className="container">
               <div className="row">
                 <div className="col-12 mt-5 d-flex align-items-center justify-content-between">
-                  <AddButton ButtonText="اضافة" onClick={handleShowModal} />
+                  <AddButton ButtonText="اضافه فرع" onClick={handleShowModal} />
                   <h1 className="branches-title">الفروع</h1>
                 </div>
                 <div className="col-12 mt-3">
-                  <table className="table branches-table table-hover">
+                  <table className="table branches-table table-hover shadow-sm">
                     <thead>
                       <tr>
                         <th scope="col">الاجراءات</th>
@@ -156,10 +156,16 @@ const handleSubmit = async () => {
                           </td>
                         </tr>
                       ) : (
-                        branchesData.map((branch) => (
+                        branchesData.map((branch, index) => (
                           <motion.tr
-                            initial={{ translateX: "-100vw" }}
-                            animate={{ translateX: "0" }}
+                            initial={{ opacity: 0, y: 50 }}
+                            animate={{ opacity: 1, y: 0 }} 
+                            transition={{
+                              type: "spring",
+                              stiffness: 100,
+                              damping: 25,
+                              delay: 0.1 * index,
+                            }} // حركة Bounce مع تأخير حسب ترتيب الصف
                             key={branch.id}
                             className="branches-table-row"
                           >

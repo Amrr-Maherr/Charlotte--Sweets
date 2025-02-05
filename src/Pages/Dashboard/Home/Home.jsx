@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import OrderBox from "../../../Components/HomeOrderBox/OrderBox";
 import axios from "axios";
 import Loader from "../Loader/Loader";
+import HomeStatistics from "../../../Components/HomeStatistics";
 
 function Home() {
   const [Orders, setOrders] = useState({});
@@ -28,63 +29,66 @@ function Home() {
       {loading ? (
         <Loader />
       ) : (
-        <div className="container">
-          <div className="row d-flex justify-content-center my-4">
-            {[
-              {
-                key: "completedOrders",
-                icon: "fa-check-circle",
-                bg: "#FFE3B9",
-                label: "الطلبات المكتمله",
-              },
-              {
-                key: "declinedOrders",
-                icon: "fa-times-circle",
-                bg: "#E4BCD5",
-                label: "الطلبات المرفوضه",
-              },
-              {
-                key: "deliveredOrders",
-                icon: "fa-truck",
-                bg: "#D4C6F1",
-                label: "الطلبات الموصله",
-              },
-              {
-                key: "newOrders",
-                icon: "fa-plus-circle",
-                bg: "#AEEDFB",
-                label: "الطلبات الجديده",
-              },
-              {
-                key: "pendingOrders",
-                icon: "fa-clock-o",
-                bg: "#FBC3CD",
-                label: "الطلبات المعلقه",
-              },
-              {
-                key: "returnedOrders",
-                icon: "fa-undo",
-                bg: "#A8AFDF",
-                label: "الطلبات المرتجعه",
-              },
-            ].map((order, index) => (
-              <motion.div
-                key={order.key}
-                className="col-xl-3 my-3"
-                initial={{ opacity: 0, translateY: 50 }}
-                animate={{ opacity: 1, translateY: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <OrderBox
-                  icon={order.icon}
-                  iconBg={order.bg}
-                  orderStatus={order.label}
-                  orderNumber={Orders[order.key]}
-                />
-              </motion.div>
-            ))}
+        <>
+          <div className="container">
+            <div className="row d-flex justify-content-center my-4">
+              {[
+                {
+                  key: "completedOrders",
+                  icon: "fa-check-circle",
+                  bg: "#FFE3B9",
+                  label: "الطلبات المكتمله",
+                },
+                {
+                  key: "declinedOrders",
+                  icon: "fa-times-circle",
+                  bg: "#E4BCD5",
+                  label: "الطلبات المرفوضه",
+                },
+                {
+                  key: "deliveredOrders",
+                  icon: "fa-truck",
+                  bg: "#D4C6F1",
+                  label: "الطلبات الموصله",
+                },
+                {
+                  key: "newOrders",
+                  icon: "fa-plus-circle",
+                  bg: "#AEEDFB",
+                  label: "الطلبات الجديده",
+                },
+                {
+                  key: "pendingOrders",
+                  icon: "fa-clock-o",
+                  bg: "#FBC3CD",
+                  label: "الطلبات المعلقه",
+                },
+                {
+                  key: "returnedOrders",
+                  icon: "fa-undo",
+                  bg: "#A8AFDF",
+                  label: "الطلبات المرتجعه",
+                },
+              ].map((order, index) => (
+                <motion.div
+                  key={order.key}
+                  className="col-xl-3 my-3"
+                  initial={{ opacity: 0, translateY: 50 }}
+                  animate={{ opacity: 1, translateY: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <OrderBox
+                    icon={order.icon}
+                    iconBg={order.bg}
+                    orderStatus={order.label}
+                    orderNumber={Orders[order.key]}
+                  />
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
+          <HomeStatistics />
+        </>
       )}
     </section>
   );

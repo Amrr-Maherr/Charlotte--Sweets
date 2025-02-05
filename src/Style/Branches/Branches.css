@@ -7,14 +7,14 @@
         font-size: 20px;
         font-weight: 700;
         color: #667085;
-        padding: 10px 0px;
+        padding: 15px 0px;
 }
 .branches-table tr td {
     font-family: "Cairo";
         font-size: 20px;
         font-weight: 700;
         color: #48505E;
-        padding: 10px 0px;
+        padding: 15px 0px;
 }
 tr .actions {
     display: flex;
@@ -22,36 +22,17 @@ tr .actions {
     justify-content: center;
     gap: 10px;
 }
-tr .actions .view-icon , tr .actions .delete-icon {
-    padding: 5px;
-    border-radius: 50%;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -ms-border-radius: 50%;
-    -o-border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-.add-manager-button {
-        width: 131px;
-        height: 47px;
-        border-radius: 5px;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        -ms-border-radius: 5px;
-        -o-border-radius: 5px;
-        font-family: "Cairo";
-            font-size: 20px;
-            font-weight: 700;
-            background-color: #37CD2F;
-            color: white;
-            border: none;
-}
 .branches-title {
     font-family: "Cairo";
         font-size: 20px;
         font-weight: 700;
         color: #000000;
+}
+.actions img {
+    -o-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+    cursor: pointer;
 }

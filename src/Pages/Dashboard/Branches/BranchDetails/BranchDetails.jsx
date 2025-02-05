@@ -2,9 +2,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../../Loader/Loader";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "../../../../Style/BranchDetails/BranchDetails.css"; // إضافة ملف التنسيق المخصص
 import { motion } from "framer-motion";
+import "../../../../Style/BranchDetails/BranchDetails.css"; // إضافة ملف التنسيق المخصص
+
 function BranchDetails() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,13 +19,14 @@ function BranchDetails() {
       .then((response) => {
         setData(response.data);
         console.log(response.data);
-          setLoading(false);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching branch details:", error);
         setLoading(true);
       });
   }, [id, token]);
+
   return (
     <section className="branch-details-section py-5">
       {loading ? (
@@ -33,6 +34,7 @@ function BranchDetails() {
       ) : (
         <div className="container">
           <div className="row">
+            {/* عرض الخريطة */}
             <motion.div
               initial={{ translateX: "-100vw" }}
               animate={{ translateX: "0" }}
@@ -41,15 +43,22 @@ function BranchDetails() {
               <h3 className="card-title mb-3 text-end">الخريطة</h3>
               <div className="card shadow-lg">
                 <div className="card-body map-card">
-                  <MapContainer center={[data.lat, data.long]} zoom={13}>
-                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                    <Marker position={[data.lat, data.long]}>
-                      <Popup>{data.name}</Popup>
-                    </Marker>
-                  </MapContainer>
+                  {/* استخدم iframe لعرض خريطة جوجل */}
+                  <iframe
+                    src={`https://www.google.com/maps?q=${data.lat},${data.long}&hl=ar&z=13&output=embed`}
+                    width="100%"
+                    height="400px"
+                    frameBorder="0"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    aria-hidden="false"
+                    tabIndex="0"
+                  ></iframe>
                 </div>
               </div>
             </motion.div>
+
+            {/* تفاصيل الفرع */}
             <motion.div
               initial={{ translateX: "100vw" }}
               animate={{ translateX: "0" }}
@@ -81,6 +90,8 @@ function BranchDetails() {
                 </div>
               </div>
             </motion.div>
+
+            {/* الشيفات */}
             <motion.div
               initial={{ translateX: "-100vw" }}
               animate={{ translateX: "0" }}
@@ -95,7 +106,7 @@ function BranchDetails() {
                         key={index}
                         className="col-xl-3 col-md-6 col-12 ms-auto chef-col"
                       >
-                        <div className="card chef-card">
+                        <div className="card chef-card shadow-sm">
                           <div className="chef-info">
                             <p className="chef-name">
                               {chef.first_name} {chef.last_name}
@@ -112,10 +123,12 @@ function BranchDetails() {
                 </div>
               </div>
             </motion.div>
+
+            {/* مناديب المبيعات */}
             <motion.div
               initial={{ translateX: "100vw" }}
               animate={{ translateX: "0" }}
-              className="col-12 sales my-5"
+              className="col-12 sales"
             >
               <div className="container">
                 <div className="row gy-4">
@@ -125,7 +138,7 @@ function BranchDetails() {
                       key={index}
                       className="col-xl-3 col-md-6 col-12 ms-auto delivery-col"
                     >
-                      <div className="card delivery-card">
+                      <div className="card delivery-card shadow-sm">
                         <div className="delivery-info">
                           <p className="delivery-name">
                             {delivery.first_name} {delivery.last_name}
