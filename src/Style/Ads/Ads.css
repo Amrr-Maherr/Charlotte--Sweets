@@ -14,17 +14,18 @@
         height: 399px;
         border-radius: 20px;
         background-color: #ffffff;
-        /* background-color: red; */
         display: flex;
         align-items: center;
         justify-content: space-evenly;
         flex-direction: column;
+        
 }
 .ads-card .card-content {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
     width: 100%;
+    flex-wrap: wrap-reverse;
 }
 .ads-card .ads-card-text {
         text-align: right;
