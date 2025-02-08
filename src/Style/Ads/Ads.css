@@ -1,0 +1,84 @@
+.ads-row {
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ads-row .ads-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ads-card {
+        width: 722px;
+        height: 399px;
+        border-radius: 20px;
+        background-color: #ffffff;
+        /* background-color: red; */
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        flex-direction: column;
+}
+.ads-card .card-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+}
+.ads-card .ads-card-text {
+        text-align: right;
+        width: 335px;
+            height: 90px;
+}
+.ads-card .ads-card-text p {
+    font-family: "Cairo";
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 29.98px;
+        color: #808594;
+}
+.ads-card .ads-card-text strong {
+    color: #000000;
+    font-weight: 600;
+}
+.ads-img-placeHolder {
+    width: 228px;
+    height: 160px;
+}
+.ads-img-placeHolder img {
+    height: 100%;
+    width: 100%;
+}
+.ads-card .ads-btn-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ads-card .ads-btn-container button {
+    width: 189px;
+        height: 48px;
+        border-radius: 5px;
+        border: none;
+        background-color: #E5C6BB;
+        font-family: "Cairo";
+            font-weight: 600;
+            font-size: 16px;
+}
+/*  */
+.ads-table tr th {
+    font-family: "Cairo";
+    font-size: 20px;
+    font-weight: 700;
+    color: #667085;
+    padding: 15px 0px;
+}
+
+.ads-table tr td {
+    font-family: "Cairo";
+    font-size: 20px;
+    font-weight: 700;
+    color: #48505E;
+    padding: 15px 0px;
+}

@@ -53,8 +53,7 @@
         flex-direction: row;
         border: none;
         width: 253px;
-        height: 110px;
-        padding: 0px 15px;
+        padding:15px;
         -o-border-radius: 8px;
         -webkit-border-radius: 8px;
         -moz-border-radius: 8px;
@@ -102,8 +101,7 @@
     flex-direction: row;
     border: none;
     width: 253px;
-    height: 110px;
-    padding: 0px 15px;
+    padding: 15px;
     -o-border-radius: 8px;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;

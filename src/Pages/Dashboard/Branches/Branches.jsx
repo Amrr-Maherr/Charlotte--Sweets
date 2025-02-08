@@ -55,6 +55,8 @@ function Branches() {
           }
         );
         setBranchesData(response.data);
+        console.log(response.data);
+        
         setLoading(false);
       } catch (error) {
         console.log(error.response.data.message);
@@ -159,7 +161,7 @@ const handleSubmit = async () => {
                         branchesData.map((branch, index) => (
                           <motion.tr
                             initial={{ opacity: 0, y: 50 }}
-                            animate={{ opacity: 1, y: 0 }} 
+                            animate={{ opacity: 1, y: 0 }}
                             transition={{
                               type: "spring",
                               stiffness: 100,
@@ -182,8 +184,7 @@ const handleSubmit = async () => {
                               </motion.div>
                               <Link
                                 to={`/dashboard/branch-details/${branch.id}`}
-                                className="action-icon view-icon"
-                              >
+                                className="action-icon view-icon" >
                                 <motion.div
                                   whileHover={{ scale: 1.3 }}
                                   whileTap={{ scale: 0.8 }}

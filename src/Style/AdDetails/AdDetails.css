@@ -1,0 +1,44 @@
+.single-add-container .single-add-row {
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.single-add-container .single-add-row .single-add-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.single-add-container .single-add-row .single-add-col .single-add-card {
+        width: 722px;
+        height: 399px;
+        border-radius: 20px;
+        -webkit-border-radius: 20px;
+        -moz-border-radius: 20px;
+        -ms-border-radius: 20px;
+        -o-border-radius: 20px;
+        background-color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+}
+.single-add-container .single-add-row .single-add-col .single-add-card .single-add-image {
+    width: 300px;
+    height: 300px;
+}
+.single-add-container .single-add-row .single-add-col .single-add-card .single-add-image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+}
+.single-add-container .single-add-row .single-add-col .single-add-card .single-add-title p {
+    font-family: "Cairo";
+        font-weight: 600;
+        font-size: 26px;
+        color: #808594;
+}

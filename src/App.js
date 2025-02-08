@@ -21,6 +21,7 @@ import Specialties from "./Pages/Dashboard/Specialties/Specialties.jsx";
 import Roses from "./Pages/Dashboard/Roses/Roses.jsx";
 import Products from "./Pages/Dashboard/Products/Products.jsx";
 import ChefsDetails from "./Pages/Dashboard/Chefs/ChefsDetails.jsx";
+import AdDetails from "./Pages/Dashboard/Ads/AdDetails/AdDetails.jsx";
 
 function App() {
   return (
@@ -58,6 +59,10 @@ function App() {
             <Route
               path="/dashboard/chef-details/:id"
               element={<ChefsDetails />}
+            />
+            <Route
+              path="/dashboard/add-details/:id"
+              element={<AdDetails/>}
             />
           </Route>
 
