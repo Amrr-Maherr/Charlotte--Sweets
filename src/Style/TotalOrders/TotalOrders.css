@@ -1,0 +1,20 @@
+.order-container .order-row .order-col .orders-title {
+    font-family: "Cairo";
+        font-weight: 700;
+        font-size: 20px;
+        text-align: right;
+}
+.order-container .order-row  .orders-table tr th {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        color: #667085;
+        padding: 15px 0px;
+}
+.order-container .order-row  .orders-table tr td {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        color: #667085;
+        padding: 15px 0px;
+}

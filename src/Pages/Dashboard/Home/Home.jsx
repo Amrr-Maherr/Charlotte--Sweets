@@ -69,6 +69,13 @@ function Home() {
                   bg: "#A8AFDF",
                   label: "الطلبات المرتجعه",
                 },
+                {
+                  key: "returnedOrders",
+                  icon: "fa-undo",
+                  bg: "#A8AFDF",
+                  label: "كل الطلبات",
+                  link: "/dashboard/total-orders",
+                },
               ].map((order, index) => (
                 <motion.div
                   key={order.key}
@@ -82,6 +89,7 @@ function Home() {
                     iconBg={order.bg}
                     orderStatus={order.label}
                     orderNumber={Orders[order.key]}
+                    link={order.link}
                   />
                 </motion.div>
               ))}
