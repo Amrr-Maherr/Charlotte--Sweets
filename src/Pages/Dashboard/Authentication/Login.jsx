@@ -27,7 +27,7 @@ function Login() {
           toast.success("Login success");
           setEmail("");
           setPassword("");
-          setTimeout(Navigate("/dashboard/home"), 3000);
+          Navigate("/dashboard/home");
         })
         .catch((error) => {
           toast.error(error.response.data.message);
@@ -104,6 +104,9 @@ function Login() {
                     className="login-form__input"
                     id="password"
                   />
+                </div>
+                <div className="forget-password-link">
+                  <Link to="/forget-password" style={{textDecoration:"none",color:"black"}}>هل نسيت كلمه السر؟</Link>
                 </div>
                 <motion.button
                   whileHover={{ scale: 1.1 }}
