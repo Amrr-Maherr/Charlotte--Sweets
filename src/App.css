@@ -3,10 +3,9 @@ body {
   overflow-x: hidden;
   background-image: url(./Assets//unsplash_5LOhydOtTKU.png);
   background-position: center center;
-  background-repeat: repeat;
-  /* تكرار الخلفية */
-  background-size: auto;
-  /* احتواء الصورة والحفاظ على نسبتها */
+  background-repeat: no-repeat;
+  background-size: 100%;
+  /* عرض 100% وارتفاع 100% */
   min-height: 100dvh;
 }
 /* Style the scrollbar */
