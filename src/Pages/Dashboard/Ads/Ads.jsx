@@ -1,41 +1,63 @@
 import "../../../Style/Ads/Ads.css";
 import icon from "../../../Assets/Icon.png";
-import DeleteIcon from "../../../Assets/deleteButton.svg"
-import Eye from "../../../Assets/eye.svg"
+import DeleteIcon from "../../../Assets/deleteButton.svg";
+import Eye from "../../../Assets/eye.svg";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
 import Loader from "../Loader/Loader";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2"; // استيراد SweetAlert2
+
 function Ads() {
   const [adTitle, setTitle] = useState("");
-    const [adImg, setImage] = useState(null);
-    const [AdsData, setAdsData] = useState([])
-    const [loading,setLoading] = useState(true)
-    const token = JSON.parse(localStorage.getItem("AuthToken"));
-     const getData = () => {
-       axios
-         .get("https://management.mlmcosmo.com/api/banners", {
-           headers: { Authorization: `Bearer ${token}` },
-         })
-         .then((response) => {
-             setAdsData(response.data);
-             console.log(response.data);
-             
-             setLoading(false)
-         })
-         .catch((error) => {
-             console.log(error.response.data.message);
-             setLoading(true)
-         });
-     };
- useEffect(() => {
-   getData();
- }, [token]);
-  const handleAdd = () => {
+  const [adImg, setImage] = useState(null);
+  const [AdsData, setAdsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const token = JSON.parse(localStorage.getItem("AuthToken"));
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  const getData = async () => {
+    try {
+      const response = await axios.get(
+        "https://management.mlmcosmo.com/api/banners",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setAdsData(response.data);
+      console.log(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error.response.data.message);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, [token]);
+
+  // حساب عدد الصفحات
+  const totalPages = Math.ceil(AdsData.length / itemsPerPage);
+
+  // استخراج العناصر للصفحة الحالية
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = AdsData.slice(indexOfFirstItem, indexOfLastItem);
+
+  // التنقل بين الصفحات
+  const nextPage = () =>
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+
+  const handleAdd = async () => {
     if (!adTitle || !adImg) {
-        toast.error("يرجى ملء جميع الحقول قبل الإرسال");
+      Swal.fire({
+        icon: "error",
+        title: "خطأ!",
+        text: "يرجى ملء جميع الحقول قبل الإرسال",
+      });
       return;
     }
 
@@ -43,46 +65,80 @@ function Ads() {
     formData.append("title", adTitle);
     formData.append("image", adImg);
 
-    axios
-      .post("https://management.mlmcosmo.com/api/banner", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-          toast.success(response.data);
-          getData()
-      })
-      .catch((error) => {
-        console.log(error.response.data.message);
+    try {
+      const response = await axios.post(
+        "https://management.mlmcosmo.com/api/banner",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      Swal.fire({
+        icon: "success",
+        title: "نجاح!",
+        text: response.data,
       });
-    };
-    const handelDelete = (id) => {
-      axios
-        .delete(`https://management.mlmcosmo.com/api/banner/${id}`,{headers:{Authorization:`Bearer ${token}`}})
-        .then((response) => {
-          console.log(response.data.message || "Deleted successfully");
-          getData();
-        })
-        .catch((error) => {
-          console.log(error?.response?.data?.message || "An error occurred");
-        });
-    };
+      getData();
+    } catch (error) {
+      console.log(error.response.data.message);
+      Swal.fire({
+        icon: "error",
+        title: "خطأ!",
+        text: error.response.data.message,
+      });
+    }
+  };
+
+  const handelDelete = (id) => {
+    Swal.fire({
+      title: "هل أنت متأكد؟",
+      text: "لن يمكنك التراجع عن هذا!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "نعم، احذف!",
+      cancelButtonText: "إلغاء",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`https://management.mlmcosmo.com/api/banner/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((response) => {
+            Swal.fire("تم الحذف!", response.data, "success");
+            getData();
+          })
+          .catch((error) => {
+            Swal.fire(
+              "خطأ!",
+              error?.response?.data?.message || "An error occurred",
+              "error"
+            );
+          });
+      }
+    });
+  };
 
   return (
     <>
       {loading ? (
-        <>
-          <Loader />
-        </>
+        <Loader />
       ) : (
         <>
           <section className="ads-section">
             <div className="container ads-container">
               <div className="row ads-row">
                 <div className="col-12 ads-col">
-                  <div className="ads-card">
+                  <motion.div // استخدام motion.div هنا
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    className="ads-card shadow"
+                  >
                     <div className="card-content">
                       <div className="ads-card-text">
                         <p>
@@ -107,7 +163,8 @@ function Ads() {
                         ارفع صورة
                       </motion.button>
                     </div>
-                  </div>
+                  </motion.div>{" "}
+                  
                 </div>
               </div>
             </div>
@@ -117,7 +174,7 @@ function Ads() {
               <div className="row">
                 <div className="col-12">
                   <div className="table-responsive">
-                    <table class="table table-hover text-center ads-table">
+                    <table className="table table-hover text-center ads-table shadow">
                       <thead>
                         <tr>
                           <th scope="col">الاجرائات</th>
@@ -126,7 +183,7 @@ function Ads() {
                         </tr>
                       </thead>
                       <tbody>
-                        {AdsData.length === 0 ? (
+                        {currentItems.length === 0 ? (
                           <>
                             <tr>
                               <td colSpan="4" className="text-center">
@@ -136,25 +193,37 @@ function Ads() {
                           </>
                         ) : (
                           <>
-                            {AdsData.map((ad) => (
-                              <tr key={ad.id}>
+                            {currentItems.map((ad, index) => (
+                              <motion.tr // استخدام motion.tr هنا
+                                initial={{ opacity: 0, y: 50 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{
+                                  type: "spring",
+                                  stiffness: 100,
+                                  damping: 25,
+                                  delay: 0.1 * index,
+                                }}
+                                key={ad.id}
+                              >
                                 <td>
                                   <div className="actions">
                                     <img
                                       src={DeleteIcon}
-                                      alt=""
+                                      alt="حذف"
                                       onClick={() => {
                                         handelDelete(ad.id);
                                       }}
                                     />
-                                    <Link to={`/dashboard/add-details/${ad.id}`}>
-                                      <img src={Eye} alt="" />
+                                    <Link
+                                      to={`/dashboard/add-details/${ad.id}`}
+                                    >
+                                      <img src={Eye} alt="عرض" />
                                     </Link>
                                   </div>
                                 </td>
                                 <td>{ad.title}</td>
-                                <td>{ad.id}</td>
-                              </tr>
+                                <td>{indexOfFirstItem + index + 1}</td>
+                              </motion.tr>
                             ))}
                           </>
                         )}
@@ -162,6 +231,34 @@ function Ads() {
                     </table>
                   </div>
                 </div>
+              </div>
+              {/* Pagination */}
+              <div className="d-flex justify-content-center">
+                <button
+                  style={{
+                    backgroundColor: "rgba(169, 65, 29, 1)",
+                    color: "white",
+                  }}
+                  className="btn mx-2"
+                  onClick={prevPage}
+                  disabled={currentPage === 1}
+                >
+                  السابق
+                </button>
+                <span className="align-self-center">
+                  صفحة {currentPage} من {totalPages}
+                </span>
+                <button
+                  className="btn mx-2"
+                  style={{
+                    backgroundColor: "rgba(169, 65, 29, 1)",
+                    color: "white",
+                  }}
+                  onClick={nextPage}
+                  disabled={currentPage === totalPages}
+                >
+                  التالي
+                </button>
               </div>
             </div>
           </section>
@@ -239,7 +336,6 @@ function Ads() {
           </div>
         </div>
       </div>
-      <Toaster />
     </>
   );
 }

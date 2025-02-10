@@ -5,15 +5,15 @@ function HomeStatistics() {
         <>
             <section>
                 <div className="container">
-                    <div className="row">
+                    <div className="row my-5">
                         <div className="col-xl-4 col-12">
                             <StatisticsList/>
                         </div>
                         <div className="col-xl-4 col-12">
-                            <StatisticsList/>
+                            {/* <StatisticsList/> */}
                         </div>
                         <div className="col-xl-4 col-12">
-                            <StatisticsList/>
+                            {/* <StatisticsList/> */}
                         </div>
                     </div>
                 </div>

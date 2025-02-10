@@ -7,7 +7,7 @@ function OrderBox({ orderNumber, orderStatus, iconBg, icon, link }) {
     <motion.div
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.8 }}
-      className="card order-box-card shadow-sm"
+      className="card order-box-card shadow"
     >
       <div className="card-info">
         <p className="card-number">{orderNumber ?? 0}</p>

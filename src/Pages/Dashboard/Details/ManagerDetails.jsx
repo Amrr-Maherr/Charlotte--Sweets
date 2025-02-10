@@ -3,10 +3,11 @@ import "../../../Style/Details/Details.css";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Loader from "../Loader/Loader";
+import { motion } from "framer-motion"; // استيراد motion
 
 function Details() {
   const [Manager, setManager] = useState({});
-  const [loading,setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const { id } = useParams();
 
@@ -17,10 +18,10 @@ function Details() {
       })
       .then((response) => {
         setManager(response.data);
-        setLoading(false)
+        setLoading(false);
       })
       .catch((error) => {
-        setLoading(false)
+        setLoading(false);
       });
   }, [token, id]);
 
@@ -28,9 +29,13 @@ function Details() {
     <>
       <section>
         {loading ? (
-          <><Loader/></>
+          <Loader />
         ) : (
-          <>
+          <motion.div // إضافة motion.div هنا
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+          >
             <div className="container Details-container">
               <div className="row Details-row">
                 <div className="col-12 Details-col">
@@ -94,7 +99,7 @@ function Details() {
                 </div>
               </div>
             </div>
-          </>
+          </motion.div> // إغلاق motion.div هنا
         )}
       </section>
     </>

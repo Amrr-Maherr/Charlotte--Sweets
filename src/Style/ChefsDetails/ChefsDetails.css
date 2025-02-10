@@ -1,18 +1,16 @@
-.chef-details__table tr th {
+.chef-info-table tr th {
     font-family: "Cairo";
-        font-size: 20px;
         font-weight: 700;
-        color: #667085;
+        font-size: 20px;
+        line-height: 21px;
+        color:rgba(102, 112, 133, 1) ;
+        padding: 10px;
 }
-.chef-details__table tr td {
+.chef-info-table tr td {
     font-family: "Cairo";
-        font-size: 20px;
         font-weight: 700;
-        color: #48505E;
-}
-.chef-details__title {
-    text-align: end;
-    font-family: "Cairo";
         font-size: 20px;
-        font-weight: 700;
+        line-height: 21px;
+        color:rgba(72, 80, 94, 1);
+        padding: 10px;
 }

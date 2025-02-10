@@ -1,5 +1,14 @@
+.chef-container .chef-row .chef-col {
+    display: flex;
+    justify-content: center;
+}
+.chef-title-col {
+    /* width: 1096px; */
+    margin: 0px auto;
+}
 .chef-container .chef-row .chef-col .chef-table  {
     text-align: center;
+    /* min-width: 1096px; */
 }
 .chef-container .chef-row .chef-col .chef-table th {
 font-family: "Cairo";

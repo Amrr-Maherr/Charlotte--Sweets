@@ -71,7 +71,7 @@ function SideBar() {
                 handleLinkClick("/dashboard/sales-representatives")
               }
             >
-              <i className="fa fa-truck"></i> مناديب المبيعات
+              <i className="fa fa-truck"></i>  مندوبي التوصيل
             </Link>
           </motion.li>
           <motion.li whileTap={{ scale: 0.9 }}>

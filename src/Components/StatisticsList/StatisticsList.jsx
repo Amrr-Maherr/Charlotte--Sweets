@@ -23,7 +23,7 @@ function StatisticsList() {
     <div>
       <div className="StatisticsList-title">
         <h3>الاحصائيات</h3>
-        <div className="StatisticsList shadow-sm">
+        <div className="StatisticsList shadow">
           <div className="StatisticsList-main">
             <div className="StatisticsList-info">
               <p className="StatisticsList-number">{Data.branches}</p>

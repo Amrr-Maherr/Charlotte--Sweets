@@ -25,7 +25,7 @@ function Home() {
   }, [token]);
 
   return (
-    <section>
+    <section style={{ minHeight: "100dvh" }}>
       {loading ? (
         <Loader />
       ) : (
@@ -38,43 +38,42 @@ function Home() {
                   icon: "fa-check-circle",
                   bg: "#FFE3B9",
                   label: "الطلبات المكتمله",
+                  link: "/dashboard/complete-orders",
                 },
                 {
                   key: "declinedOrders",
                   icon: "fa-times-circle",
                   bg: "#E4BCD5",
                   label: "الطلبات المرفوضه",
+                  link: "/dashboard/rejected-orders",
                 },
                 {
                   key: "deliveredOrders",
                   icon: "fa-truck",
                   bg: "#D4C6F1",
                   label: "الطلبات الموصله",
+                  link: "/dashboard/delivered-orders",
                 },
                 {
                   key: "newOrders",
                   icon: "fa-plus-circle",
                   bg: "#AEEDFB",
                   label: "الطلبات الجديده",
+                  link: "/dashboard/new-orders",
                 },
                 {
                   key: "pendingOrders",
                   icon: "fa-clock-o",
                   bg: "#FBC3CD",
                   label: "الطلبات المعلقه",
+                  link: "/dashboard/pending-orders",
                 },
                 {
                   key: "returnedOrders",
                   icon: "fa-undo",
                   bg: "#A8AFDF",
                   label: "الطلبات المرتجعه",
-                },
-                {
-                  key: "returnedOrders",
-                  icon: "fa-undo",
-                  bg: "#A8AFDF",
-                  label: "كل الطلبات",
-                  link: "/dashboard/total-orders",
+                  link: "/dashboard/returned-orders",
                 },
               ].map((order, index) => (
                 <motion.div
@@ -95,7 +94,7 @@ function Home() {
               ))}
             </div>
           </div>
-          <HomeStatistics />
+          {/* <HomeStatistics /> */}
         </>
       )}
     </section>

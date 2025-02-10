@@ -22,8 +22,13 @@ import Roses from "./Pages/Dashboard/Roses/Roses.jsx";
 import Products from "./Pages/Dashboard/Products/Products.jsx";
 import ChefsDetails from "./Pages/Dashboard/Chefs/ChefsDetails.jsx";
 import AdDetails from "./Pages/Dashboard/Ads/AdDetails/AdDetails.jsx";
-import TotalOrders from "./Pages/Dashboard/TotalOrders/TotalOrders.jsx";
-import OrderDetails from "./Pages/Dashboard/OrderDetails/OrderDetails.jsx";
+import SalesRepresentativesDetails from "./Pages/Dashboard/SalesRepresentativesDetails/SalesRepresentativesDetails.jsx";
+import NewOrders from "./Pages/Dashboard/NewOrders/NewOrders.jsx";
+import CompleteOrders from "./Pages/Dashboard/CompleteOrders/CompleteOrders.jsx";
+import DeliveredOrders from "./Pages/Dashboard/DeliveredOrders/DeliveredOrders.jsx";
+import RejectedOrders from "./Pages/Dashboard/RejectedOrders/RejectedOrders.jsx";
+import ReturnedOrders from "./Pages/Dashboard/ReturnedOrders/ReturnedOrders.jsx";
+import PendingOrders from "./Pages/Dashboard/PendingOrders/PendingOrders.jsx";
 
 function App() {
   return (
@@ -31,7 +36,6 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<Login />} />
-
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="home" element={<Home />} />
             <Route path="ads" element={<Ads />} />
@@ -42,7 +46,11 @@ function App() {
             <Route path="specialties" element={<Specialties />} />
             <Route path="flowers" element={<Roses />} />
             <Route path="products" element={<Products />} />
-            <Route path="total-orders" element={<TotalOrders/>} />
+            <Route path="new-orders" element={<NewOrders />} />
+            <Route path="complete-orders" element={<CompleteOrders />} />
+            <Route path="rejected-orders" element={<RejectedOrders />} />
+            <Route path="returned-orders" element={<ReturnedOrders />} />
+            <Route path="pending-orders" element={<PendingOrders/>} />
             <Route
               path="/dashboard/manager-details/:id"
               element={<Details />}
@@ -60,19 +68,15 @@ function App() {
               element={<SalesRepresentatives />}
             />
             <Route
+              path="sales-representatives-details/:id"
+              element={<SalesRepresentativesDetails />}
+            />
+            <Route
               path="/dashboard/chef-details/:id"
               element={<ChefsDetails />}
             />
-            <Route
-              path="/dashboard/add-details/:id"
-              element={<AdDetails/>}
-            />
-            <Route
-              path="/dashboard/order-details/:id"
-              element={<OrderDetails/>}
-            />
+            <Route path="/dashboard/add-details/:id" element={<AdDetails />} />
           </Route>
-
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

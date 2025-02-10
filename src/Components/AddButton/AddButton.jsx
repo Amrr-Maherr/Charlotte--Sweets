@@ -1,7 +1,7 @@
 import "../../Style/AddButton/AddButton.css";
 import { motion } from "framer-motion";
 
-function AddButton({ ButtonText, onClick }) {
+function AddButton({ ButtonText, onClick, ...props }) {
   return (
     <motion.button
       whileHover={{ scale: 1.1 }}
@@ -9,6 +9,7 @@ function AddButton({ ButtonText, onClick }) {
       className="addButton shadow-sm"
       onClick={onClick}
       transition={{ type: "spring", stiffness: 300 }}
+      {...props} // تمرير جميع الخصائص الأخرى هنا
     >
       {ButtonText}
     </motion.button>

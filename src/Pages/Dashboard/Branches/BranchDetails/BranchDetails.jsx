@@ -33,11 +33,11 @@ function BranchDetails() {
   }, [id, token]);
 
   if (loading) {
-    return <Loader />; // لا حاجة إلى قسم loading في العرض أدناه، فقط قم بإرجاع Loader هنا
+    return <Loader />;
   }
 
   if (!data) {
-    return <p>لم يتم العثور على بيانات للفرع بالمعرف: {id}</p>; // عرض رسالة في حالة عدم وجود بيانات
+    return <p>لم يتم العثور على بيانات للفرع بالمعرف: {id}</p>;
   }
 
   return (
@@ -46,14 +46,14 @@ function BranchDetails() {
         <div className="row">
           {/* عرض الخريطة */}
           <motion.div
-            initial={{ translateX: "-100vw" }}
-            animate={{ translateX: "0" }}
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
             className="col-md-6 mb-4"
           >
             <h3 className="card-title mb-3 text-end">الخريطة</h3>
             <div className="card shadow-lg">
               <div className="card-body map-card">
-                {/* استخدم iframe لعرض خريطة جوجل */}
                 <iframe
                   src={`https://www.google.com/maps?q=${data.lat},${data.long}&hl=ar&z=13&output=embed`}
                   width="100%"
@@ -70,25 +70,34 @@ function BranchDetails() {
 
           {/* تفاصيل الفرع */}
           <motion.div
-            initial={{ translateX: "100vw" }}
-            animate={{ translateX: "0" }}
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
             className="col-md-6 mb-4"
           >
             <h3 className="card-title mb-3 text-end">تفاصيل الفرع</h3>
             <div className="card shadow-lg branch-card">
               <div className="card-body">
-                <div className="d-flex align-items-center justify-content-end w-100 text-end">
+                <div className="d-flex align-items-center justify-content-end w-100 text-end mt-3">
                   <div className="branch-info">
-                    <p className="branch-name">{data.name}</p>
-                    <p className="branch-address">{data.address}</p>
+                    <p className="branch-name" style={{ width: "400px" }}>
+                      {data.name}
+                    </p>
+                    <p className="branch-address" style={{ width: "400px" }}>
+                      {data.address}
+                    </p>
                     {data.manager ? (
-                      <p className="branch-manager">
+                      <p className="branch-manager" style={{ width: "400px" }}>
                         {data.manager.first_name} {data.manager.last_name}
                       </p>
                     ) : (
-                      <p className="branch-manager">لا يوجد مدير</p>
+                      <p className="branch-manager" style={{ width: "400px" }}>
+                        لا يوجد مدير
+                      </p>
                     )}
-                    <p className="branch-phone">{data.phone}</p>
+                    <p className="branch-phone" style={{ width: "400px" }}>
+                      {data.phone}
+                    </p>
                   </div>
                   <div className="branch-labels">
                     <p className="label">اسم الفرع</p>
@@ -103,8 +112,9 @@ function BranchDetails() {
 
           {/* الشيفات */}
           <motion.div
-            initial={{ translateX: "-100vw" }}
-            animate={{ translateX: "0" }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
             className="col-12 chefs-list my-5"
           >
             <div className="chefs-container">
@@ -117,7 +127,7 @@ function BranchDetails() {
                         key={index}
                         className="col-xl-3 col-md-6 col-12 ms-auto chef-col"
                       >
-                        <div className="card chef-card shadow-sm">
+                        <div className="card chef-card shadow">
                           <div className="chef-info">
                             <p className="chef-name">
                               {chef.first_name} {chef.last_name}
@@ -140,8 +150,9 @@ function BranchDetails() {
 
           {/* مناديب المبيعات */}
           <motion.div
-            initial={{ translateX: "100vw" }}
-            animate={{ translateX: "0" }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
             className="col-12 sales"
           >
             <div className="container">
@@ -153,7 +164,7 @@ function BranchDetails() {
                       key={index}
                       className="col-xl-3 col-md-6 col-12 ms-auto delivery-col"
                     >
-                      <div className="card delivery-card shadow-sm">
+                      <div className="card delivery-card shadow">
                         <div className="delivery-info">
                           <p className="delivery-name">
                             {delivery.first_name} {delivery.last_name}
