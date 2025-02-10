@@ -1,0 +1,17 @@
+.new-order-container .new-order-row .new-order-title h1 {
+    font-family: "Cairo";
+        font-weight: 700;
+        font-size: 20px;
+}
+.new-order-container .new-order-row .new-order-table tr th {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        color: #667085;
+}
+.new-order-container .new-order-row .new-order-table tr td {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        color: #48505E;
+}
