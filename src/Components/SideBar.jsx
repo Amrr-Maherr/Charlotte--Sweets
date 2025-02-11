@@ -1,14 +1,34 @@
-import { useState } from "react";
+import React from "react";
 import "../Style/SideBar.css";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 function SideBar() {
-  const [activeLink, setActiveLink] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const handleLinkClick = (to) => {
-    setActiveLink(to);
+  const handleLogout = async (e) => {
+    e.preventDefault(); // Prevent default link behavior
+    try {
+      const token = JSON.parse(localStorage.getItem("AuthToken"));
+      await axios.post(
+        "https://management.mlmcosmo.com/api/logout",
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      // Clear token from localStorage
+      localStorage.removeItem("AuthToken");
+
+      // Redirect to login page
+      navigate("/"); // Replace "/login" with your actual login route
+    } catch (error) {
+      console.error("Logout failed:", error);
+      // Handle logout error (e.g., display an error message)
+    }
   };
 
   return (
@@ -21,7 +41,9 @@ function SideBar() {
               className={
                 location.pathname === "/dashboard/home" ? "active" : ""
               }
-              onClick={() => handleLinkClick("/dashboard/home")}
+              aria-current={
+                location.pathname === "/dashboard/home" ? "page" : undefined
+              }
             >
               <i className="fa fa-home"></i> الرئيسية
             </Link>
@@ -32,7 +54,9 @@ function SideBar() {
               className={
                 location.pathname === "/dashboard/branches" ? "active" : ""
               }
-              onClick={() => handleLinkClick("/dashboard/branches")}
+              aria-current={
+                location.pathname === "/dashboard/branches" ? "page" : undefined
+              }
             >
               <i className="fa fa-code-fork"></i> الفروع
             </Link>
@@ -43,7 +67,9 @@ function SideBar() {
               className={
                 location.pathname === "/dashboard/managers" ? "active" : ""
               }
-              onClick={() => handleLinkClick("/dashboard/managers")}
+              aria-current={
+                location.pathname === "/dashboard/managers" ? "page" : undefined
+              }
             >
               <i className="fa fa-users"></i> المديرين
             </Link>
@@ -54,7 +80,9 @@ function SideBar() {
               className={
                 location.pathname === "/dashboard/chefs" ? "active" : ""
               }
-              onClick={() => handleLinkClick("/dashboard/chefs")}
+              aria-current={
+                location.pathname === "/dashboard/chefs" ? "page" : undefined
+              }
             >
               <i className="fa fa-cutlery"></i> الشيفات
             </Link>
@@ -67,11 +95,13 @@ function SideBar() {
                   ? "active"
                   : ""
               }
-              onClick={() =>
-                handleLinkClick("/dashboard/sales-representatives")
+              aria-current={
+                location.pathname === "/dashboard/sales-representatives"
+                  ? "page"
+                  : undefined
               }
             >
-              <i className="fa fa-truck"></i>  مندوبي التوصيل
+              <i className="fa fa-truck"></i> مندوبي التوصيل
             </Link>
           </motion.li>
           <motion.li whileTap={{ scale: 0.9 }}>
@@ -80,7 +110,9 @@ function SideBar() {
               className={
                 location.pathname === "/dashboard/sales" ? "active" : ""
               }
-              onClick={() => handleLinkClick("/dashboard/sales")}
+              aria-current={
+                location.pathname === "/dashboard/sales" ? "page" : undefined
+              }
             >
               <i className="fa fa-line-chart"></i> السيلز
             </Link>
@@ -89,7 +121,9 @@ function SideBar() {
             <Link
               to="/dashboard/ads"
               className={location.pathname === "/dashboard/ads" ? "active" : ""}
-              onClick={() => handleLinkClick("/dashboard/ads")}
+              aria-current={
+                location.pathname === "/dashboard/ads" ? "page" : undefined
+              }
             >
               <i className="fa fa-bullhorn"></i> الاعلانات
             </Link>
@@ -100,7 +134,11 @@ function SideBar() {
               className={
                 location.pathname === "/dashboard/specialties" ? "active" : ""
               }
-              onClick={() => handleLinkClick("/dashboard/specialties")}
+              aria-current={
+                location.pathname === "/dashboard/specialties"
+                  ? "page"
+                  : undefined
+              }
             >
               <i className="fa fa-briefcase"></i> التخصصات
             </Link>
@@ -111,7 +149,9 @@ function SideBar() {
               className={
                 location.pathname === "/dashboard/flowers" ? "active" : ""
               }
-              onClick={() => handleLinkClick("/dashboard/flowers")}
+              aria-current={
+                location.pathname === "/dashboard/flowers" ? "page" : undefined
+              }
             >
               <i className="fa fa-leaf"></i> الورود
             </Link>
@@ -122,9 +162,20 @@ function SideBar() {
               className={
                 location.pathname === "/dashboard/products" ? "active" : ""
               }
-              onClick={() => handleLinkClick("/dashboard/products")}
+              aria-current={
+                location.pathname === "/dashboard/products" ? "page" : undefined
+              }
             >
               <i className="fa fa-cogs"></i> المنتجات
+            </Link>
+          </motion.li>
+          <motion.li whileTap={{ scale: 0.9 }}>
+            <Link
+              to="#" // Use "#" as the href since it's not a real route
+              className="logout-link" // Add a class for styling purposes
+              onClick={handleLogout}
+            >
+              <i className="fa fa-sign-out"></i> تسجيل الخروج
             </Link>
           </motion.li>
         </ul>

@@ -21,7 +21,7 @@ function PendingRequests() {
           { headers: { Authorization: `Bearer ${token}` } }
         );
         console.log("Managers Data:", response.data.data);
-        setManagers(response.data.data.slice(0, 10));
+        setManagers(response.data.data.slice(0, 3));
         setManagerRole(response.data.key);
       } catch (error) {
         console.error("Error fetching managers:", error);
@@ -45,7 +45,7 @@ function PendingRequests() {
           { headers: { Authorization: `Bearer ${token}` } }
         );
         console.log("Sales Data:", response.data.data);
-        setSales(response.data.data.slice(0, 10));
+        setSales(response.data.data.slice(0, 3));
         setSalesRole(response.data.key);
       } catch (error) {
         console.error("Error fetching sales:", error);
@@ -108,8 +108,9 @@ function PendingRequests() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(
+          .post(
             `https://management.mlmcosmo.com/api/reject-manager/${managerId}`,
+            {},
             {
               headers: { Authorization: `Bearer ${token}` },
             }
@@ -172,9 +173,14 @@ function PendingRequests() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`https://management.mlmcosmo.com/api/reject-sale/${saleId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
+          .post(
+            `https://management.mlmcosmo.com/api/reject-sale/${saleId}`,
+            {},
+            {
+              // Changed DELETE to POST and added {} as body
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          )
           .then((response) => {
             Swal.fire("تم الرفض!", "تم رفض طلب المندوب بنجاح.", "success");
             setSales(sales.filter((sale) => sale.id !== saleId));

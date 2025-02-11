@@ -105,9 +105,6 @@ function Login() {
                     id="password"
                   />
                 </div>
-                <div className="forget-password-link">
-                  <Link to="/forget-password" style={{textDecoration:"none",color:"black"}}>هل نسيت كلمه السر؟</Link>
-                </div>
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.8 }}
