@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios"; // تأكد من استيراد axios
+import axios from "axios";
 import {
   PieChart,
   Pie,
@@ -8,26 +8,25 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-
-// دالة لتوليد ألوان عشوائية
-const generateRandomColor = () => {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-};
+import Loader from "../Pages/Dashboard/Loader/Loader";
 
 function Chart() {
   const [data, setData] = useState([]);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [isLoading, setIsLoading] = useState(true); // حالة تحميل البيانات
+  const [isLoading, setIsLoading] = useState(true);
   const token = JSON.parse(localStorage.getItem("AuthToken"));
 
-  // دالة لجلب البيانات
+  const COLORS = {
+    مكتملة: "rgba(244, 67, 54, 1)",
+    "قيد التنفيذ": "rgba(172, 13, 108, 1)",
+    جديدة: "rgba(55, 205, 47, 1)",
+    مرفوضة: "rgba(255, 174, 52, 1)",
+    مرتجعة: "rgba(115, 212, 233, 1)",
+    منتهيه: "rgba(99, 96, 253, 1)",
+  };
+
   useEffect(() => {
-    setIsLoading(true); // يبدأ تحميل البيانات
+    setIsLoading(true);
     if (!token) {
       console.log("No AuthToken found in localStorage");
       return;
@@ -58,92 +57,101 @@ function Chart() {
         console.log("Error fetching data", error);
       })
       .finally(() => {
-        setIsLoading(false); // ينتهي تحميل البيانات
+        setIsLoading(false);
       });
   }, [selectedYear]);
 
-  // تحديد السنة الحالية وإضافة سنوات مستقبلية (مثلاً 5 سنوات قادمة)
   const currentYear = new Date().getFullYear();
   const futureYears = Array.from(
     { length: 100 },
     (_, index) => currentYear + index
-  ); // السنوات من الحالية حتى 5 سنوات قادمة
-
-  if (isLoading) {
-    return <div>Loading...</div>; // عرض مؤشر تحميل إذا كانت البيانات قيد التحميل
-  }
+  );
 
   return (
-    <div className="d-flex align-items-center justify-content-between flex-column">
-      <div className="d-flex align-items-center justify-content-between w-100 py-4">
-        <select
-          value={selectedYear}
-          onChange={(e) => setSelectedYear(e.target.value)}
-          style={{
-            width: "80px",
-            height: "25px",
-            borderRadius: "8px",
-            border: "none",
-            outline: "none",
-          }}
-        >
-          {futureYears.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
-        <h1
-          style={{
-            fontSize: "12px",
-            fontFamily: "cairo",
-            fontWeight: "600",
-            textAlign: "right",
-          }}
-        >
-          مخطط بيانى
-        </h1>
-      </div>
-      <div
-        style={{
-          width: "100%",
-          margin: "auto",
-                  backgroundColor: "white",
-          borderRadius:"10px"
-        }}
-        className="my-4"
-      >
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie
-              data={data}
-              cx="50%" // تم التعديل هنا
-              cy="50%" // تم التعديل هنا
-              innerRadius={60}
-              outerRadius={80}
-              paddingAngle={5}
-              dataKey="value"
-              label
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={generateRandomColor()} />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend
-              layout="horizontal"
-              wrapperStyle={{
-                display: "flex",
-                justifyContent: "space-around",
-                flexWrap: "wrap",
-                padding: "20px 10px",
-                fontSize: "12px",
+    <>
+      {isLoading ? (
+        <>
+          <Loader />
+        </>
+      ) : (
+        <>
+          <div className="d-flex align-items-center justify-content-between flex-column mt-4">
+            <div className="d-flex align-items-center justify-content-between w-100">
+              <select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+                style={{
+                  width: "80px",
+                  height: "25px",
+                  borderRadius: "8px",
+                  border: "none",
+                  outline: "none",
+                  color: "rgba(115, 115, 115, 1)",
+                }}
+              >
+                {futureYears.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+              <h1
+                style={{
+                  fontSize: "12px",
+                  fontFamily: "cairo",
+                  fontWeight: "600",
+                  textAlign: "right",
+                }}
+              >
+                مخطط بيانى
+              </h1>
+            </div>
+            <div
+              style={{
+                width: "100%",
+                height: "240px",
+                margin: "auto",
+                backgroundColor: "white",
+                borderRadius: "10px",
               }}
-            />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
+              className="my-4 shadow"
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={data}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={70}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {data.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[entry.name]} // Use predefined colors
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend
+                    layout="horizontal"
+                    wrapperStyle={{
+                      display: "flex",
+                      justifyContent: "space-around",
+                      flexWrap: "wrap",
+                      padding: "10px",
+                      fontSize: "12px",
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </>
+      )}
+    </>
   );
 }
 

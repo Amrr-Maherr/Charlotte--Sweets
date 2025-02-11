@@ -4,6 +4,9 @@ import OrderBox from "../../../Components/HomeOrderBox/OrderBox";
 import axios from "axios";
 import Loader from "../Loader/Loader";
 import HomeStatistics from "../../../Components/HomeStatistics";
+import Chart from "../../../Components/Chart";
+import ManagersRequests from "../../../Components/ManagersRequests/ManagersRequests";
+import PendingRequests from "../../../Components/PendingRequests/PendingRequests";
 
 function Home() {
   const [Orders, setOrders] = useState({});
@@ -94,7 +97,20 @@ function Home() {
               ))}
             </div>
           </div>
-          {/* <HomeStatistics /> */}
+          <div className="container">
+            <div className="row  d-flex justify-content-center">
+              <div className="col-xl-4 col-12  d-flex justify-content-center">
+                <HomeStatistics />
+              </div>
+              <div className="col-xl-4 col-12 d-flex flex-column align-items-evenly justify-content-center">
+                <ManagersRequests />
+                <Chart />
+              </div>
+              <div className="col-xl-4 col-12">
+                <PendingRequests />
+              </div>
+            </div>
+          </div>
         </>
       )}
     </section>

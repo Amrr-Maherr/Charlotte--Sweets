@@ -1,0 +1,81 @@
+.main-parent {
+    width: 370px;
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 1);
+        margin: 0px auto;
+        height: auto;
+}
+.PendingRequests-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 320px;
+    margin: 0px auto;
+    margin-top:35px;
+    margin-bottom: 10px;
+}
+.PendingRequests-title a {
+    font-family: "Cairo";
+        font-weight: 600;
+        font-size: 20px;
+        color: rgba(169, 65, 29, 1);
+        text-decoration: none;
+}
+.PendingRequests-title p {
+    font-family: "Cairo";
+        font-weight: 700;
+        font-size: 20px;
+        color: rgba(0, 0, 0, 1);
+}
+/*  */
+.manager-parent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.pending-requests-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 50%;
+}
+.manager-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding:30px 10px ;
+}
+.pending-requests-actions {
+    display: flex;
+    gap: 10px;
+}
+.pending-requests-name {
+    font-family: "Cairo";
+        font-weight: 500;
+        font-size: 20px;
+        color: rgba(0, 0, 0, 1);
+}
+.pending-requests-role {
+    font-family: "Cairo";
+        font-weight: 500;
+        font-size: 14px;
+        color: rgba(115, 115, 115, 1);
+}
+.pending-requests-image {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+.pending-requests-image img {
+    width: 100%;
+    height: 100%;
+    -o-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.pending-requests-actions {
+    cursor: pointer;
+}

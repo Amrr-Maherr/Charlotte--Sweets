@@ -1,57 +1,53 @@
-.StatisticsList {
-    background-color: white;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
-    padding: 0px 20px;
-    width: 397px;
+.parent {
+        min-width: 320px;
+        height: auto;
+        -o-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        -ms-border-radius: 10px;
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 1);
+        padding: 20px;
 }
-.StatisticsList-title h3 {
-    font-family: "Cairo";
-        font-size: 20px;
-        font-weight: 700;
-        text-align: right;
+.parent .sub-parent {
+    width: 100%;
 }
-.StatisticsList-main {
+.parent .sub-parent .info{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px 0px;
 }
-.StatisticsList-main .StatisticsList-info {
-    width: 60%;
+.parent .sub-parent .info .sub-info {
+    width: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 }
-.StatisticsList-main .StatisticsList-info .StatisticsList-number {
-        font-size: 25px;
+.parent .sub-parent .info .sub-info .info-number {
         font-weight: 600;
-        color: #4D4D4D;
+        font-size: 25px;
+        color: rgba(77, 77, 77, 1);
 }
-.StatisticsList-main .StatisticsList-info .StatisticsList-name {
+.parent .sub-parent .info .sub-info .info-title {
     font-family: "Cairo";
-        font-size: 20px;
         font-weight: 400;
-        color: #65647C;
+        font-size: 20px;
 }
-.StatisticsList-main  .StatisticsList-icon {
-       width: 54px;
-       height: 54px;
-       border-radius: 50%;
-       -webkit-border-radius: 50%;
-       -moz-border-radius: 50%;
-       -ms-border-radius: 50%;
-       -o-border-radius: 50%;
-       background-color: #EEE8FA;
-       display: flex;
-       align-items: center;
-       justify-content: center;
+.parent .sub-parent .info .icon {
+    background-color: rgba(238, 232, 250, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    -o-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+    color: rgba(117, 69, 220, 1);
 }
-.StatisticsList-main .StatisticsList-icon i {
+.parent .sub-parent .info .icon i {
     font-size: 21px;
-    color: #B49BEA;
 }
