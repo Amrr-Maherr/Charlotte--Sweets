@@ -13,6 +13,26 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const token = JSON.parse(localStorage.getItem("AuthToken"));
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delayChildren: 0.3,
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 },
+    },
+  };
+
   useEffect(() => {
     axios
       .get("https://management.mlmcosmo.com/api/orders-stats", {
@@ -28,13 +48,23 @@ function Home() {
   }, [token]);
 
   return (
-    <section style={{ minHeight: "100dvh" }}>
+    <motion.section
+      style={{ minHeight: "100dvh" }}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       {loading ? (
         <Loader />
       ) : (
         <>
           <div className="container">
-            <div className="row d-flex justify-content-center my-4">
+            <motion.div
+              className="row d-flex justify-content-center my-4"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
               {[
                 {
                   key: "completedOrders",
@@ -82,9 +112,7 @@ function Home() {
                 <motion.div
                   key={order.key}
                   className="col-xl-3 my-3"
-                  initial={{ opacity: 0, translateY: 50 }}
-                  animate={{ opacity: 1, translateY: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  variants={itemVariants}
                 >
                   <OrderBox
                     icon={order.icon}
@@ -95,25 +123,39 @@ function Home() {
                   />
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
-          <div className="container">
-            <div className="row  d-flex justify-content-center">
-              <div className="col-xl-4 col-12  d-flex justify-content-center">
+          <motion.div
+            className="container"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.div
+              className="row  d-flex justify-content-center"
+              variants={containerVariants}
+            >
+              <motion.div
+                className="col-xl-4 col-12  d-flex justify-content-center"
+                variants={itemVariants}
+              >
                 <HomeStatistics />
-              </div>
-              <div className="col-xl-4 col-12 d-flex flex-column align-items-evenly justify-content-center">
+              </motion.div>
+              <motion.div
+                className="col-xl-4 col-12 d-flex flex-column align-items-evenly justify-content-center"
+                variants={itemVariants}
+              >
                 <ManagersRequests />
                 <Chart />
-              </div>
-              <div className="col-xl-4 col-12">
+              </motion.div>
+              <motion.div className="col-xl-4 col-12" variants={itemVariants}>
                 <PendingRequests />
-              </div>
-            </div>
-          </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         </>
       )}
-    </section>
+    </motion.section>
   );
 }
 

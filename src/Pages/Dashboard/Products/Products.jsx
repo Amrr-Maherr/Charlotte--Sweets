@@ -137,7 +137,7 @@ function Products() {
                   />
                 </div>
                 <div className="col-xl-4 mt-5">
-                  <h2 className="text-end">المنتجات</h2>
+                  <h2 className="text-end" style={{fontSize:"20px"}}>المنتجات</h2>
                 </div>
               </div>
               <div className="row product-row">

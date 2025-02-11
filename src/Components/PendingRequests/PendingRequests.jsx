@@ -190,7 +190,7 @@ function PendingRequests() {
   return (
     <>
       <div className="PendingRequests-title">
-        <Link to="">شاهد الكل</Link>
+        <Link to="/dashboard/all-requests">شاهد الكل</Link>
         <h5>طلبات الاضافه</h5>
       </div>
       <div className="main-parent pending-requests-container shadow">

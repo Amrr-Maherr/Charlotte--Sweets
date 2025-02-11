@@ -4,7 +4,7 @@ import axios from "axios";
 import Loader from "../Loader/Loader";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import "bootstrap/dist/css/bootstrap.min.css"; // استيراد Bootstrap CSS
+import "bootstrap/dist/css/bootstrap.min.css";
 import L from "leaflet";
 
 // حل مشكلة الأيقونات في Leaflet
@@ -16,15 +16,115 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
 });
 
+// Helper functions to display data conditionally
+const displayField = (label, value) => {
+  // Do not display fields containing "id" (case-insensitive)
+  if (label.toLowerCase().includes("id")) {
+    return null;
+  }
+
+  if (value !== null && value !== undefined) {
+    return (
+      <li className="list-group-item d-flex justify-content-between align-items-center">
+        {" "}
+        {/* Added flexbox */}
+        <strong>{label}:</strong>
+        <span>{value.toString()}</span> {/* Wrapped value in a span */}
+      </li>
+    );
+  }
+  return null;
+};
+
+const displayObjectInfo = (label, object) => {
+  if (object && typeof object === "object") {
+    return (
+      <div className="mb-3">
+        <h6 className="card-subtitle mb-2 text-muted">{label}</h6>
+        {object.image && (
+          <img
+            src={object.image}
+            alt={`${label} Image`}
+            style={{
+              width: "50px",
+              height: "50px",
+              borderRadius: "50%",
+            }}
+            className="mb-2"
+          />
+        )}
+        <ul className="list-group list-group-flush">
+          {displayField(
+            `اسم ${label}`,
+            `${object.first_name} ${object.last_name}`
+          )}
+          {displayField(`هاتف ${label}`, object.phone)}
+          {/* Add more fields here as needed */}
+        </ul>
+      </div>
+    );
+  }
+  return null;
+};
+
+const displayProductInfo = (label, product) => {
+  if (product && typeof product === "object") {
+    return (
+      <div className="mb-3">
+        <h6 className="card-subtitle mb-2 text-muted">{label}</h6>
+        {product.image && (
+          <img
+            src={product.image}
+            alt={`${label} Image`}
+            style={{
+              width: "100px",
+              height: "100px",
+              borderRadius: "10px",
+            }}
+            className="mb-2"
+          />
+        )}
+        <ul className="list-group list-group-flush">
+          {displayField(`اسم ${label}`, product.name)}
+          {displayField(`الوصف`, product.description)}
+          {/* Add more fields here as needed */}
+        </ul>
+      </div>
+    );
+  }
+  return null;
+};
+
+const displayFlowerInfo = (label, flowers) => {
+  if (flowers && typeof flowers === "object") {
+    return (
+      <div className="mb-3">
+        <h6 className="card-subtitle mb-2 text-muted">{label}</h6>
+        <ul className="list-group list-group-flush">
+          {displayField(`نوع ${label}`, flowers.type)}
+          {/* Add more fields here as needed */}
+        </ul>
+      </div>
+    );
+  }
+  return null;
+};
+
 function OrderDetails() {
   const { id } = useParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const token = JSON.parse(localStorage.getItem("AuthToken"));
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (!token) {
+          setError("الرجاء تسجيل الدخول.");
+          setLoading(false);
+          return;
+        }
         const response = await axios.get(
           `https://management.mlmcosmo.com/api/order/${id}`,
           {
@@ -35,6 +135,7 @@ function OrderDetails() {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching order details:", error);
+        setError("حدث خطأ أثناء جلب بيانات الطلب. يرجى المحاولة مرة أخرى.");
         setLoading(false);
       }
     };
@@ -45,244 +146,299 @@ function OrderDetails() {
     return <Loader />;
   }
 
+  if (error) {
+    return <p className="alert alert-danger">{error}</p>;
+  }
+
   if (!order) {
     return <p>الطلب غير موجود</p>;
   }
 
-  // فحص القيم والتأكد من أنها أرقام صالحة
+  // Validate latitude and longitude
   const latitude = parseFloat(order.latitude);
   const longitude = parseFloat(order.longitude);
-  const isValidLatLng = !isNaN(latitude) && !isNaN(longitude); // فحص ما إذا كانا أرقامًا صالحة
+  const isValidLatLng = !isNaN(latitude) && !isNaN(longitude);
 
-  const position = isValidLatLng ? [latitude, longitude] : null; // استخدم null إذا كانت القيم غير صالحة
+  const position = isValidLatLng ? [latitude, longitude] : null;
 
-  // دالة لعرض تفاصيل الورد
-  const renderFlowerDetails = () => {
-    if (!order.flowers) return null; // لا تعرض شيء إذا لم تكن هناك ورود
+  // Render UI based on order type
+  const renderOrderDetails = () => {
+    switch (order.order_type) {
+      case "كيك":
+        // Cake Order
+        return (
+          <>
+            <h2 className="mb-4">تفاصيل طلب كيك</h2>
+            <div className="row">
+              {/* Order and Customer Information */}
+              <div className="col-md-6 px-2 mb-4">
+                <div className="card">
+                  {" "}
+                  {/* Removed h-100 */}
+                  <div className="card-body d-flex flex-column">
+                    {" "}
+                    {/* Added flexbox */}
+                    <h5 className="card-title">معلومات الطلب والعميل</h5>
+                    <ul className="list-group list-group-flush flex-grow-1">
+                      {" "}
+                      {/* Added flex-grow-1 */}
+                      {displayField("نوع الطلب", order.order_type)}
+                      {displayField("حالة الطلب", order.status)}
+                      {displayField("اسم العميل", order.customer_name)}
+                      {displayField("هاتف العميل", order.customer_phone)}
+                      {/* Check if product exists to determine where to get the name */}
+                      {displayField("اسم الكيك", order.order_details)}
+                      {displayField("تاريخ التوصيل", order.delivery_date)}
+                      {displayField("وقت التوصيل", order.delivery_time)}
+                    </ul>
+                  </div>
+                </div>
+              </div>
 
-    return (
-      <div className="col-md-6 px-2 my-4">
-        <div className="card mb-3 h-100 d-flex flex-column">
-          <div className="card-body">
-            <h5 className="card-title">تفاصيل الورد</h5>
-            {/* هنا تعرض تفاصيل الورد بناءً على البيانات المتوفرة */}
-            <p>
-              <strong>نوع الورد:</strong> {order.flowers.type || "غير محدد"}
-            </p>
-            <p>
-              <strong>الكمية:</strong> {order.flower_quantity || "غير محدد"}
-            </p>
-            <p>
-              <strong>السعر:</strong> {order.flower_price || "غير محدد"}
-            </p>
-            {/* يمكنك إضافة المزيد من التفاصيل هنا */}
-          </div>
-        </div>
-      </div>
-    );
-  };
+              {/* Payment Information */}
+              <div className="col-md-6 px-2 mb-4">
+                <div className="card">
+                  {" "}
+                  {/* Removed h-100 */}
+                  <div className="card-body d-flex flex-column">
+                    {" "}
+                    {/* Added flexbox */}
+                    <h5 className="card-title">معلومات الدفع</h5>
+                    <ul className="list-group list-group-flush flex-grow-1">
+                      {" "}
+                      {/* Added flex-grow-1 */}
+                      {displayField("طريقة الدفع", order.payment_method)}
+                      {displayField("السعر الكلي", order.total_price)}
+                      {displayField("المقدم", order.deposit)}
+                      {displayField("المتبقي", order.remaining)}
+                      {displayField("سعر التوصيل", order.delivery_price)}
+                    </ul>
+                  </div>
+                </div>
+              </div>
 
-  // دالة لعرض تفاصيل الكيك
-  const renderCakeDetails = () => {
-    if (!order.product) return null; // لا تعرض شيء إذا لم يكن هناك كيك
+              {/* Personnel Information */}
+              <div className="col-md-4 px-2 mb-4">
+                <div className="card">
+                  {" "}
+                  {/* Removed h-100 */}
+                  <div className="card-body d-flex flex-column">
+                    {" "}
+                    {/* Added flexbox */}
+                    <h5 className="card-title">معلومات الأفراد</h5>
+                    <div className="flex-grow-1">
+                      {" "}
+                      {/* Added flex-grow-1 */}
+                      {displayObjectInfo("البائع", order.sale)}
+                      {displayObjectInfo("الشيف", order.chef)}
+                      {/* Only display delivery if it exists */}
+                      {order.delivery &&
+                        displayObjectInfo("عامل التوصيل", order.delivery)}
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-    return (
-      <div className="col-md-6 px-2 my-4">
-        <div className="card mb-3 h-100 d-flex flex-column">
-          <div className="card-body">
-            <h5 className="card-title">تفاصيل الكيك</h5>
-            {/* هنا تعرض تفاصيل الكيك بناءً على البيانات المتوفرة */}
-            <p>
-              <strong>اسم الكيك:</strong> {order.product.name || "غير محدد"}
-            </p>
-            <p>
-              <strong>الوصف:</strong>{" "}
-              {order.product.description || "لا يوجد وصف"}
-            </p>
-            <p>
-              <strong>السعر:</strong> {order.price || "غير محدد"}
-            </p>
-            {/* يمكنك إضافة المزيد من التفاصيل هنا */}
-            {order.product.image && (
-              <img
-                src={order.product.image}
-                alt="صورة الكيك"
-                style={{
-                  width: "150px",
-                  height: "150px",
-                  borderRadius: "10px",
-                }}
-              />
-            )}
-          </div>
-        </div>
-      </div>
-    );
+              {/* ImageES Information */}
+              {order.images &&
+                Array.isArray(order.images) &&
+                order.images.length > 0 && (
+                  <div className="col-md-4 px-2 mb-4">
+                    <div className="card">
+                      {" "}
+                      {/* Removed h-100 */}
+                      <div className="card-body">
+                        <h5 className="card-title">صور إضافية</h5>
+                        <div className="d-flex flex-wrap">
+                          {order.images.map((img, index) => (
+                            <img
+                              key={index}
+                              src={img.image}
+                              alt={`صورة إضافية ${index + 1}`}
+                              style={{
+                                width: "100px",
+                                height: "100px",
+                                margin: "5px",
+                                borderRadius: "10px",
+                              }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+            </div>
+          </>
+        );
+      case "ورد":
+      case "كيك و ورد": // **Modified: Handling Cake and Flower case**
+        // Flower Order
+        return (
+          <>
+            <h2 className="mb-4">تفاصيل طلب {order.order_type}</h2>{" "}
+            {/* Modified title */}
+            <div className="row">
+              {/* Order and Customer Information */}
+              <div className="col-md-6 px-2 mb-4">
+                <div className="card">
+                  {" "}
+                  {/* Removed h-100 */}
+                  <div className="card-body d-flex flex-column">
+                    {" "}
+                    {/* Added flexbox */}
+                    <h5 className="card-title">معلومات الطلب والعميل</h5>
+                    <ul className="list-group list-group-flush flex-grow-1">
+                      {" "}
+                      {/* Added flex-grow-1 */}
+                      {displayField("رقم الطلب", order.id)}
+                      {displayField("نوع الطلب", order.order_type)}
+                      {displayField("حالة الطلب", order.status)}
+                      {displayField("اسم العميل", order.customer_name)}
+                      {displayField("هاتف العميل", order.customer_phone)}
+                      {displayField("تاريخ التوصيل", order.delivery_date)}
+                      {displayField("وقت التوصيل", order.delivery_time)}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment Information */}
+              <div className="col-md-6 px-2 mb-4">
+                <div className="card">
+                  {" "}
+                  {/* Removed h-100 */}
+                  <div className="card-body d-flex flex-column">
+                    {" "}
+                    {/* Added flexbox */}
+                    <h5 className="card-title">معلومات الدفع</h5>
+                    <ul className="list-group list-group-flush flex-grow-1">
+                      {" "}
+                      {/* Added flex-grow-1 */}
+                      {displayField("طريقة الدفع", order.payment_method)}
+                      {displayField("السعر الكلي", order.total_price)}
+                      {displayField("المقدم", order.deposit)}
+                      {displayField("المتبقي", order.remaining)}
+                      {displayField("سعر التوصيل", order.delivery_price)}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Personnel Information */}
+              <div className="col-md-4 px-2 mb-4">
+                <div className="card">
+                  {" "}
+                  {/* Removed h-100 */}
+                  <div className="card-body d-flex flex-column">
+                    {" "}
+                    {/* Added flexbox */}
+                    <h5 className="card-title">معلومات الأفراد</h5>
+                    <div className="flex-grow-1">
+                      {" "}
+                      {/* Added flex-grow-1 */}
+                      {displayObjectInfo("البائع", order.sale)}
+                      {/* Only display delivery if it exists */}
+                      {order.delivery &&
+                        displayObjectInfo("عامل التوصيل", order.delivery)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Flower Information */}
+              {order.flowers && (
+                <div className="col-md-4 px-2 mb-4">
+                  <div className="card">
+                    {" "}
+                    {/* Removed h-100 */}
+                    <div className="card-body d-flex flex-column">
+                      {" "}
+                      {/* Added flexbox */}
+                      <h5 className="card-title">معلومات الورد</h5>
+                      <div className="flex-grow-1">
+                        {displayFlowerInfo("الورد", order.flowers)}
+                        {displayField("كمية الورد", order.flower_quantity)}
+                        {displayField("سعر الورد", order.flower_price)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {/* Image Information */}
+              {order.image && (
+                <div className="col-md-4 px-2 mb-4">
+                  <div className="card">
+                    {" "}
+                    {/* Removed h-100 */}
+                    <div className="card-body">
+                      <h5 className="card-title">صورة الطلب</h5>
+                      <img
+                        src={order.image}
+                        alt="صورة الطلب"
+                        style={{ width: "100%", borderRadius: "10px" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+              {/* ImageES Information */}
+              {order.images &&
+                Array.isArray(order.images) &&
+                order.images.length > 0 && (
+                  <div className="col-md-4 px-2 mb-4">
+                    <div className="card">
+                      {" "}
+                      {/* Removed h-100 */}
+                      <div className="card-body">
+                        <h5 className="card-title">صور إضافية</h5>
+                        <div className="d-flex flex-wrap">
+                          {order.images.map((img, index) => (
+                            <img
+                              key={index}
+                              src={img.image}
+                              alt={`صورة إضافية ${index + 1}`}
+                              style={{
+                                width: "100px",
+                                height: "100px",
+                                margin: "5px",
+                                borderRadius: "10px",
+                              }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+            </div>
+          </>
+        );
+      default:
+        return <p>نوع الطلب غير مدعوم</p>;
+    }
   };
 
   return (
     <div dir="rtl" className="container mt-4">
+      {renderOrderDetails()}
+
+      {/* Delivery and Map Information */}
       <div className="row">
-        {/* معلومات الطلب الأساسية ومعلومات العميل */}
-        <div className="col-md-4 px-2 my-4">
-          <div className="card mb-3 h-100 d-flex flex-column">
-            <div className="card-body">
-              <h5 className="card-title">معلومات الطلب والعميل</h5>
-              <p>
-                <strong>رقم الطلب:</strong> {order.id}
-              </p>
-              <p>
-                <strong>نوع الطلب:</strong> {order.order_type}
-              </p>
-              <p>
-                <strong>حالة الطلب:</strong> {order.status}
-              </p>
-              <p>
-                <strong>اسم العميل:</strong> {order.customer_name}
-              </p>
-              <p>
-                <strong>هاتف العميل:</strong> {order.customer_phone}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* معلومات الدفع */}
-        <div className="col-md-4 px-2 my-4">
-          <div className="card mb-3 h-100 d-flex flex-column">
-            <div className="card-body">
-              <h5 className="card-title">معلومات الدفع</h5>
-              <p>
-                <strong>طريقة الدفع:</strong> {order.payment_method}
-              </p>
-              <p>
-                <strong>السعر الكلي:</strong> {order.total_price}
-              </p>
-              <p>
-                <strong>المقدم:</strong> {order.deposit}
-              </p>
-              <p>
-                <strong>المتبقي:</strong> {order.remaining}
-              </p>
-              <p>
-                <strong>سعر التوصيل:</strong>{" "}
-                {order.delivery_price || "غير محدد"}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* معلومات الأفراد (البائع، الشيف، عامل التوصيل) */}
-        <div className="col-md-4 px-2 my-4">
-          <div className="card mb-3 h-100 d-flex flex-column">
-            <div className="card-body d-flex flex-column justify-content-between">
-              <div>
-                <h5 className="card-title">معلومات الأفراد</h5>
-                {order.sale && (
-                  <>
-                    <h6 className="card-subtitle mb-2 text-muted">البائع</h6>
-                    {order.sale.image && (
-                      <img
-                        src={order.sale.image}
-                        alt="صورة البائع"
-                        style={{
-                          width: "50px",
-                          height: "50px",
-                          borderRadius: "50%",
-                        }}
-                        className="mb-2"
-                      />
-                    )}
-                    <p>
-                      <strong>اسم البائع:</strong> {order.sale.first_name}{" "}
-                      {order.sale.last_name}
-                    </p>
-                    <p>
-                      <strong>هاتف البائع:</strong> {order.sale.phone}
-                    </p>
-                  </>
-                )}
-                {order.chef && (
-                  <>
-                    <h6 className="card-subtitle mb-2 text-muted">الشيف</h6>
-                    {order.chef.image && (
-                      <img
-                        src={order.chef.image}
-                        alt="صورة الشيف"
-                        style={{
-                          width: "50px",
-                          height: "50px",
-                          borderRadius: "50%",
-                        }}
-                        className="mb-2"
-                      />
-                    )}
-                    <p>
-                      <strong>اسم الشيف:</strong> {order.chef.first_name}{" "}
-                      {order.chef.last_name}
-                    </p>
-                    <p>
-                      <strong>هاتف الشيف:</strong> {order.chef.phone}
-                    </p>
-                  </>
-                )}
-                {order.delivery && (
-                  <>
-                    <h6 className="card-subtitle mb-2 text-muted">
-                      عامل التوصيل
-                    </h6>
-                    {order.delivery.image && (
-                      <img
-                        src={order.delivery.image}
-                        alt="صورة عامل التوصيل"
-                        style={{
-                          width: "50px",
-                          height: "50px",
-                          borderRadius: "50%",
-                        }}
-                        className="mb-2"
-                      />
-                    )}
-                    <p>
-                      <strong>اسم عامل التوصيل:</strong>{" "}
-                      {order.delivery.first_name} {order.delivery.last_name}
-                    </p>
-                    <p>
-                      <strong>هاتف عامل التوصيل:</strong> {order.delivery.phone}
-                    </p>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* عرض تفاصيل الورد أو الكيك بناءً على وجودهما */}
-        {order.flowers && renderFlowerDetails()}
-        {order.product && renderCakeDetails()}
-
-        {/* الخريطة ومعلومات التوصيل المدمجة */}
-        <div className="col-md-12 px-2">
-          <div className="card mb-3">
-            <div className="card-body">
+        <div className="col-md-12 px-2 mb-4">
+          <div className="card">
+            {" "}
+            {/* Removed h-100 */}
+            <div className="card-body d-flex flex-column">
+              {" "}
+              {/* Added flexbox */}
               <h5 className="card-title">معلومات التوصيل والخريطة</h5>
-              <p>
-                <strong>وصف العنوان:</strong> {order.map_desc}
-              </p>
-              <p>
-                <strong>بيانات إضافية:</strong>{" "}
-                {order.additional_data || "لا يوجد"}
-              </p>
-              {order.product_id && (
-                <p>
-                  <strong>معرف المنتج:</strong> {order.product_id}
-                </p>
-              )}
-              {order.rejection_cause && (
-                <p>
-                  <strong>سبب الرفض:</strong> {order.rejection_cause}
-                </p>
-              )}
+              <ul className="list-group list-group-flush">
+                {displayField("وصف العنوان", order.map_desc)}
+                {displayField("بيانات إضافية", order.additional_data)}
+                {displayField("معرف المنتج", order.product_id)}
+                {displayField("سبب الرفض", order.rejection_cause)}
+              </ul>
               {isValidLatLng ? (
                 <MapContainer
                   center={position}
@@ -298,7 +454,9 @@ function OrderDetails() {
                   </Marker>
                 </MapContainer>
               ) : (
-                <p>لا يمكن عرض الخريطة بسبب عدم وجود بيانات موقع صالحة.</p>
+                <p className="text-muted">
+                  لا يمكن عرض الخريطة بسبب عدم وجود بيانات موقع صالحة.
+                </p>
               )}
             </div>
           </div>

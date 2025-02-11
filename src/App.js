@@ -30,6 +30,7 @@ import RejectedOrders from "./Pages/Dashboard/RejectedOrders/RejectedOrders.jsx"
 import ReturnedOrders from "./Pages/Dashboard/ReturnedOrders/ReturnedOrders.jsx";
 import PendingOrders from "./Pages/Dashboard/PendingOrders/PendingOrders.jsx";
 import OrderDetails from "./Pages/Dashboard/OrderDetails/OrderDetails.jsx";
+import AllRequests from "./Pages/Dashboard/AllRequests/AllRequests.jsx";
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
             <Route path="returned-orders" element={<ReturnedOrders />} />
             <Route path="pending-orders" element={<PendingOrders />} />
             <Route path="delivered-orders" element={<DeliveredOrders />} />
+            <Route path="all-requests" element={<AllRequests/>} />
             <Route
               path="/dashboard/manager-details/:id"
               element={<Details />}

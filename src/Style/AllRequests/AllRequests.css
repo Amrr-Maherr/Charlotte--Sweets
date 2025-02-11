@@ -1,0 +1,12 @@
+.AllRequests-table tr th {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        color: #667085;
+}
+.AllRequests-table tr td {
+    font-family: "Cairo";
+        font-size: 20px;
+        font-weight: 700;
+        color: #48505E;
+}

@@ -63,7 +63,7 @@ function ManagersRequests() {
         <div className="requests-parent">
           <div className="requests-sub-parent">
             <p className="requests-number">{requests.sales}</p>
-            <h4 className="requests-title">طلبات الاضافه</h4>
+            <h4 className="requests-title">سليز جديد</h4>
           </div>
           <div className="requests-icon">
             <i className="fa fa-user-plus"></i> {/* Request Addition Icon */}

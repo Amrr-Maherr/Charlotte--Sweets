@@ -182,7 +182,12 @@ function Roses() {
                   />
                 </div>
                 <div className="col-xl-4 mt-5">
-                  <h1 className="Roses-title text-end">الورود</h1>
+                  <h1
+                    className="Roses-title text-end"
+                    style={{ fontSize: "20px" }}
+                  >
+                    الورود
+                  </h1>
                 </div>
               </div>
               <div className="row">

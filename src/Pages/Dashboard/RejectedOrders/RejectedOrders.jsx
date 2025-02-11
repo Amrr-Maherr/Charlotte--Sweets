@@ -102,7 +102,7 @@ function RejectedOrders() {
                             >
                               <td className="actions">
                                 <Link
-                                  to={`/dashboard/rejected-order-details/${order.id}`} // رابط مناسب
+                                  to={`/dashboard/order-details/${order.id}`} // رابط مناسب
                                   className="action-icon view-icon"
                                 >
                                   <div className="action-icon">
