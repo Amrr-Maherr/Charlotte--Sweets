@@ -1,5 +1,5 @@
 body {
-  font-family: "Cairo", serif;
+  font-family: "Cairo", serif !important;
   overflow-x: hidden;
   background-image: url(./Assets//unsplash_5LOhydOtTKU.png);
   background-position: center center;
