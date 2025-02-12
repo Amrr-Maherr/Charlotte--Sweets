@@ -3,7 +3,6 @@ nav {
 }
 nav .container-fluid {
     flex-wrap: nowrap !important;
-    
 }
 nav .container-fluid .profile-image {
         width: 60px;
@@ -60,7 +59,7 @@ nav .logo-image .nav-item {
     width: 222px;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 .offcanvas-header .offcanvas-title {
     font-size: 25px;

@@ -17,23 +17,26 @@ function NavBar() {
     <>
       <nav className="navbar navbar-expand-lg  custom-navbar">
         <div className="container-fluid">
-          <a className="navbar-brand profile-image d-none d-lg-block" href="/">
-            <img src={profile_image} alt="Profile" />
-          </a>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <span className="nav-link dashboard-link" aria-disabled="true">
-                  لوحه التحكم
-                </span>
-              </li>
-            </ul>
-          </div>
           <ul className="navbar-nav logo-image d-none d-lg-block">
             <li className="nav-item">
               <img src={logo_image} alt="Logo" />
             </li>
           </ul>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav">
+              <li className="nav-item">
+                <span className="nav-link dashboard-link" aria-disabled="true">
+                  Control panel
+                </span>
+              </li>
+            </ul>
+          </div>
+          <Link
+            className="navbar-brand profile-image d-none d-lg-block"
+            to="/dashboard/profile"
+          >
+            <img src={profile_image} alt="Profile" />
+          </Link>
 
           <button
             className="btn  d-lg-none"

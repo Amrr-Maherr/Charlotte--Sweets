@@ -165,6 +165,20 @@ function SideBar() {
               <i className="fa fa-cogs"></i> Products
             </Link>
           </motion.li>
+          {/* Profile Link */}
+          <motion.li whileTap={{ scale: 0.9 }}>
+            <Link
+              to="/dashboard/profile"
+              className={
+                location.pathname === "/dashboard/profile" ? "active" : ""
+              }
+              aria-current={
+                location.pathname === "/dashboard/profile" ? "page" : undefined
+              }
+            >
+              <i className="fa fa-user"></i> Profile
+            </Link>
+          </motion.li>
           <motion.li whileTap={{ scale: 0.9 }}>
             <Link to="#" className="logout-link" onClick={handleLogout}>
               <i className="fa fa-sign-out"></i> Logout
