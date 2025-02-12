@@ -6,7 +6,7 @@ import see from "../../../Assets/eye.svg";
 import del from "../../../Assets/deleteButton.svg";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import { motion } from "framer-motion"; // استيراد motion
+import { motion } from "framer-motion"; // Import motion
 
 function Chefs() {
   const [data, setData] = useState([]);
@@ -18,14 +18,14 @@ function Chefs() {
 
   const handleDelete = (id) => {
     Swal.fire({
-      title: "هل أنت متأكد؟",
-      text: "لن يمكنك التراجع عن هذا!",
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "نعم، احذف!",
-      cancelButtonText: "إلغاء",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
@@ -34,16 +34,17 @@ function Chefs() {
           })
           .then((response) => {
             Swal.fire(
-              "تم الحذف!",
-              response.data, // عرض رسالة النجاح من الـ API
+              "Deleted!",
+              response.data, // Display success message from the API
               "success"
             );
-            setData((prevData) => prevData.filter((chef) => chef.id !== id)); // تحديث الـ State بعد الحذف
+            setData((prevData) => prevData.filter((chef) => chef.id !== id)); // Update the state after deletion
           })
           .catch((error) => {
             Swal.fire(
-              "خطأ!",
-              error.response?.data?.message || "حدث خطأ أثناء الحذف.", // عرض رسالة الخطأ من الـ API أو رسالة عامة
+              "Error!",
+              error.response?.data?.message ||
+                "An error occurred during deletion.", // Display error message from the API or a general message
               "error"
             );
           });
@@ -70,16 +71,16 @@ function Chefs() {
     fetchData();
   }, [fetchData]);
 
-  // تصفية بيانات الشيفات بناءً على كلمة البحث
+  // Filter chef data based on the search term
   const filteredChefs = data.filter((chef) => {
     const fullName = `${chef.first_name} ${chef.last_name}`.toLowerCase();
     return fullName.includes(searchTerm.toLowerCase());
   });
 
-  // حساب عدد الصفحات بعد التصفية
+  // Calculate the number of pages after filtering
   const totalPagesFiltered = Math.ceil(filteredChefs.length / itemsPerPage);
 
-  // استخراج العناصر للصفحة الحالية بعد التصفية
+  // Extract items for the current page after filtering
   const indexOfLastItemFiltered = currentPage * itemsPerPage;
   const indexOfFirstItemFiltered = indexOfLastItemFiltered - itemsPerPage;
   const currentItemsFiltered = filteredChefs.slice(
@@ -87,7 +88,7 @@ function Chefs() {
     indexOfLastItemFiltered
   );
 
-  // التنقل بين الصفحات
+  // Pagination navigation
   const nextPage = () =>
     setCurrentPage((prev) => Math.min(prev + 1, totalPagesFiltered));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -99,7 +100,7 @@ function Chefs() {
           <Loader />
         ) : (
           <>
-            {/* استخدم fragment هنا */}
+            {/* Use fragment here */}
             <div className="container chef-container">
               <div className="row chef-row">
                 <div className="col-xl-4 mt-5"></div>
@@ -107,13 +108,13 @@ function Chefs() {
                   <input
                     type="text"
                     className="form-control p-2 rounded text-end"
-                    placeholder="ابحث باسم الشيف..."
+                    placeholder="Search by chef name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <div className="col-xl-4 mt-5">
-                  <h1 className="chef-title text-end">الشيفات</h1>
+                  <h1 className="chef-title text-end">Chefs</h1>
                 </div>
               </div>
               <div className="row chef-row">
@@ -121,10 +122,10 @@ function Chefs() {
                   <table className="table chef-table table-hover shadow">
                     <thead>
                       <tr>
-                        <th scope="col">الاجرائات</th>
-                        <th scope="col">الفرع</th>
-                        <th scope="col">عدد الطلبات</th>
-                        <th scope="col">الاسم</th>
+                        <th scope="col">Actions</th>
+                        <th scope="col">Branch</th>
+                        <th scope="col">Order Count</th>
+                        <th scope="col">Name</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -132,15 +133,15 @@ function Chefs() {
                         <>
                           <tr>
                             <td colSpan="4" className="chef-no-data">
-                              لا يوجد شيفات متاحة
+                              No chefs available
                             </td>
                           </tr>
                         </>
                       ) : (
                         <>
-                          {/* واستخدم fragment هنا */}
+                          {/* And use fragment here */}
                           {currentItemsFiltered.map((chef, index) => (
-                            <motion.tr // استخدام motion.tr هنا
+                            <motion.tr // Use motion.tr here
                               initial={{ opacity: 0, y: 50 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{
@@ -148,7 +149,7 @@ function Chefs() {
                                 stiffness: 100,
                                 damping: 25,
                                 delay: 0.1 * index,
-                              }} // حركة Bounce مع تأخير حسب ترتيب الصف
+                              }} // Bounce animation with delay based on row order
                               key={chef.id}
                             >
                               <td className="actions">
@@ -156,11 +157,11 @@ function Chefs() {
                                   className="delete-icon"
                                   onClick={() => handleDelete(chef.id)}
                                 >
-                                  <img src={del} alt="حذف" />
+                                  <img src={del} alt="Delete" />
                                 </div>
                                 <Link to={`/dashboard/chef-details/${chef.id}`}>
                                   <div className="seeIcon">
-                                    <img src={see} alt="عرض" />
+                                    <img src={see} alt="View" />
                                   </div>
                                 </Link>
                               </td>
@@ -192,10 +193,10 @@ function Chefs() {
                   onClick={prevPage}
                   disabled={currentPage === 1}
                 >
-                  السابق
+                  Previous
                 </button>
                 <span className="align-self-center">
-                  صفحة {currentPage} من {totalPagesFiltered}
+                  Page {currentPage} of {totalPagesFiltered}
                 </span>
                 <button
                   className="btn mx-2"
@@ -206,7 +207,7 @@ function Chefs() {
                   onClick={nextPage}
                   disabled={currentPage === totalPagesFiltered}
                 >
-                  التالي
+                  Next
                 </button>
               </div>
             </div>

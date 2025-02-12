@@ -6,8 +6,8 @@ import deleteIcon from "../../../Assets/deleteButton.svg";
 import eye from "../../../Assets/eye.svg";
 import { Link } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import Swal from "sweetalert2"; // استيراد SweetAlert2
-import { motion } from "framer-motion"; // استيراد motion
+import Swal from "sweetalert2"; // Import SweetAlert2
+import { motion } from "framer-motion"; // Import motion
 
 function Managers() {
   const [Data, setData] = useState([]);
@@ -15,7 +15,7 @@ function Managers() {
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const [searchTerm, setSearchTerm] = useState(""); // State الخاص بالبحث
+  const [searchTerm, setSearchTerm] = useState(""); // State for the search term
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,29 +37,29 @@ function Managers() {
     fetchData();
   }, [token]);
 
-  // حساب عدد الصفحات
+  // Calculate total number of pages
   const totalPages = Math.ceil(Data.length / itemsPerPage);
 
-  // استخراج العناصر للصفحة الحالية
+  // Extract items for the current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = Data.slice(indexOfFirstItem, indexOfLastItem);
 
-  // التنقل بين الصفحات
+  // Pagination navigation
   const nextPage = () =>
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
   const handleDelete = (id) => {
     Swal.fire({
-      title: "هل أنت متأكد؟",
-      text: "لن يمكنك التراجع عن هذا!",
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "نعم، احذف!",
-      cancelButtonText: "إلغاء",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
@@ -68,18 +68,19 @@ function Managers() {
           })
           .then((response) => {
             Swal.fire(
-              "تم الحذف!",
-              response.data, // عرض رسالة النجاح من الـ API
+              "Deleted!",
+              response.data, // Display success message from the API
               "success"
             );
             setData((prevData) =>
               prevData.filter((manager) => manager.id !== id)
-            ); // تحديث الـ State بعد الحذف
+            ); // Update the state after deletion
           })
           .catch((error) => {
             Swal.fire(
-              "خطأ!",
-              error.response?.data?.message || "حدث خطأ أثناء الحذف.", // عرض رسالة الخطأ من الـ API أو رسالة عامة
+              "Error!",
+              error.response?.data?.message ||
+                "An error occurred during deletion.", // Display error message from the API or a general message
               "error"
             );
           });
@@ -87,16 +88,16 @@ function Managers() {
     });
   };
 
-  // تصفية بيانات المديرين بناءً على كلمة البحث
+  // Filter manager data based on the search term
   const filteredManagers = Data.filter((manager) => {
     const fullName = `${manager.first_name} ${manager.last_name}`.toLowerCase();
     return fullName.includes(searchTerm.toLowerCase());
   });
 
-  // حساب عدد الصفحات بعد التصفية
+  // Calculate the number of pages after filtering
   const totalPagesFiltered = Math.ceil(filteredManagers.length / itemsPerPage);
 
-  // استخراج العناصر للصفحة الحالية بعد التصفية
+  // Extract items for the current page after filtering
   const indexOfLastItemFiltered = currentPage * itemsPerPage;
   const indexOfFirstItemFiltered = indexOfLastItemFiltered - itemsPerPage;
   const currentItemsFiltered = filteredManagers.slice(
@@ -118,13 +119,13 @@ function Managers() {
                   <input
                     type="text"
                     className="form-control p-2 rounded text-end"
-                    placeholder="ابحث باسم المدير..."
+                    placeholder="Search by manager name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <div className="col-xl-4 mt-5">
-                  <h1 className="Managers-title text-end">المديرين</h1>
+                  <h1 className="Managers-title text-end">Managers</h1>
                 </div>
               </div>
               <div className="row Managers-table-row">
@@ -132,9 +133,9 @@ function Managers() {
                   <table className="table Managers-table table-hover shadow">
                     <thead>
                       <tr>
-                        <th scope="col">الاجراءات</th>
-                        <th scope="col">الفرع</th>
-                        <th scope="col">الاسم</th>
+                        <th scope="col">Actions</th>
+                        <th scope="col">Branch</th>
+                        <th scope="col">Name</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -142,14 +143,14 @@ function Managers() {
                         <>
                           <tr>
                             <td colSpan="3" className="text-center">
-                              لا يوجد مديرين حاليا
+                              No managers available
                             </td>
                           </tr>
                         </>
                       ) : (
                         <>
                           {currentItemsFiltered.map((manager, index) => (
-                            <motion.tr // استخدام motion.tr هنا
+                            <motion.tr // Use motion.tr here
                               initial={{ opacity: 0, y: 50 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{
@@ -157,7 +158,7 @@ function Managers() {
                                 stiffness: 100,
                                 damping: 25,
                                 delay: 0.1 * index,
-                              }} // حركة Bounce مع تأخير حسب ترتيب الصف
+                              }} // Bounce animation with delay based on row order
                               key={manager.id}
                             >
                               <td className="actions">
@@ -169,14 +170,14 @@ function Managers() {
                                   whileTap={{ scale: 0.8 }}
                                   className="action-icon delete-icon"
                                 >
-                                  <img src={deleteIcon} alt="حذف" />
+                                  <img src={deleteIcon} alt="Delete" />
                                 </motion.div>
                                 <Link
                                   to={`/dashboard/manager-details/${manager.id}`}
                                   className="action-icon view-icon"
                                 >
                                   <div className="action-icon">
-                                    <img src={eye} alt="عرض" />
+                                    <img src={eye} alt="View" />
                                   </div>
                                 </Link>
                               </td>
@@ -184,7 +185,7 @@ function Managers() {
                               <td>
                                 {manager.first_name} {manager.last_name}
                               </td>
-                            </motion.tr> // وإغلاق motion.tr هنا
+                            </motion.tr> // Closing motion.tr here
                           ))}
                         </>
                       )}
@@ -204,10 +205,10 @@ function Managers() {
                   onClick={prevPage}
                   disabled={currentPage === 1}
                 >
-                  السابق
+                  Previous
                 </button>
                 <span className="align-self-center">
-                  صفحة {currentPage} من {totalPagesFiltered}
+                  Page {currentPage} of {totalPagesFiltered}
                 </span>
                 <button
                   className="btn mx-2"
@@ -218,7 +219,7 @@ function Managers() {
                   onClick={nextPage}
                   disabled={currentPage === totalPagesFiltered}
                 >
-                  التالي
+                  Next
                 </button>
               </div>
             </div>

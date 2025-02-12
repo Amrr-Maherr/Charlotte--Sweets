@@ -26,10 +26,10 @@ aside ul li a {
         padding: 10px 18px;
         margin: 10px 0px;
         display: block;
-        text-align: right;
+        text-align: left;
         display: flex;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: space-between;
         flex-direction: row-reverse;
         gap: 15px;
 }

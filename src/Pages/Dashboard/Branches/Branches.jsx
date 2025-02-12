@@ -11,9 +11,9 @@ import AddButton from "../../../Components/AddButton/AddButton";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import Swal from "sweetalert2"; // استيراد SweetAlert2
+import Swal from "sweetalert2"; // Import SweetAlert2
 
-// تصحيح مشكلة الأيقونات في Leaflet
+// Correct the problem of icons in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
@@ -33,7 +33,7 @@ function Branches() {
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const [searchTerm, setSearchTerm] = useState(""); // State الخاص بالبحث
+  const [searchTerm, setSearchTerm] = useState(""); // State for the search term
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -70,15 +70,15 @@ function Branches() {
     fetchData();
   }, [fetchData]);
 
-  // تصفية بيانات الفروع بناءً على كلمة البحث
+  // Filter branch data based on the search term
   const filteredBranches = branchesData.filter((branch) =>
     branch.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // حساب عدد الصفحات بعد التصفية
+  // Calculate the number of pages after filtering
   const totalPages = Math.ceil(filteredBranches.length / itemsPerPage);
 
-  // استخراج العناصر للصفحة الحالية بعد التصفية
+  // Extract items for the current page after filtering
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredBranches.slice(
@@ -86,21 +86,21 @@ function Branches() {
     indexOfLastItem
   );
 
-  // التنقل بين الصفحات
+  // Pagination navigation
   const nextPage = () =>
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
   const handleDelete = (id) => {
     Swal.fire({
-      title: "هل أنت متأكد؟",
-      text: "لن يمكنك التراجع عن هذا!",
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "نعم، احذف!",
-      cancelButtonText: "إلغاء",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
@@ -109,19 +109,20 @@ function Branches() {
           })
           .then((response) => {
             Swal.fire(
-              "تم الحذف!",
-              response.data, // عرض رسالة النجاح من الـ API
+              "Deleted!",
+              response.data, // Display success message from the API
               "success"
             );
             setBranchesData((prevData) =>
               prevData.filter((branch) => branch.id !== id)
-            ); // تحديث الـ State بعد الحذف
-            fetchData(); // إعادة تحميل البيانات بعد الحذف
+            ); // Update the state after deletion
+            fetchData(); // Reload data after deletion
           })
           .catch((error) => {
             Swal.fire(
-              "خطأ!",
-              error.response?.data?.message || "حدث خطأ أثناء الحذف.", // عرض رسالة الخطأ من الـ API أو رسالة عامة
+              "Error!",
+              error.response?.data?.message ||
+                "An error occurred during deletion.", // Display error message from the API or a general message
               "error"
             );
           });
@@ -131,9 +132,9 @@ function Branches() {
 
   const handleSubmit = async () => {
     try {
-      // تحقق من أن جميع الحقول المطلوبة مُدخلة
+      // Check if all required fields are filled
       if (!name || !address || !phone || !long || !lat) {
-        toast.error("الرجاء ملء جميع الحقول.");
+        toast.error("Please fill in all fields.");
         return;
       }
 
@@ -141,8 +142,8 @@ function Branches() {
         name,
         address,
         phone,
-        long: String(long), // تحويل خط الطول إلى سلسلة نصية
-        lat: String(lat), // تحويل خط العرض إلى سلسلة نصية
+        long: String(long), // Convert longitude to string
+        lat: String(lat), // Convert latitude to string
       };
 
       const response = await axios.post(
@@ -156,14 +157,15 @@ function Branches() {
         }
       );
 
-      toast.success("تم إضافة الفرع بنجاح!");
+      toast.success("Branch added successfully!");
       setBranchesData([...branchesData, response.data]); // Update local state
       handleCloseModal();
-      fetchData(); // إعادة تحميل البيانات بعد الإضافة
+      fetchData(); // Reload data after adding
     } catch (error) {
       console.error("Error adding branch:", error);
       toast.error(
-        error.response?.data?.message || "حدث خطأ أثناء إضافة الفرع."
+        error.response?.data?.message ||
+          "An error occurred while adding the branch."
       );
     }
   };
@@ -174,7 +176,7 @@ function Branches() {
         setLatitude(e.latlng.lat);
         setLongitude(e.latlng.lng);
         toast.success(
-          `تم اختيار الموقع: خط عرض ${e.latlng.lat}, خط طول ${e.latlng.lng}`
+          `Location selected: Latitude ${e.latlng.lat}, Longitude ${e.latlng.lng}`
         );
       },
     });
@@ -191,19 +193,22 @@ function Branches() {
             <div className="container">
               <div className="row">
                 <div className="col-xl-4 mt-5">
-                  <AddButton ButtonText="اضافه فرع" onClick={handleShowModal} />
+                  <h1 className="branches-title text-start">Branches</h1>
                 </div>
                 <div className="col-xl-4 mt-5">
                   <input
                     type="text"
-                    className="form-control p-2 rounded text-end"
-                    placeholder="ابحث باسم الفرع..."
+                    className="form-control p-2 rounded"
+                    placeholder="Search by branch name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
-                <div className="col-xl-4 mt-5">
-                  <h1 className="branches-title text-end">الفروع</h1>
+                <div className="col-xl-4 mt-5 text-end">
+                  <AddButton
+                    ButtonText="Add Branch"
+                    onClick={handleShowModal}
+                  />
                 </div>
               </div>
               <div className="row">
@@ -211,10 +216,10 @@ function Branches() {
                   <table className="table branches-table table-hover shadow">
                     <thead>
                       <tr>
-                        <th scope="col">الاجراءات</th>
-                        <th scope="col">مدير الفرع</th>
-                        <th scope="col">العنوان</th>
-                        <th scope="col">اسم الفرع</th>
+                        <th scope="col">Branch Name</th>
+                        <th scope="col">Branch Manager</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="branches-table-body">
@@ -234,21 +239,18 @@ function Branches() {
                               stiffness: 100,
                               damping: 25,
                               delay: 0.1 * index,
-                            }} // حركة Bounce مع تأخير حسب ترتيب الصف
+                            }} // Bounce animation with delay based on row order
                             key={branch.id}
                             className="branches-table-row"
                           >
+                            <td>{branch.name.slice(0, 10)}...</td>
+                            <td>{branch.address.slice(0, 10)}...</td>
+                            <td>
+                              {branch.manager
+                                ? `${branch.manager.first_name} ${branch.manager.last_name}`
+                                : "No Manager"}
+                            </td>
                             <td className="actions">
-                              <motion.div
-                                onClick={() => {
-                                  handleDelete(branch.id);
-                                }}
-                                whileHover={{ scale: 1.3 }}
-                                whileTap={{ scale: 0.8 }}
-                                className="action-icon delete-icon"
-                              >
-                                <img src={deleteIcon} alt="حذف" />
-                              </motion.div>
                               <Link
                                 to={`/dashboard/branch-details/${branch.id}`}
                                 className="action-icon view-icon"
@@ -257,17 +259,20 @@ function Branches() {
                                   whileHover={{ scale: 1.3 }}
                                   whileTap={{ scale: 0.8 }}
                                 >
-                                  <img src={eye} alt="عرض التفاصيل" />
+                                  <img src={eye} alt="View Details" />
                                 </motion.div>
                               </Link>
+                              <motion.div
+                                onClick={() => {
+                                  handleDelete(branch.id);
+                                }}
+                                whileHover={{ scale: 1.3 }}
+                                whileTap={{ scale: 0.8 }}
+                                className="action-icon delete-icon"
+                              >
+                                <img src={deleteIcon} alt="Delete" />
+                              </motion.div>
                             </td>
-                            <td>
-                              {branch.manager
-                                ? `${branch.manager.first_name} ${branch.manager.last_name}`
-                                : "لا يوجد مدير"}
-                            </td>
-                            <td>{branch.address.slice(0, 10)}...</td>
-                            <td>{branch.name.slice(0, 10)}...</td>
                           </motion.tr>
                         ))
                       )}
@@ -278,20 +283,6 @@ function Branches() {
               {/* Pagination */}
               <div className="d-flex justify-content-center">
                 <button
-                  style={{
-                    backgroundColor: "rgba(169, 65, 29, 1)",
-                    color: "white",
-                  }}
-                  className="btn mx-2"
-                  onClick={prevPage}
-                  disabled={currentPage === 1}
-                >
-                  السابق
-                </button>
-                <span className="align-self-center">
-                  صفحة {currentPage} من {totalPages}
-                </span>
-                <button
                   className="btn mx-2"
                   style={{
                     backgroundColor: "rgba(169, 65, 29, 1)",
@@ -300,7 +291,21 @@ function Branches() {
                   onClick={nextPage}
                   disabled={currentPage === totalPages}
                 >
-                  التالي
+                  Next
+                </button>
+                <span className="align-self-center">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  style={{
+                    backgroundColor: "rgba(169, 65, 29, 1)",
+                    color: "white",
+                  }}
+                  className="btn mx-2"
+                  onClick={prevPage}
+                  disabled={currentPage === 1}
+                >
+                  Previous
                 </button>
               </div>
             </div>
@@ -320,7 +325,7 @@ function Branches() {
           <div className="modal-content" style={{ width: "462px" }}>
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalLabel">
-                إضافة فرع جديد
+                Add New Branch
               </h5>
               <button
                 type="button"
@@ -351,18 +356,18 @@ function Branches() {
                 </div>
                 {lat && long && (
                   <div className="mt-2">
-                    <p>خط العرض: {lat}</p>
-                    <p>خط الطول: {long}</p>
+                    <p>Latitude: {lat}</p>
+                    <p>Longitude: {long}</p>
                   </div>
                 )}
               </div>
               <div className="form-container">
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label">
-                    الاسم
+                    Name
                   </label>
                   <input
-                    placeholder="ادخل اسم الفرع..."
+                    placeholder="Enter branch name..."
                     type="text"
                     id="name"
                     className="form-control text-end"
@@ -373,10 +378,10 @@ function Branches() {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="address" className="form-label">
-                    العنوان
+                    Address
                   </label>
                   <input
-                    placeholder="ادخل عنوان الفرع..."
+                    placeholder="Enter branch address..."
                     type="text"
                     id="address"
                     className="form-control text-end"
@@ -387,10 +392,10 @@ function Branches() {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="phone" className="form-label">
-                    رقم الجوال
+                    Phone Number
                   </label>
                   <input
-                    placeholder="أدخل رقم الهاتف الخاص بالفرع..."
+                    placeholder="Enter branch phone number..."
                     type="text"
                     id="phone"
                     className="form-control text-end"
@@ -413,7 +418,7 @@ function Branches() {
                     }}
                     onClick={handleSubmit}
                   >
-                    ارسال
+                    Submit
                   </button>
                 </div>
               </div>

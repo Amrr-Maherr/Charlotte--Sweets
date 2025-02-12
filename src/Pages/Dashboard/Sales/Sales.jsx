@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "../../../Style/Sales/Sales.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -14,7 +14,7 @@ function Sales() {
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const [searchTerm, setSearchTerm] = useState(""); // State الخاص بالبحث
+  const [searchTerm, setSearchTerm] = useState(""); // State for the search term
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,33 +35,34 @@ function Sales() {
     fetchData();
   }, [token]);
 
-  // فنكشن الحذف
+  // Delete function
   const handleDelete = async (id) => {
     Swal.fire({
-      title: "هل أنت متأكد؟",
-      text: "لن يمكنك التراجع عن هذا!",
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "نعم، احذف!",
-      cancelButtonText: "إلغاء",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
     }).then(async (result) => {
-      // استخدام async/await
+      // Use async/await
       if (result.isConfirmed) {
         try {
           const response = await axios.delete(
-            `https://management.mlmcosmo.com/api/delete-sale/${id}`, // تعديل الـ Endpoint
+            `https://management.mlmcosmo.com/api/delete-sale/${id}`, // Endpoint edited
             {
               headers: { Authorization: `Bearer ${token}` },
             }
           );
-          Swal.fire("تم الحذف!", response.data, "success");
+          Swal.fire("Deleted!", response.data, "success");
           seData((prevData) => prevData.filter((sale) => sale.id !== id));
         } catch (error) {
           Swal.fire(
-            "خطأ!",
-            error.response?.data?.message || "حدث خطأ أثناء الحذف.",
+            "Error!",
+            error.response?.data?.message ||
+              "An error occurred during deletion.",
             "error"
           );
         }
@@ -69,16 +70,16 @@ function Sales() {
     });
   };
 
-  // تصفية بيانات المبيعات بناءً على كلمة البحث
+  // Filter sales data based on the search term
   const filteredSales = Data.filter((sale) => {
     const fullName = `${sale.first_name} ${sale.last_name}`.toLowerCase();
     return fullName.includes(searchTerm.toLowerCase());
   });
 
-  // حساب عدد الصفحات بعد التصفية
+  // Calculate the number of pages after filtering
   const totalPagesFiltered = Math.ceil(filteredSales.length / itemsPerPage);
 
-  // استخراج العناصر للصفحة الحالية بعد التصفية
+  // Extract items for the current page after filtering
   const indexOfLastItemFiltered = currentPage * itemsPerPage;
   const indexOfFirstItemFiltered = indexOfLastItemFiltered - itemsPerPage;
   const currentItemsFiltered = filteredSales.slice(
@@ -86,7 +87,7 @@ function Sales() {
     indexOfLastItemFiltered
   );
 
-  // التنقل بين الصفحات
+  // Pagination navigation
   const nextPage = () =>
     setCurrentPage((prev) => Math.min(prev + 1, totalPagesFiltered));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -105,13 +106,13 @@ function Sales() {
                   <input
                     type="text"
                     className="form-control p-2 rounded text-end"
-                    placeholder="ابحث باسم مندوب المبيعات..."
+                    placeholder="Search by sales representative name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <div className="col-xl-4 mt-5">
-                  <h2 className="Sales-table-title text-end">قائمة المبيعات</h2>
+                  <h2 className="Sales-table-title text-end">Sales List</h2>
                 </div>
               </div>
               <div className="row Sales-table-row">
@@ -119,59 +120,55 @@ function Sales() {
                   <table className="table Sales-table table-hover shadow">
                     <thead>
                       <tr>
-                        <th scope="col">الاجرائات</th>
-                        <th scope="col">البريد الالكتروني</th>
-                        <th scope="col">الجوال</th>
-                        <th scope="col">الاسم</th>
+                        <th scope="col">Actions</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Name</th>
                       </tr>
                     </thead>
                     <tbody>
                       {currentItemsFiltered.length === 0 ? (
-                        <>
-                          <tr>
-                            <td colSpan="4" className="text-center">
-                              لا يوجد سيلز حاليا
-                            </td>
-                          </tr>
-                        </>
+                        <tr>
+                          <td colSpan="4" className="text-center">
+                            No sales currently available
+                          </td>
+                        </tr>
                       ) : (
-                        <>
-                          {currentItemsFiltered.map((sale, index) => (
-                            <motion.tr
-                              initial={{ opacity: 0, y: 50 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{
-                                type: "spring",
-                                stiffness: 100,
-                                damping: 25,
-                                delay: 0.1 * index,
-                              }}
-                              key={sale.id}
-                            >
-                              <td className="actions">
-                                <div
-                                  className="action-icon delete-icon"
-                                  onClick={() => handleDelete(sale.id)}
-                                >
-                                  <img src={DeleteIcon} alt="حذف" />
+                        currentItemsFiltered.map((sale, index) => (
+                          <motion.tr
+                            initial={{ opacity: 0, y: 50 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 100,
+                              damping: 25,
+                              delay: 0.1 * index,
+                            }}
+                            key={sale.id}
+                          >
+                            <td className="actions">
+                              <div
+                                className="action-icon delete-icon"
+                                onClick={() => handleDelete(sale.id)}
+                              >
+                                <img src={DeleteIcon} alt="Delete" />
+                              </div>
+                              <Link
+                                to={`/dashboard/sales-details/${sale.id}`}
+                                className="action-icon view-icon"
+                              >
+                                <div className="action-icon">
+                                  <img src={eye} alt="" />
                                 </div>
-                                <Link
-                                  to={`/dashboard/sales-details/${sale.id}`}
-                                  className="action-icon view-icon"
-                                >
-                                  <div className="action-icon">
-                                    <img src={eye} alt="" />
-                                  </div>
-                                </Link>
-                              </td>
-                              <td>{sale.email}</td>
-                              <td>{sale.phone}</td>
-                              <td>
-                                {sale.first_name} {sale.last_name}
-                              </td>
-                            </motion.tr>
-                          ))}
-                        </>
+                              </Link>
+                            </td>
+                            <td>{sale.email}</td>
+                            <td>{sale.phone}</td>
+                            <td>
+                              {sale.first_name} {sale.last_name}
+                            </td>
+                          </motion.tr>
+                        ))
                       )}
                     </tbody>
                   </table>
@@ -189,10 +186,10 @@ function Sales() {
                   onClick={prevPage}
                   disabled={currentPage === 1}
                 >
-                  السابق
+                  Previous
                 </button>
                 <span className="align-self-center">
-                  صفحة {currentPage} من {totalPagesFiltered}
+                  Page {currentPage} of {totalPagesFiltered}
                 </span>
                 <button
                   className="btn mx-2"
@@ -203,7 +200,7 @@ function Sales() {
                   onClick={nextPage}
                   disabled={currentPage === totalPagesFiltered}
                 >
-                  التالي
+                  Next
                 </button>
               </div>
             </div>

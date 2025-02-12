@@ -33,10 +33,10 @@
 }
 .map-card {
     overflow: hidden;
-    height: 348px;
+    height: auto;
 }
 .branch-card {
-    height: 348px;
+    height: auto;
 }
 /*  */
 .chefs-list .chefs-container .chefs-grid .chefs-title {
@@ -49,10 +49,10 @@
 .chefs-list .chefs-container .chefs-grid .chef-card {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: space-evenly;
         flex-direction: row;
         border: none;
-        width: 253px;
+        width: auto;
         padding:15px;
         -o-border-radius: 8px;
         -webkit-border-radius: 8px;
@@ -60,6 +60,7 @@
         -ms-border-radius: 8px;
         border-radius: 8px;
         background-color: #fff;
+        gap: 15px;
 }
 .chefs-list .chefs-container .chefs-grid .chef-card .chef-info .chef-name {
     font-family: "Cairo";
@@ -97,10 +98,10 @@
 .delivery-card {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
     flex-direction: row;
     border: none;
-    width: 253px;
+    width: auto;
     padding: 15px;
     -o-border-radius: 8px;
     -webkit-border-radius: 8px;
@@ -108,6 +109,7 @@
     -ms-border-radius: 8px;
     border-radius: 8px;
     background-color: #fff;
+    gap: 15px;
 }
 
  .delivery-card .delivery-info .delivery-name {
@@ -134,5 +136,6 @@
 .delivery-col , .chef-col {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-start;
+    flex-direction: row;
 }

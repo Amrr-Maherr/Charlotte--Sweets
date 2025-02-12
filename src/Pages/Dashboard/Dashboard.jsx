@@ -10,11 +10,11 @@ function Dashboard() {
       <div className="container-fluid dashboard-wrapper p-0">
         <NavBar />
         <div className="dashboard-content-area">
-          <div className="dashboard-outlet">
-            <Outlet />
-          </div>
           <div className="dashboard-sidebar">
             <SideBar />
+          </div>
+          <div className="dashboard-outlet">
+            <Outlet />
           </div>
         </div>
       </div>

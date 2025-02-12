@@ -14,8 +14,8 @@ function Specialties() {
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const [searchTerm, setSearchTerm] = useState(""); // State الخاص بالبحث
-  const [newSpecialty, setNewSpecialty] = useState(""); // State لاسم التخصص الجديد
+  const [searchTerm, setSearchTerm] = useState(""); // State for the search term
+  const [newSpecialty, setNewSpecialty] = useState(""); // State for the new specialty name
 
   const fetchData = useCallback(async () => {
     try {
@@ -27,10 +27,10 @@ function Specialties() {
       );
       console.log(response.data);
       setData(response.data);
-      setLoading(false); // بعد تحميل البيانات أوقف التحميل
+      setLoading(false); // Stop loading after data is fetched
     } catch (error) {
       console.log(error.response?.data?.message || error.message);
-      setLoading(false); // في حال حدوث خطأ، نوقف التحميل
+      setLoading(false); // Stop loading in case of error
     }
   }, [token]);
 
@@ -38,29 +38,29 @@ function Specialties() {
     fetchData();
   }, [token, fetchData]);
 
-  // حساب عدد الصفحات
+  // Calculate the number of pages
   const totalPages = Math.ceil(Data.length / itemsPerPage);
 
-  // استخراج العناصر للصفحة الحالية
+  // Extract items for the current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = Data.slice(indexOfFirstItem, indexOfLastItem);
 
-  // التنقل بين الصفحات
+  // Pagination navigation
   const nextPage = () =>
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
   const handelDelete = (id) => {
     Swal.fire({
-      title: "هل أنت متأكد؟",
-      text: "لن يمكنك التراجع عن هذا!",
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "نعم، احذف!",
-      cancelButtonText: "إلغاء",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
@@ -68,12 +68,12 @@ function Specialties() {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then((response) => {
-            Swal.fire("تم الحذف!", response.data, "success");
-            setData((prevData) => prevData.filter((spec) => spec.id !== id)); // تحديث الـ State بعد الحذف
+            Swal.fire("Deleted!", response.data, "success");
+            setData((prevData) => prevData.filter((spec) => spec.id !== id)); // Update the state after deletion
           })
           .catch((error) => {
             Swal.fire(
-              "خطأ!",
+              "Error!",
               error.response?.data?.message || "An error occurred",
               "error"
             );
@@ -82,18 +82,18 @@ function Specialties() {
     });
   };
 
-  // تصفية بيانات التخصصات بناءً على كلمة البحث
+  // Filter specialties data based on the search term
   const filteredSpecialties = Data.filter((specialty) => {
     const specialtyName = specialty.name || "";
     return specialtyName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  // حساب عدد الصفحات بعد التصفية
+  // Calculate the number of pages after filtering
   const totalPagesFiltered = Math.ceil(
     filteredSpecialties.length / itemsPerPage
   );
 
-  // استخراج العناصر للصفحة الحالية بعد التصفية
+  // Extract items for the current page after filtering
   const indexOfLastItemFiltered = currentPage * itemsPerPage;
   const indexOfFirstItemFiltered = indexOfLastItemFiltered - itemsPerPage;
   const currentItemsFiltered = filteredSpecialties.slice(
@@ -106,7 +106,7 @@ function Specialties() {
     try {
       const response = await axios.post(
         "https://management.mlmcosmo.com/api/specialization",
-        { name: newSpecialty }, // key هو name
+        { name: newSpecialty }, // key is name
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -114,9 +114,9 @@ function Specialties() {
         }
       );
       console.log(response.data);
-      toast.success("تمت إضافة التخصص بنجاح");
-      setData((prevData) => [...prevData, response.data]); // تحديث الـ State بعد الإضافة
-      fetchData(); // تحديث قائمة التخصصات بعد الإرسال بنجاح
+      toast.success("Specialty added successfully");
+      setData((prevData) => [...prevData, response.data]); // Update the state after adding
+      fetchData(); // Update the list of specialties after successful submission
       setNewSpecialty(""); // Clear input field
       // Close the modal after successful submission
       const modal = document.getElementById("addSpecialtyModal");
@@ -130,7 +130,8 @@ function Specialties() {
     } catch (error) {
       console.error("Error adding specialty:", error);
       toast.error(
-        error.response?.data?.message || "حدث خطأ أثناء إضافة التخصص."
+        error.response?.data?.message ||
+          "An error occurred while adding the specialty."
       );
     }
   };
@@ -147,22 +148,22 @@ function Specialties() {
             <div className="row">
               <div className="col-xl-4 mt-5">
                 <AddButton
-                  ButtonText="اضافه"
+                  ButtonText="Add"
                   data-bs-toggle="modal"
-                  data-bs-target="#addSpecialtyModal" // ID المودال هنا
+                  data-bs-target="#addSpecialtyModal" // Modal ID here
                 />
               </div>
               <div className="col-xl-4 mt-5">
                 <input
                   type="text"
                   className="form-control p-2 rounded text-end"
-                  placeholder="ابحث باسم التخصص..."
+                  placeholder="Search by specialty name..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
               <div className="col-xl-4 mt-5">
-                <h3 className="section-title text-end">التخصصات</h3>
+                <h3 className="section-title text-end">Specialties</h3>
               </div>
             </div>
             <div className="row">
@@ -171,10 +172,10 @@ function Specialties() {
                   <thead>
                     <tr>
                       <th scope="col" className="table-header">
-                        الاجراءات
+                        Actions
                       </th>
                       <th scope="col" className="table-header">
-                        التخصص
+                        Specialty
                       </th>
                       <th scope="col" className="table-header">
                         #
@@ -185,12 +186,12 @@ function Specialties() {
                     {currentItemsFiltered.length === 0 ? (
                       <tr className="no-data-row">
                         <td colSpan="3" className="no-data-message">
-                          لا توجد بيانات لعرضها
+                          No data to display
                         </td>
                       </tr>
                     ) : (
                       currentItemsFiltered.map((ele, index) => (
-                        <motion.tr // استخدام motion.tr هنا
+                        <motion.tr // Use motion.tr here
                           initial={{ opacity: 0, y: 50 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{
@@ -209,7 +210,7 @@ function Specialties() {
                                 handelDelete(ele.id);
                               }}
                             >
-                              <img src={deleteIcon} alt="حذف" />
+                              <img src={deleteIcon} alt="Delete" />
                             </div>
                           </td>
                           <td className="specialty-name">{ele.name}</td>
@@ -234,10 +235,10 @@ function Specialties() {
                 onClick={prevPage}
                 disabled={currentPage === 1}
               >
-                السابق
+                Previous
               </button>
               <span className="align-self-center">
-                صفحة {currentPage} من {totalPagesFiltered}
+                Page {currentPage} of {totalPagesFiltered}
               </span>
               <button
                 className="btn mx-2"
@@ -248,7 +249,7 @@ function Specialties() {
                 onClick={nextPage}
                 disabled={currentPage === totalPagesFiltered}
               >
-                التالي
+                Next
               </button>
             </div>
           </>
@@ -267,7 +268,7 @@ function Specialties() {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="addSpecialtyModalLabel">
-                إضافة تخصص جديد
+                Add New Specialty
               </h5>
               <button
                 type="button"
@@ -283,13 +284,13 @@ function Specialties() {
                   htmlFor="specialtyName"
                   className="form-label text-end w-100"
                 >
-                  اسم التخصص
+                  Specialty Name
                 </label>
                 <input
                   type="text"
                   className="form-control text-end"
                   id="specialtyName"
-                  placeholder="ادخل اسم التخصص"
+                  placeholder="Enter specialty name"
                   value={newSpecialty}
                   onChange={(e) => setNewSpecialty(e.target.value)}
                 />
@@ -301,15 +302,18 @@ function Specialties() {
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
-                إغلاق
+                Close
               </button>
               <button
-                style={{ backgroundColor: "rgba(169, 65, 29, 1)",color:"white"}}
+                style={{
+                  backgroundColor: "rgba(169, 65, 29, 1)",
+                  color: "white",
+                }}
                 type="button"
                 className="btn"
                 onClick={handleSubmit}
               >
-                حفظ
+                Save
               </button>
             </div>
           </div>

@@ -70,42 +70,42 @@ function Home() {
                   key: "completedOrders",
                   icon: "fa-check-circle",
                   bg: "#FFE3B9",
-                  label: "الطلبات المكتمله",
+                  label: "Completed Orders",
                   link: "/dashboard/complete-orders",
                 },
                 {
                   key: "declinedOrders",
                   icon: "fa-times-circle",
                   bg: "#E4BCD5",
-                  label: "الطلبات المرفوضه",
+                  label: "Declined Orders",
                   link: "/dashboard/rejected-orders",
                 },
                 {
                   key: "deliveredOrders",
                   icon: "fa-truck",
                   bg: "#D4C6F1",
-                  label: "الطلبات الموصله",
+                  label: "Delivered Orders",
                   link: "/dashboard/delivered-orders",
                 },
                 {
                   key: "newOrders",
                   icon: "fa-plus-circle",
                   bg: "#AEEDFB",
-                  label: "الطلبات الجديده",
+                  label: "New Orders",
                   link: "/dashboard/new-orders",
                 },
                 {
                   key: "pendingOrders",
                   icon: "fa-clock-o",
                   bg: "#FBC3CD",
-                  label: "الطلبات المعلقه",
+                  label: "Pending Orders",
                   link: "/dashboard/pending-orders",
                 },
                 {
                   key: "returnedOrders",
                   icon: "fa-undo",
                   bg: "#A8AFDF",
-                  label: "الطلبات المرتجعه",
+                  label: "Returned Orders",
                   link: "/dashboard/returned-orders",
                 },
               ].map((order, index) => (
@@ -125,34 +125,19 @@ function Home() {
               ))}
             </motion.div>
           </div>
-          <motion.div
-            className="container"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <motion.div
-              className="row  d-flex justify-content-center"
-              variants={containerVariants}
-            >
-              <motion.div
-                className="col-xl-4 col-12  d-flex justify-content-center"
-                variants={itemVariants}
-              >
-                <HomeStatistics />
-              </motion.div>
-              <motion.div
-                className="col-xl-4 col-12 d-flex flex-column align-items-evenly justify-content-center"
-                variants={itemVariants}
-              >
-                <ManagersRequests />
-                <Chart />
-              </motion.div>
-              <motion.div className="col-xl-4 col-12" variants={itemVariants}>
-                <PendingRequests />
-              </motion.div>
-            </motion.div>
-          </motion.div>
+          <div className="container">
+            <div className="row bg-danger">
+              <div className="col-xl-4">
+                <h1>Test</h1>
+              </div>
+              <div className="col-xl-4">
+                <h1>Test</h1>
+              </div>
+              <div className="col-xl-4">
+                <h1>Test</h1>
+              </div>
+            </div>
+          </div>
         </>
       )}
     </motion.section>

@@ -17,7 +17,7 @@ function Products() {
 
   // States for pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6; // عدد العناصر في الصفحة الواحدة
+  const itemsPerPage = 6; // Number of items per page
 
   // State for search term
   const [searchTerm, setSearchTerm] = useState("");
@@ -62,7 +62,7 @@ function Products() {
 
   const handelAddProduct = () => {
     if (!productName || !productImage || !productBranch) {
-      toast.error("يرجى ملء جميع الحقول");
+      toast.error("Please fill in all fields");
     } else {
       const formData = new FormData();
       formData.append("name", productName);
@@ -78,12 +78,13 @@ function Products() {
         })
         .then((response) => {
           console.log(response.data.message);
-          toast.success("تمت إضافة المنتج بنجاح");
-          fetchData(); // تحديث قائمة المنتجات بعد الإضافة
+          toast.success("Product added successfully");
+          fetchData(); // Update the product list after adding
         })
         .catch((error) => {
           toast.error(
-            error.response?.data?.message || "حدث خطأ أثناء إضافة المنتج"
+            error.response?.data?.message ||
+              "An error occurred while adding the product"
           );
         });
     }
@@ -122,7 +123,7 @@ function Products() {
               <div className="row product-row">
                 <div className="col-xl-4 mt-5">
                   <AddButton
-                    ButtonText="اضافه"
+                    ButtonText="Add"
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModal"
                   />
@@ -131,19 +132,21 @@ function Products() {
                   <input
                     type="text"
                     className="form-control p-2 rounded text-end"
-                    placeholder="ابحث باسم المنتج..."
+                    placeholder="Search by product name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <div className="col-xl-4 mt-5">
-                  <h2 className="text-end" style={{fontSize:"20px"}}>المنتجات</h2>
+                  <h2 className="text-end" style={{ fontSize: "20px" }}>
+                    Products
+                  </h2>
                 </div>
               </div>
               <div className="row product-row">
                 {currentItems.length === 0 ? (
                   <div className="fs-2 text-danger text-center">
-                    لا توجد منتجات متاحه
+                    No products available
                   </div>
                 ) : (
                   currentItems.map((product) => (
@@ -166,7 +169,7 @@ function Products() {
                         <div className="card-body">
                           <h5 className="card-title">{product.name}</h5>
                           <p className="card-text">
-                            {product.branch.name || "لا يوجد فرع"}
+                            {product.branch.name || "No branch"}
                           </p>
                         </div>
                       </div>
@@ -184,10 +187,10 @@ function Products() {
                     onClick={prevPage}
                     disabled={currentPage === 1}
                   >
-                    السابق
+                    Previous
                   </button>
                   <span className="align-self-center">
-                    صفحة {currentPage} من {totalPagesFiltered}
+                    Page {currentPage} of {totalPagesFiltered}
                   </span>
                   <button
                     className="btn mx-2"
@@ -198,7 +201,7 @@ function Products() {
                     onClick={nextPage}
                     disabled={currentPage === totalPagesFiltered}
                   >
-                    التالي
+                    Next
                   </button>
                 </div>
               </div>
@@ -221,7 +224,7 @@ function Products() {
               <div className="form-container">
                 <div className="mb-3">
                   <label htmlFor="name" className="form-label text-end">
-                    اسم المنتج
+                    Product Name
                   </label>
                   <input
                     onChange={(event) => {
@@ -235,7 +238,7 @@ function Products() {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="address" className="form-label text-end">
-                    صوره المنتج
+                    Product Image
                   </label>
                   <input
                     onChange={(event) => {
@@ -248,7 +251,7 @@ function Products() {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="phone" className="form-label text-end">
-                    الفرع
+                    Branch
                   </label>
                   <select
                     onChange={(event) => {
@@ -256,7 +259,7 @@ function Products() {
                     }}
                     className="form-control text-end"
                   >
-                    <option value="">اختر الفرع</option>
+                    <option value="">Choose Branch</option>
                     {branches.map((branch) => (
                       <option key={branch.id} value={branch.id}>
                         {branch.name}
@@ -276,7 +279,7 @@ function Products() {
                       color: "white",
                     }}
                   >
-                    اضافه المنتج
+                    Add Product
                   </button>
                 </div>
               </div>

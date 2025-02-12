@@ -13,7 +13,7 @@ function Roses() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [branches, setBranches] = useState([]); // State لقائمة الفروع
+  const [branches, setBranches] = useState([]); // State for branch list
   const [RoseBranch, setRoseBranch] = useState("");
   const [RoseTitle, setRoseTitle] = useState("");
   const token = JSON.parse(localStorage.getItem("AuthToken"));
@@ -27,7 +27,7 @@ function Roses() {
 
   useEffect(() => {
     fetchData();
-    fetchBranches(); // جلب قائمة الفروع عند تحميل المكون
+    fetchBranches(); // Fetch branch list on component mount
   }, [token]);
 
   const fetchData = async () => {
@@ -63,14 +63,14 @@ function Roses() {
 
   const handelDelete = (id) => {
     Swal.fire({
-      title: "هل أنت متأكد؟",
-      text: "لن يمكنك التراجع عن هذا!",
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "نعم، احذف!",
-      cancelButtonText: "إلغاء",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
@@ -79,15 +79,15 @@ function Roses() {
           })
           .then((response) => {
             Swal.fire(
-              "تم الحذف!",
-              "تم حذف الوردة بنجاح.", // رسالة النجاح
+              "Deleted!",
+              "Rose deleted successfully.", // Success message
               "success"
             );
             fetchData(); // Refresh data after deletion
           })
           .catch((error) => {
             console.log(error.response.data);
-            toast.error("فشل حذف الوردة."); // Show error message
+            toast.error("Failed to delete rose."); // Show error message
           });
       }
     });
@@ -103,7 +103,7 @@ function Roses() {
 
   const handelAdd = async () => {
     if (!RoseTitle || !RoseBranch) {
-      toast.error("الرجاء ملء جميع الحقول."); // استخدام toast لعرض رسالة الخطأ
+      toast.error("Please fill in all fields."); // Use toast to display error message
     } else {
       try {
         const formData = {
@@ -116,11 +116,11 @@ function Roses() {
           { headers: { Authorization: `Bearer ${token}` } }
         );
         console.log(response.data);
-        toast.success("تمت إضافة الوردة بنجاح."); // استخدام toast لعرض رسالة النجاح
-        fetchData(); // تحديث البيانات بعد الإضافة
-        handleCloseModal(); // إغلاق الـ Modal بعد الإضافة
+        toast.success("Rose added successfully."); // Use toast to display success message
+        fetchData(); // Refresh data after addition
+        handleCloseModal(); // Close the Modal after addition
       } catch (error) {
-        toast.error(error.response.data.message); // استخدام toast لعرض رسالة الخطأ
+        toast.error(error.response.data.message); // Use toast to display error message
       }
     }
   };
@@ -170,13 +170,13 @@ function Roses() {
             <>
               <div className="row my-3">
                 <div className="col-xl-4 mt-5">
-                  <AddButton ButtonText="اضافه" onClick={handleShowModal} />
+                  <AddButton ButtonText="Add" onClick={handleShowModal} />
                 </div>
                 <div className="col-xl-4 mt-5">
                   <input
                     type="text"
                     className="form-control p-2 rounded text-end"
-                    placeholder="ابحث باسم النوع..."
+                    placeholder="Search by type..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
@@ -186,7 +186,7 @@ function Roses() {
                     className="Roses-title text-end"
                     style={{ fontSize: "20px" }}
                   >
-                    الورود
+                    Roses
                   </h1>
                 </div>
               </div>
@@ -195,21 +195,21 @@ function Roses() {
                   <table className="table table-hover text-center Roses-table shadow">
                     <thead>
                       <tr>
-                        <th scope="col">الإجراءات</th>
-                        <th scope="col">الفرع</th>
-                        <th scope="col">النوع</th>
+                        <th scope="col">Actions</th>
+                        <th scope="col">Branch</th>
+                        <th scope="col">Type</th>
                       </tr>
                     </thead>
                     <tbody>
                       {currentItems.length === 0 ? (
                         <tr>
                           <td colSpan="3" className="no-data-message">
-                            لا توجد بيانات لعرضها
+                            No data to display
                           </td>
                         </tr>
                       ) : (
                         currentItems.map((ele, index) => (
-                          <motion.tr // استخدام motion.tr هنا
+                          <motion.tr // Use motion.tr here
                             initial={{ opacity: 0, y: 50 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{
@@ -229,7 +229,7 @@ function Roses() {
                               >
                                 <img
                                   src={deleteButton}
-                                  alt="حذف"
+                                  alt="Delete"
                                   className="roses-delete-icon"
                                 />
                               </div>
@@ -255,10 +255,10 @@ function Roses() {
                   onClick={prevPage}
                   disabled={currentPage === 1}
                 >
-                  السابق
+                  Previous
                 </button>
                 <span className="align-self-center">
-                  صفحة {currentPage} من {totalPages}
+                  Page {currentPage} of {totalPages}
                 </span>
                 <button
                   className="btn mx-2"
@@ -269,7 +269,7 @@ function Roses() {
                   onClick={nextPage}
                   disabled={currentPage === totalPages}
                 >
-                  التالي
+                  Next
                 </button>
               </div>
             </>
@@ -288,7 +288,7 @@ function Roses() {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title" id="addRoseModalLabel">
-                  إضافة وردة جديدة
+                  Add New Rose
                 </h5>
                 <button
                   type="button"
@@ -306,7 +306,7 @@ function Roses() {
                       htmlFor="branchName"
                       className="form-label w-100 text-end"
                     >
-                      اسم الفرع
+                      Branch Name
                     </label>
                     <select
                       className="form-select"
@@ -315,7 +315,7 @@ function Roses() {
                         setRoseBranch(event.target.value);
                       }}
                     >
-                      <option value="">اختر الفرع</option>
+                      <option value="">Choose Branch</option>
                       {branches.map((branch) => (
                         <option
                           className="text-end"
@@ -332,7 +332,7 @@ function Roses() {
                       htmlFor="roseType"
                       className="form-label w-100 text-end"
                     >
-                      نوع الورد
+                      Rose Type
                     </label>
                     <input
                       onChange={(event) => {
@@ -341,7 +341,7 @@ function Roses() {
                       type="text"
                       className="form-control text-end"
                       id="roseType"
-                      placeholder="أدخل نوع الورد"
+                      placeholder="Enter rose type"
                     />
                   </div>
                 </form>
@@ -353,7 +353,7 @@ function Roses() {
                   data-bs-dismiss="modal"
                   onClick={handleCloseModal}
                 >
-                  إغلاق
+                  Close
                 </button>
                 <button
                   style={{
@@ -366,7 +366,7 @@ function Roses() {
                     handelAdd();
                   }}
                 >
-                  حفظ
+                  Save
                 </button>
               </div>
             </div>

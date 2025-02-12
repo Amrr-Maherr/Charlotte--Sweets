@@ -3,7 +3,7 @@ import "../../../Style/Details/Details.css";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Loader from "../Loader/Loader";
-import { motion } from "framer-motion"; // استيراد motion
+import { motion } from "framer-motion"; // Import motion
 
 function Details() {
   const [Manager, setManager] = useState({});
@@ -31,7 +31,7 @@ function Details() {
         {loading ? (
           <Loader />
         ) : (
-          <motion.div // إضافة motion.div هنا
+          <motion.div // Add motion.div here
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -41,13 +41,13 @@ function Details() {
                 <div className="col-12 Details-col">
                   <div className="card text-center">
                     <div className="card-title">
-                      <h3>تفاصيل المدير</h3>
+                      <h3>Manager Details</h3>
                     </div>
                     {Manager.image && (
                       <img
                         src={Manager.image}
                         className="card-img-top"
-                        alt="مدير"
+                        alt="Manager"
                         style={{
                           width: "81px",
                           height: "81px",
@@ -64,33 +64,33 @@ function Details() {
                             <td>
                               {Manager.first_name
                                 ? `${Manager.first_name} ${Manager.last_name}`
-                                : "غير متوفر"}
+                                : "Not Available"}
                             </td>
-                            <th>الاسم</th>
+                            <th>Name</th>
                           </tr>
                           <tr>
                             <td>
                               {Manager.branch
                                 ? Manager.branch.name
-                                : "لا يوجد فرع"}
+                                : "No Branch"}
                             </td>
-                            <th>الفرع</th>
+                            <th>Branch</th>
                           </tr>
                           <tr>
-                            <td>{Manager.email || "غير متوفر"}</td>
-                            <th>البريد الإلكتروني</th>
+                            <td>{Manager.email || "Not Available"}</td>
+                            <th>Email</th>
                           </tr>
                           <tr>
-                            <td>{Manager.phone || "غير متوفر"}</td>
-                            <th>رقم الهاتف</th>
+                            <td>{Manager.phone || "Not Available"}</td>
+                            <th>Phone Number</th>
                           </tr>
                           <tr>
-                            <td>{Manager.status || "غير متوفر"}</td>
-                            <th>حالة الطلب</th>
+                            <td>{Manager.status || "Not Available"}</td>
+                            <th>Status</th>
                           </tr>
                           <tr>
-                            <td>{Manager.verified_at || "غير متوفر"}</td>
-                            <th>تاريخ الإضافة</th>
+                            <td>{Manager.verified_at || "Not Available"}</td>
+                            <th>Added Date</th>
                           </tr>
                         </tbody>
                       </table>
@@ -99,7 +99,7 @@ function Details() {
                 </div>
               </div>
             </div>
-          </motion.div> // إغلاق motion.div هنا
+          </motion.div> // Closing motion.div here
         )}
       </section>
     </>

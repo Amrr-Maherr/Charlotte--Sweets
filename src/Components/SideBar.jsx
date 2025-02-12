@@ -9,7 +9,7 @@ function SideBar() {
   const navigate = useNavigate();
 
   const handleLogout = async (e) => {
-    e.preventDefault(); // Prevent default link behavior
+    e.preventDefault();
     try {
       const token = JSON.parse(localStorage.getItem("AuthToken"));
       await axios.post(
@@ -20,14 +20,10 @@ function SideBar() {
         }
       );
 
-      // Clear token from localStorage
       localStorage.removeItem("AuthToken");
-
-      // Redirect to login page
-      navigate("/"); // Replace "/login" with your actual login route
+      navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
-      // Handle logout error (e.g., display an error message)
     }
   };
 
@@ -45,7 +41,7 @@ function SideBar() {
                 location.pathname === "/dashboard/home" ? "page" : undefined
               }
             >
-              <i className="fa fa-home"></i> الرئيسية
+              <i className="fa fa-home"></i> Home
             </Link>
           </motion.li>
           <motion.li whileTap={{ scale: 0.9 }}>
@@ -58,7 +54,7 @@ function SideBar() {
                 location.pathname === "/dashboard/branches" ? "page" : undefined
               }
             >
-              <i className="fa fa-code-fork"></i> الفروع
+              <i className="fa fa-code-fork"></i> Branches
             </Link>
           </motion.li>
           <motion.li whileTap={{ scale: 0.9 }}>
@@ -71,7 +67,7 @@ function SideBar() {
                 location.pathname === "/dashboard/managers" ? "page" : undefined
               }
             >
-              <i className="fa fa-users"></i> المديرين
+              <i className="fa fa-users"></i> Managers
             </Link>
           </motion.li>
           <motion.li whileTap={{ scale: 0.9 }}>
@@ -84,7 +80,7 @@ function SideBar() {
                 location.pathname === "/dashboard/chefs" ? "page" : undefined
               }
             >
-              <i className="fa fa-cutlery"></i> الشيفات
+              <i className="fa fa-cutlery"></i> Chefs
             </Link>
           </motion.li>
           <motion.li whileTap={{ scale: 0.9 }}>
@@ -101,7 +97,7 @@ function SideBar() {
                   : undefined
               }
             >
-              <i className="fa fa-truck"></i> مندوبي التوصيل
+              <i className="fa fa-truck"></i> Delivery Representatives
             </Link>
           </motion.li>
           <motion.li whileTap={{ scale: 0.9 }}>
@@ -114,7 +110,7 @@ function SideBar() {
                 location.pathname === "/dashboard/sales" ? "page" : undefined
               }
             >
-              <i className="fa fa-line-chart"></i> السيلز
+              <i className="fa fa-line-chart"></i> Sales
             </Link>
           </motion.li>
           <motion.li whileTap={{ scale: 0.9 }}>
@@ -125,7 +121,7 @@ function SideBar() {
                 location.pathname === "/dashboard/ads" ? "page" : undefined
               }
             >
-              <i className="fa fa-bullhorn"></i> الاعلانات
+              <i className="fa fa-bullhorn"></i> Ads
             </Link>
           </motion.li>
           <motion.li whileTap={{ scale: 0.9 }}>
@@ -140,7 +136,7 @@ function SideBar() {
                   : undefined
               }
             >
-              <i className="fa fa-briefcase"></i> التخصصات
+              <i className="fa fa-briefcase"></i> Specialties
             </Link>
           </motion.li>
           <motion.li whileTap={{ scale: 0.9 }}>
@@ -153,7 +149,7 @@ function SideBar() {
                 location.pathname === "/dashboard/flowers" ? "page" : undefined
               }
             >
-              <i className="fa fa-leaf"></i> الورود
+              <i className="fa fa-leaf"></i> Flowers
             </Link>
           </motion.li>
           <motion.li whileTap={{ scale: 0.9 }}>
@@ -166,16 +162,12 @@ function SideBar() {
                 location.pathname === "/dashboard/products" ? "page" : undefined
               }
             >
-              <i className="fa fa-cogs"></i> المنتجات
+              <i className="fa fa-cogs"></i> Products
             </Link>
           </motion.li>
           <motion.li whileTap={{ scale: 0.9 }}>
-            <Link
-              to="#" // Use "#" as the href since it's not a real route
-              className="logout-link" // Add a class for styling purposes
-              onClick={handleLogout}
-            >
-              <i className="fa fa-sign-out"></i> تسجيل الخروج
+            <Link to="#" className="logout-link" onClick={handleLogout}>
+              <i className="fa fa-sign-out"></i> Logout
             </Link>
           </motion.li>
         </ul>

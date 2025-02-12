@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Loader from "../Loader/Loader";
 import "../../../Style/ChefsDetails/ChefsDetails.css";
-import { motion } from "framer-motion"; // استيراد motion
+import { motion } from "framer-motion"; // Import motion
 
 function SalesDetails() {
   const { id } = useParams();
@@ -30,19 +30,19 @@ function SalesDetails() {
 
   if (loading) return <Loader />;
 
-  // حساب عدد الصفحات
+  // Calculate the number of pages
   const totalPages = Data?.orders
     ? Math.ceil(Data.orders.length / ordersPerPage)
     : 1;
 
-  // استخراج الطلبات للصفحة الحالية
+  // Extract orders for the current page
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = Data?.orders
     ? Data.orders.slice(indexOfFirstOrder, indexOfLastOrder)
     : [];
 
-  // التنقل بين الصفحات
+  // Pagination navigation
   const nextPage = () =>
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -53,14 +53,14 @@ function SalesDetails() {
         <div className="row chef-details__row">
           <div className="col-12 chef-details__col mt-5"></div>
           <div className="col-12 chef-details__col mt-3 d-flex justify-content-center">
-            <motion.div // إضافة motion.div هنا
+            <motion.div // Add motion.div here
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
               className="card text-center w-50 shadow"
             >
               <div className="card-title py-3 text-end pe-4">
-                <h3>تفاصيل السيلز</h3>
+                <h3>Sales Details</h3>
               </div>
 
               {Data?.image && (
@@ -85,39 +85,38 @@ function SalesDetails() {
                       <td>
                         {Data?.first_name
                           ? `${Data.first_name} ${Data.last_name}`
-                          : "غير متوفر"}
+                          : "Not Available"}
                       </td>
-                      <th>الاسم</th>
+                      <th>Name</th>
                     </tr>
                     <tr>
                       <td>{Data?.orders ? Data.orders.length : 0}</td>
-                      <th>عدد الطلبات</th>
+                      <th>Order Count</th>
                     </tr>
                     <tr>
-                      <td>{Data?.email ? Data.email : "غير متوفر"}</td>
-                      <th>الايميل</th>
+                      <td>{Data?.email ? Data.email : "Not Available"}</td>
+                      <th>Email</th>
                     </tr>
                     <tr>
-                      <td>{Data?.phone ? Data.phone : "غير متوفر"}</td>
-                      <th>رقم الجوال</th>
+                      <td>{Data?.phone ? Data.phone : "Not Available"}</td>
+                      <th>Phone Number</th>
                     </tr>
                     <tr>
-                      <td>{Data?.status || "غير متوفر"}</td>
-                      <th>الحاله</th>
+                      <td>{Data?.status || "Not Available"}</td>
+                      <th>Status</th>
                     </tr>
                     <tr>
-                      <td>{Data?.verified_at || "غير متوفر"}</td>
-                      <th>تاريخ التحقق</th>
+                      <td>{Data?.verified_at || "Not Available"}</td>
+                      <th>Verification Date</th>
                     </tr>
                   </tbody>
                 </table>
               </div>
-            </motion.div>{" "}
-            
+            </motion.div>
           </div>
 
           <div className="col-12 my-4">
-            <h3 className="mt-4 text-center">قائمة الطلبات</h3>
+            <h3 className="mt-4 text-center">Order List</h3>
             {Data?.orders && Data.orders.length > 0 ? (
               <>
                 <div className="table-responsive my-4 chef-info-table">
@@ -125,27 +124,27 @@ function SalesDetails() {
                     <thead>
                       <tr>
                         <th>#</th>
-                        <th>نوع الطلب</th>
-                        <th>تاريخ الطلب</th>
-                        <th>الكمية</th>
-                        <th>الحالة</th>
+                        <th>Order Type</th>
+                        <th>Order Date</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       {currentOrders.map((order, index) => (
                         <tr key={index}>
                           <td>{indexOfFirstOrder + index + 1}</td>
-                          <td>{order.order_type || "لا يوجد نوع"}</td>
-                          <td>{order.delivery_date || "لا يوجد تاريخ"}</td>
-                          <td>{order.quantity || "لا توجد كميه"}</td>
-                          <td>{order.status || "لا توجد حاله"}</td>
+                          <td>{order.order_type || "No Type"}</td>
+                          <td>{order.delivery_date || "No Date"}</td>
+                          <td>{order.quantity || "No Quantity"}</td>
+                          <td>{order.status || "No Status"}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
 
-                {/* أزرار التنقل بين الصفحات */}
+                {/* Pagination Buttons */}
                 <div className="d-flex justify-content-center">
                   <button
                     style={{
@@ -156,10 +155,10 @@ function SalesDetails() {
                     onClick={prevPage}
                     disabled={currentPage === 1}
                   >
-                    السابق
+                    Previous
                   </button>
                   <span className="align-self-center">
-                    صفحة {currentPage} من {totalPages}
+                    Page {currentPage} of {totalPages}
                   </span>
                   <button
                     style={{
@@ -170,12 +169,12 @@ function SalesDetails() {
                     onClick={nextPage}
                     disabled={currentPage === totalPages}
                   >
-                    التالي
+                    Next
                   </button>
                 </div>
               </>
             ) : (
-              <p className="text-center text-muted">لا توجد طلبات.</p>
+              <p className="text-center text-muted">No orders.</p>
             )}
           </div>
         </div>

@@ -9,10 +9,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 320px;
+    width: 370px;
     margin: 0px auto;
-    margin-top:43px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 .PendingRequests-title a {
     font-family: "Cairo";
