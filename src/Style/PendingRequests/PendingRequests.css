@@ -1,17 +1,10 @@
-.main-parent {
-    width: 370px;
-        border-radius: 10px;
-        background-color: rgba(255, 255, 255, 1);
-        margin: 0px auto;
-        height: auto;
-}
 .PendingRequests-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 370px;
-    margin: 0px auto;
-    margin-bottom: 5px;
+    width: 383px;
+        height: 37px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 20px;
 }
 .PendingRequests-title a {
     font-family: "Cairo";
@@ -20,52 +13,59 @@
         color: rgba(169, 65, 29, 1);
         text-decoration: none;
 }
-.PendingRequests-title p {
+.PendingRequests-title p{
     font-family: "Cairo";
         font-weight: 700;
         font-size: 20px;
         color: rgba(0, 0, 0, 1);
 }
+.PendingRequests-main-parent {
+    width: 397px;
+        height: auto;
+        top: 518px;
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 1);
+        padding: 20px 34px;
+}
 /*  */
-.manager-parent {
+.PendingRequests-main-parent .request-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 20px;
 }
-.pending-requests-details {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 50%;
+.PendingRequests-main-parent .request-item .request-actions {
+    width: 50px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
 }
-.manager-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding:30px 10px ;
+.PendingRequests-main-parent .request-item .request-actions img {
+    cursor: pointer;
 }
-.pending-requests-actions {
-    display: flex;
-    gap: 10px;
+/*  */
+.PendingRequests-main-parent .request-item .employee-info {
+    text-align: left;
 }
-.pending-requests-name {
+.PendingRequests-main-parent .request-item .employee-info .employee-name{
     font-family: "Cairo";
         font-weight: 500;
         font-size: 20px;
         color: rgba(0, 0, 0, 1);
 }
-.pending-requests-role {
-    font-family: "Cairo";
-        font-weight: 500;
-        font-size: 14px;
-        color: rgba(115, 115, 115, 1);
+.PendingRequests-main-parent .request-item .employee-info .employee-title{
+font-family: "Cairo";
+    font-weight: 500;
+    font-size: 14px;
+    color: rgba(115, 115, 115, 1);
 }
-.pending-requests-image {
+.PendingRequests-main-parent .request-item .employee-image {
     width: 50px;
-    height: 50px;
-    cursor: pointer;
+        height: 50px;
 }
-.pending-requests-image img {
+.PendingRequests-main-parent .request-item .employee-image img{
     width: 100%;
     height: 100%;
     -o-border-radius: 50%;
@@ -73,8 +73,4 @@
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
     border-radius: 50%;
-    cursor: pointer;
-}
-.pending-requests-actions {
-    cursor: pointer;
 }

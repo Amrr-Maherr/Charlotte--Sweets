@@ -51,7 +51,7 @@ function SalesRepresentativesDetails() {
               dir="rtl"
             >
               {/* Use Card */}
-              <div className="card-title">
+              <div className="card-title text-start">
                 <h3>Delivery Representative Details</h3>
               </div>
               {Data.image && (
@@ -70,34 +70,34 @@ function SalesRepresentativesDetails() {
               )}
               <div className="card-body">
                 <table className="table table-bordered text-end">
-                  <tbody>
+                  <tbody className="text-start">
                     <tr>
-                      <th>Name</th>
                       <td>
                         {Data.first_name
                           ? `${Data.first_name} ${Data.last_name}`
                           : "Not Available"}
                       </td>
+                          <th>Name</th>
                     </tr>
                     <tr>
-                      <th>Branch</th>
                       <td>{Data.branch ? Data.branch.name : "No Branch"}</td>
+                      <th>Branch</th>
                     </tr>
                     <tr>
-                      <th>Email</th>
                       <td>{Data.email || "Not Available"}</td>
+                      <th>Email</th>
                     </tr>
                     <tr>
-                      <th>Phone Number</th>
                       <td>{Data.phone || "Not Available"}</td>
+                      <th>Phone Number</th>
                     </tr>
                     <tr>
-                      <th>Order Status</th>
                       <td>{Data.status || "Not Available"}</td>
+                      <th>Order Status</th>
                     </tr>
                     <tr>
-                      <th>Added Date</th>
                       <td>{Data.verified_at || "Not Available"}</td>
+                      <th>Added Date</th>
                     </tr>
                   </tbody>
                 </table>

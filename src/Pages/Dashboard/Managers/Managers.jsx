@@ -114,28 +114,28 @@ function Managers() {
           <>
             <div className="container Managers-table-container vh-100">
               <div className="row Managers-table-row">
-                <div className="col-xl-4 mt-5"></div>
+                <div className="col-xl-4 mt-5">
+                  <h1 className="Managers-title text-start">Managers</h1>
+                </div>
                 <div className="col-xl-4 mt-5">
                   <input
                     type="text"
-                    className="form-control p-2 rounded text-end"
+                    className="form-control p-2 rounded"
                     placeholder="Search by manager name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
-                <div className="col-xl-4 mt-5">
-                  <h1 className="Managers-title text-end">Managers</h1>
-                </div>
+                <div className="col-xl-4 mt-5"></div>
               </div>
               <div className="row Managers-table-row">
                 <div className="col-12 Managers-table-col mt-5">
                   <table className="table Managers-table table-hover shadow">
                     <thead>
                       <tr>
-                        <th scope="col">Actions</th>
-                        <th scope="col">Branch</th>
                         <th scope="col">Name</th>
+                        <th scope="col">Branch</th>
+                        <th scope="col">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -161,7 +161,19 @@ function Managers() {
                               }} // Bounce animation with delay based on row order
                               key={manager.id}
                             >
+                              <td>
+                                {manager.first_name} {manager.last_name}
+                              </td>
+                              <td>{manager.branch.name}</td>
                               <td className="actions">
+                                <Link
+                                  to={`/dashboard/manager-details/${manager.id}`}
+                                  className="action-icon view-icon"
+                                >
+                                  <div className="action-icon">
+                                    <img src={eye} alt="View" />
+                                  </div>
+                                </Link>
                                 <motion.div
                                   onClick={() => {
                                     handleDelete(manager.id);
@@ -172,18 +184,6 @@ function Managers() {
                                 >
                                   <img src={deleteIcon} alt="Delete" />
                                 </motion.div>
-                                <Link
-                                  to={`/dashboard/manager-details/${manager.id}`}
-                                  className="action-icon view-icon"
-                                >
-                                  <div className="action-icon">
-                                    <img src={eye} alt="View" />
-                                  </div>
-                                </Link>
-                              </td>
-                              <td>{manager.branch.name}</td>
-                              <td>
-                                {manager.first_name} {manager.last_name}
                               </td>
                             </motion.tr> // Closing motion.tr here
                           ))}

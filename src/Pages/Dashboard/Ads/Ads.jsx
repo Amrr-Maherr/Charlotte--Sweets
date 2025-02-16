@@ -176,9 +176,9 @@ function Ads() {
                     <table className="table table-hover text-center ads-table shadow">
                       <thead>
                         <tr>
-                          <th scope="col">Actions</th>
-                          <th scope="col">Ad Name</th>
                           <th scope="col">#</th>
+                          <th scope="col">Ad Name</th>
+                          <th scope="col">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -201,6 +201,8 @@ function Ads() {
                               }}
                               key={ad.id}
                             >
+                              <td>{indexOfFirstItem + index + 1}</td>
+                              <td>{ad.title}</td>
                               <td>
                                 <div className="actions">
                                   <img
@@ -215,8 +217,6 @@ function Ads() {
                                   </Link>
                                 </div>
                               </td>
-                              <td>{ad.title}</td>
-                              <td>{indexOfFirstItem + index + 1}</td>
                             </motion.tr>
                           ))
                         )}

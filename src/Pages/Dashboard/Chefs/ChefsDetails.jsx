@@ -66,7 +66,7 @@ function ChefsDetails() {
               transition={{ duration: 0.5, ease: "easeInOut" }}
               className="card text-center w-50 shadow"
             >
-              <div className="card-title py-3 text-end pe-4">
+              <div className="card-title py-3 text-start p-4">
                 <h3>Chef Details</h3>
               </div>
 
@@ -87,7 +87,7 @@ function ChefsDetails() {
 
               <div className="card-body">
                 <table className="table table-bordered text-end">
-                  <tbody>
+                  <tbody className="text-end">
                     <tr>
                       <td>
                         {chefData?.first_name

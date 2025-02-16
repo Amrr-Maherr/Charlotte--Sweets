@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import "../../../Style/Managers.jsx/Managers.css"; // استخدم نفس الـ CSS
+import "../../../Style/Managers.jsx/Managers.css"; // Use the same CSS
 import axios from "axios";
 import Loader from "../Loader/Loader";
-import eye from "../../../Assets/eye.svg"; // أو أيقونة مناسبة
+import eye from "../../../Assets/eye.svg"; // Or a suitable icon
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -32,15 +32,15 @@ function PendingOrders() {
     fetchData();
   }, [token]);
 
-  // حساب عدد الصفحات
+  // Calculate the number of pages
   const totalPages = Math.ceil(Data.length / itemsPerPage);
 
-  // استخراج العناصر للصفحة الحالية
+  // Extract items for the current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = Data.slice(indexOfFirstItem, indexOfLastItem);
 
-  // التنقل بين الصفحات
+  // Navigate between pages
   const nextPage = () =>
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -54,27 +54,23 @@ function PendingOrders() {
           <>
             <div className="container Managers-table-container vh-100">
               {" "}
-              {/* استخدم نفس الـ Class */}
+              {/* Use the same Class */}
               <div className="row Managers-table-row">
-                <div className="col-xl-4 mt-5"></div>
-                <div className="col-xl-4 mt-5">
-                  {/* يمكنك إضافة حقل بحث هنا إذا كنت بحاجة إليه */}
-                </div>
-                <div className="col-xl-4 mt-5">
-                  <h1 className="Managers-title text-end">الطلبات المعلقة</h1>{" "}
-                  {/* عنوان مناسب */}
+                <div className="col-xl-12 mt-5">
+                  <h1 className="Managers-title text-start">Pending Orders</h1>{" "}
+                  {/* Appropriate title */}
                 </div>
               </div>
               <div className="row Managers-table-row">
                 <div className="col-12 Managers-table-col mt-5">
                   <table className="table Managers-table table-hover shadow">
                     {" "}
-                    {/* استخدم نفس الـ Classes */}
+                    {/* Use the same Classes */}
                     <thead>
                       <tr>
-                        <th scope="col">الاجراءات</th>
-                        <th scope="col">تاريخ الطلب</th> {/* مثال لعمود */}
-                        <th scope="col">رقم الطلب</th>
+                        <th scope="col">Order ID</th>
+                        <th scope="col">Order Date</th>
+                        <th scope="col">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -82,14 +78,14 @@ function PendingOrders() {
                         <>
                           <tr>
                             <td colSpan="3" className="text-center">
-                              لا يوجد طلبات معلقة حاليا
+                              No pending orders currently
                             </td>
                           </tr>
                         </>
                       ) : (
                         <>
                           {currentItems.map((order, index) => (
-                            <motion.tr // استخدام motion.tr هنا
+                            <motion.tr
                               initial={{ opacity: 0, y: 50 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{
@@ -97,23 +93,22 @@ function PendingOrders() {
                                 stiffness: 100,
                                 damping: 25,
                                 delay: 0.1 * index,
-                              }} // حركة Bounce مع تأخير حسب ترتيب الصف
+                              }}
                               key={order.id}
                             >
+                              <td>{order.id}</td>
+                              <td>{order.order_date || "Not specified"}</td>
                               <td className="actions">
                                 <Link
-                                  to={`/dashboard/order-details/${order.id}`} // رابط مناسب
+                                  to={`/dashboard/order-details/${order.id}`}
                                   className="action-icon view-icon"
                                 >
                                   <div className="action-icon">
-                                    <img src={eye} alt="عرض" />
+                                    <img src={eye} alt="View" />
                                   </div>
                                 </Link>
                               </td>
-                              <td>{order.order_date || "غير محدد"}</td>{" "}
-                              {/* تعديل هنا حسب حقول API */}
-                              <td>{order.id}</td>
-                            </motion.tr> // وإغلاق motion.tr هنا
+                            </motion.tr>
                           ))}
                         </>
                       )}
@@ -132,10 +127,10 @@ function PendingOrders() {
                   onClick={prevPage}
                   disabled={currentPage === 1}
                 >
-                  السابق
+                  Previous
                 </button>
                 <span className="align-self-center">
-                  صفحة {currentPage} من {totalPages}
+                  Page {currentPage} of {totalPages}
                 </span>
                 <button
                   className="btn mx-2"
@@ -146,7 +141,7 @@ function PendingOrders() {
                   onClick={nextPage}
                   disabled={currentPage === totalPages}
                 >
-                  التالي
+                  Next
                 </button>
               </div>
             </div>

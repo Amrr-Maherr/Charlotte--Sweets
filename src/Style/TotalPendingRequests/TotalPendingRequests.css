@@ -1,0 +1,58 @@
+.TotalPendingRequests-title {
+    margin-bottom: 9px;
+    width: 226px;
+    margin: 0px auto;
+}
+.TotalPendingRequests-title h3 {
+    font-family: "Cairo";
+        font-weight: 600;
+        font-size: 12px;
+}
+.TotalPendingRequests-main-parent {
+    width: 226px;
+        height: auto;
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 1);
+        margin: 0px auto;
+        margin-bottom: 29px;
+        padding-right: 14px;
+        padding-left: 25px;
+        padding-top: 24px;
+        padding-bottom: 40px;
+}
+.TotalPendingRequests-main-parent .TotalPendingRequests-parent {
+    width: 100%;
+    height: 100%;
+}
+.TotalPendingRequests-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0px;
+}
+.TotalPendingRequests-child .TotalPendingRequests-info .number {
+    font-family: "Cairo";
+        font-weight: 700;
+        font-size: 20px;
+}
+.TotalPendingRequests-child .TotalPendingRequests-info .title {
+    font-family: "Cairo";
+        font-weight: 400;
+        font-size: 20px;
+        color: rgba(115, 115, 115, 1);
+}
+.TotalPendingRequests-icon {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        -o-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        border-radius: 50%;
+}
+.TotalPendingRequests-icon i {
+    font-size: 20px;
+}

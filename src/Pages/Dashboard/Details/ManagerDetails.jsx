@@ -40,7 +40,7 @@ function Details() {
               <div className="row Details-row">
                 <div className="col-12 Details-col">
                   <div className="card text-center">
-                    <div className="card-title">
+                    <div className="card-title text-start">
                       <h3>Manager Details</h3>
                     </div>
                     {Manager.image && (
@@ -59,38 +59,38 @@ function Details() {
                     )}
                     <div className="card-body">
                       <table className="table table-bordered text-end">
-                        <tbody>
+                        <tbody className="text-start">
                           <tr>
+                            <th>Name</th>
                             <td>
                               {Manager.first_name
                                 ? `${Manager.first_name} ${Manager.last_name}`
                                 : "Not Available"}
                             </td>
-                            <th>Name</th>
                           </tr>
                           <tr>
+                            <th>Branch</th>
                             <td>
                               {Manager.branch
                                 ? Manager.branch.name
                                 : "No Branch"}
                             </td>
-                            <th>Branch</th>
                           </tr>
                           <tr>
-                            <td>{Manager.email || "Not Available"}</td>
                             <th>Email</th>
+                            <td>{Manager.email || "Not Available"}</td>
                           </tr>
                           <tr>
-                            <td>{Manager.phone || "Not Available"}</td>
                             <th>Phone Number</th>
+                            <td>{Manager.phone || "Not Available"}</td>
                           </tr>
                           <tr>
-                            <td>{Manager.status || "Not Available"}</td>
                             <th>Status</th>
+                            <td>{Manager.status || "Not Available"}</td>
                           </tr>
                           <tr>
-                            <td>{Manager.verified_at || "Not Available"}</td>
                             <th>Added Date</th>
+                            <td>{Manager.verified_at || "Not Available"}</td>
                           </tr>
                         </tbody>
                       </table>

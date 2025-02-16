@@ -101,20 +101,22 @@ function Chefs() {
         ) : (
           <>
             {/* Use fragment here */}
-            <div className="container chef-container">
+            <div
+              className="container chef-container"
+              style={{ direction: "rtl" }}
+            >
               <div className="row chef-row">
-                <div className="col-xl-4 mt-5"></div>
                 <div className="col-xl-4 mt-5">
                   <input
                     type="text"
-                    className="form-control p-2 rounded text-end"
+                    className="form-control p-2 rounded"
                     placeholder="Search by chef name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
-                <div className="col-xl-4 mt-5">
-                  <h1 className="chef-title text-end">Chefs</h1>
+                <div className="col-xl-8 mt-5">
+                  <h1 className="chef-title text-start">Chefs</h1>
                 </div>
               </div>
               <div className="row chef-row">
@@ -123,8 +125,8 @@ function Chefs() {
                     <thead>
                       <tr>
                         <th scope="col">Actions</th>
-                        <th scope="col">Branch</th>
                         <th scope="col">Order Count</th>
+                        <th scope="col">Branch</th>
                         <th scope="col">Name</th>
                       </tr>
                     </thead>
@@ -165,11 +167,11 @@ function Chefs() {
                                   </div>
                                 </Link>
                               </td>
-                              <td className="chef-branch">
-                                {chef.branch.name}
-                              </td>
                               <td className="chef-phone">
                                 {chef.orders_count}
+                              </td>
+                              <td className="chef-branch">
+                                {chef.branch.name}
                               </td>
                               <td className="chef-name">
                                 {chef.first_name} {chef.last_name}

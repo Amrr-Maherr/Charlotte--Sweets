@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import "../../../Style/NewOrders/NewOrders.css";
 import Eye from "../../../Assets/eye.svg";
-import { motion } from "framer-motion"; // استيراد motion
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 function NewOrders() {
@@ -53,22 +53,22 @@ function NewOrders() {
     <>
       <div className="container new-order-container">
         <div className="row new-order-row">
-          <div className="col-12 mt-5 text-end new-order-title">
-            <h1>الطلبات الجديدة</h1>
+          <div className="col-12 mt-5 text-start new-order-title">
+            <h1>New Orders</h1>
           </div>
           <div className="col-12 mt-5">
             <table className="table text-center new-order-table">
               <thead>
                 <tr>
-                  <th>الاجرائات</th>
-                  <th>السعر الكلي</th>
-                  <th>نوع الطلب</th>
                   <th>#</th>
+                  <th>Order Type</th>
+                  <th>Price</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {currentItems.map((order, index) => (
-                  <motion.tr // استخدام motion.tr هنا
+                  <motion.tr
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{
@@ -76,9 +76,12 @@ function NewOrders() {
                       stiffness: 100,
                       damping: 25,
                       delay: 0.1 * index,
-                    }} // حركة Bounce مع تأخير حسب ترتيب الصف
+                    }}
                     key={order.id}
                   >
+                    <td>{order.id}</td>
+                    <td>{order.order_type || "No Type"}</td>
+                    <td>{order.total_price || "No Price"}</td>
                     <td>
                       <div className="actions">
                         <Link to={`/dashboard/order-details/${order.id}`}>
@@ -86,10 +89,7 @@ function NewOrders() {
                         </Link>
                       </div>
                     </td>
-                    <td>{order.total_price || "لايوجد سعر"}</td>
-                    <td>{order.order_type || "لا يوجد نوع"}</td>
-                    <td>{order.id}</td>
-                  </motion.tr> // وإغلاق motion.tr هنا
+                  </motion.tr>
                 ))}
               </tbody>
             </table>
@@ -104,10 +104,10 @@ function NewOrders() {
               onClick={prevPage}
               disabled={currentPage === 1}
             >
-              السابق
+              Previous
             </button>
             <span className="align-self-center">
-              صفحة {currentPage} من {totalPages}
+              Page {currentPage} of {totalPages}
             </span>
             <button
               className="btn mx-2"
@@ -118,7 +118,7 @@ function NewOrders() {
               onClick={nextPage}
               disabled={currentPage === totalPages}
             >
-              التالي
+              Next
             </button>
           </div>
         </div>

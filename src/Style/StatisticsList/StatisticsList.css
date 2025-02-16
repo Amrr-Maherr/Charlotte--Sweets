@@ -1,53 +1,56 @@
-.parent {
-        min-width: 320px;
-        height: auto;
+.main-parent {
+        width: 397px;
         -o-border-radius: 10px;
         -webkit-border-radius: 10px;
         -moz-border-radius: 10px;
         -ms-border-radius: 10px;
         border-radius: 10px;
         background-color: rgba(255, 255, 255, 1);
-        padding: 20px;
+        padding:22px 21px;
 }
-.parent .sub-parent {
-    width: 100%;
+.main-parent-title {
+    margin-bottom: 20px;
 }
-.parent .sub-parent .info{
+.main-parent .child-parent {
+    width: 355px;
+}
+.main-parent .child-parent .child {
+    margin-left: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 10px;
+    width: 301px;
 }
-.parent .sub-parent .info .sub-info {
-    width: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+.main-parent .child-parent .child .child-title {
+    width: 160px;
+        height: 71px;
+        text-align: center;
 }
-.parent .sub-parent .info .sub-info .info-number {
+.main-parent .child-parent .child .child-title .child-number {
         font-weight: 600;
         font-size: 25px;
         color: rgba(77, 77, 77, 1);
+        margin-bottom: 2px;
 }
-.parent .sub-parent .info .sub-info .info-title {
+.main-parent .child-parent .child .child-title .child-text {
     font-family: "Cairo";
         font-weight: 400;
         font-size: 20px;
+        color: rgba(101, 100, 124, 1);
 }
-.parent .sub-parent .info .icon {
-    background-color: rgba(238, 232, 250, 1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 54px;
-    height: 54px;
-    -o-border-radius: 50%;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -ms-border-radius: 50%;
-    border-radius: 50%;
-    color: rgba(117, 69, 220, 1);
-}
-.parent .sub-parent .info .icon i {
-    font-size: 21px;
+.main-parent .child-parent .child .child-icon {
+        width: 54px;
+        height: 54px;
+        background-color: rgba(238, 232, 250, 1);
+        -o-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(117, 69, 220, 1);
+        font-size: 21px;
 }

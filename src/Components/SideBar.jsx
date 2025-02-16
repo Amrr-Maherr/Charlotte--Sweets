@@ -139,32 +139,6 @@ function SideBar() {
               <i className="fa fa-briefcase"></i> Specialties
             </Link>
           </motion.li>
-          <motion.li whileTap={{ scale: 0.9 }}>
-            <Link
-              to="/dashboard/flowers"
-              className={
-                location.pathname === "/dashboard/flowers" ? "active" : ""
-              }
-              aria-current={
-                location.pathname === "/dashboard/flowers" ? "page" : undefined
-              }
-            >
-              <i className="fa fa-leaf"></i> Flowers
-            </Link>
-          </motion.li>
-          <motion.li whileTap={{ scale: 0.9 }}>
-            <Link
-              to="/dashboard/products"
-              className={
-                location.pathname === "/dashboard/products" ? "active" : ""
-              }
-              aria-current={
-                location.pathname === "/dashboard/products" ? "page" : undefined
-              }
-            >
-              <i className="fa fa-cogs"></i> Products
-            </Link>
-          </motion.li>
           {/* Profile Link */}
           <motion.li whileTap={{ scale: 0.9 }}>
             <Link

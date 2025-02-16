@@ -4,9 +4,6 @@ import OrderBox from "../../../Components/HomeOrderBox/OrderBox";
 import axios from "axios";
 import Loader from "../Loader/Loader";
 import HomeStatistics from "../../../Components/HomeStatistics";
-import Chart from "../../../Components/Chart";
-import ManagersRequests from "../../../Components/ManagersRequests/ManagersRequests";
-import PendingRequests from "../../../Components/PendingRequests/PendingRequests";
 
 function Home() {
   const [Orders, setOrders] = useState({});
@@ -125,19 +122,7 @@ function Home() {
               ))}
             </motion.div>
           </div>
-          <div className="container">
-            <div className="row bg-danger">
-              <div className="col-xl-4">
-                <h1>Test</h1>
-              </div>
-              <div className="col-xl-4">
-                <h1>Test</h1>
-              </div>
-              <div className="col-xl-4">
-                <h1>Test</h1>
-              </div>
-            </div>
-          </div>
+          <HomeStatistics/>
         </>
       )}
     </motion.section>

@@ -8,10 +8,19 @@ import eye from "../../../Assets/eye.svg";
 import { motion } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
 import AddButton from "../../../Components/AddButton/AddButton";
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  useMapEvents,
+  useMap,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import Swal from "sweetalert2"; // Import SweetAlert2
+import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
+import "leaflet-geosearch/dist/geosearch.css"; // Import leaflet-geosearch styles
+import PropTypes from "prop-types";
 
 // Correct the problem of icons in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -20,6 +29,18 @@ L.Icon.Default.mergeOptions({
   iconUrl: require("leaflet/dist/images/marker-icon.png"),
   shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
 });
+
+// Define reusable Button component
+const CustomButton = ({ onClick, disabled, children }) => (
+  <button
+    className="btn mx-2"
+    style={{ backgroundColor: "rgba(169, 65, 29, 1)", color: "white" }}
+    onClick={onClick}
+    disabled={disabled}
+  >
+    {children}
+  </button>
+);
 
 function Branches() {
   const [branchesData, setBranchesData] = useState([]);
@@ -51,6 +72,7 @@ function Branches() {
 
   const fetchData = useCallback(async () => {
     try {
+      setLoading(true);
       const response = await axios.get(
         "https://management.mlmcosmo.com/api/branches",
         {
@@ -59,37 +81,44 @@ function Branches() {
       );
       setBranchesData(response.data);
       console.log(response.data);
-      setLoading(false);
     } catch (error) {
-      console.log(error.response.data.message);
+      console.error("Error fetching branches:", error);
+      toast.error(error.response?.data?.message || "Error fetching branches");
+    } finally {
       setLoading(false);
     }
   }, [token]);
 
   useEffect(() => {
-    fetchData();
+    setTimeout(() => {
+      fetchData();
+    }, 100);
   }, [fetchData]);
 
   // Filter branch data based on the search term
-  const filteredBranches = branchesData.filter((branch) =>
-    branch.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredBranches = React.useMemo(() => {
+    return branchesData.filter((branch) =>
+      branch.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [branchesData, searchTerm]);
 
   // Calculate the number of pages after filtering
   const totalPages = Math.ceil(filteredBranches.length / itemsPerPage);
 
   // Extract items for the current page after filtering
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredBranches.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  const currentItems = React.useMemo(() => {
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    return filteredBranches.slice(indexOfFirstItem, indexOfLastItem);
+  }, [currentPage, filteredBranches, itemsPerPage]);
 
   // Pagination navigation
-  const nextPage = () =>
+  const nextPage = () => {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-  const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+  const prevPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -169,147 +198,155 @@ function Branches() {
       );
     }
   };
-  // Component to handle map clicks
+  // Component to handle map clicks and reverse geocoding
   function MapEvents() {
-    const map = useMapEvents({
-      click: (e) => {
-        setLatitude(e.latlng.lat);
-        setLongitude(e.latlng.lng);
-        toast.success(
-          `Location selected: Latitude ${e.latlng.lat}, Longitude ${e.latlng.lng}`
-        );
+    const map = useMap();
+    useEffect(() => {
+      if (map) {
+        setTimeout(() => {
+          map.invalidateSize();
+        }, 0);
+      }
+    }, [map]);
+
+    const mapEvents = useMapEvents({
+      click: async (e) => {
+        const { lat, lng } = e.latlng;
+        setLatitude(lat);
+        setLongitude(lng);
+
+        try {
+          const provider = new OpenStreetMapProvider();
+          const results = await provider.search({ query: `${lat}, ${lng}` });
+
+          if (results && results.length > 0) {
+            setAddress(results[0].label);
+            toast.success(
+              `Location selected and address updated successfully.`
+            ); // Display success toast
+          } else {
+            toast.warn("Could not determine address for this location.");
+          }
+        } catch (error) {
+          console.error("Reverse geocoding error:", error);
+          toast.error("Error retrieving address for this location.");
+        }
       },
     });
     return null;
+  }
+
+  if (loading) {
+    return <Loader />;
   }
 
   return (
     <>
       <div className="branches-component">
         <section className="branches-section h-100">
-          {loading ? (
-            <Loader />
-          ) : (
-            <div className="container">
-              <div className="row">
-                <div className="col-xl-4 mt-5">
-                  <h1 className="branches-title text-start">Branches</h1>
-                </div>
-                <div className="col-xl-4 mt-5">
-                  <input
-                    type="text"
-                    className="form-control p-2 rounded"
-                    placeholder="Search by branch name..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-                <div className="col-xl-4 mt-5 text-end">
-                  <AddButton
-                    ButtonText="Add Branch"
-                    onClick={handleShowModal}
-                  />
-                </div>
+          <div className="container">
+            <div className="row">
+              <div className="col-xl-4 mt-5">
+                <h1 className="branches-title text-start">Branches</h1>
               </div>
-              <div className="row">
-                <div className="col-12 mt-5">
-                  <table className="table branches-table table-hover shadow">
-                    <thead>
-                      <tr>
-                        <th scope="col">Branch Name</th>
-                        <th scope="col">Branch Manager</th>
-                        <th scope="col">Address</th>
-                        <th scope="col">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="branches-table-body">
-                      {currentItems.length === 0 ? (
-                        <tr>
-                          <td colSpan="4" style={{ textAlign: "center" }}>
-                            No Branches to be displayed
-                          </td>
-                        </tr>
-                      ) : (
-                        currentItems.map((branch, index) => (
-                          <motion.tr
-                            initial={{ opacity: 0, y: 50 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{
-                              type: "spring",
-                              stiffness: 100,
-                              damping: 25,
-                              delay: 0.1 * index,
-                            }} // Bounce animation with delay based on row order
-                            key={branch.id}
-                            className="branches-table-row"
-                          >
-                            <td>{branch.name.slice(0, 10)}...</td>
-                            <td>{branch.address.slice(0, 10)}...</td>
-                            <td>
-                              {branch.manager
-                                ? `${branch.manager.first_name} ${branch.manager.last_name}`
-                                : "No Manager"}
-                            </td>
-                            <td className="actions">
-                              <Link
-                                to={`/dashboard/branch-details/${branch.id}`}
-                                className="action-icon view-icon"
-                              >
-                                <motion.div
-                                  whileHover={{ scale: 1.3 }}
-                                  whileTap={{ scale: 0.8 }}
-                                >
-                                  <img src={eye} alt="View Details" />
-                                </motion.div>
-                              </Link>
-                              <motion.div
-                                onClick={() => {
-                                  handleDelete(branch.id);
-                                }}
-                                whileHover={{ scale: 1.3 }}
-                                whileTap={{ scale: 0.8 }}
-                                className="action-icon delete-icon"
-                              >
-                                <img src={deleteIcon} alt="Delete" />
-                              </motion.div>
-                            </td>
-                          </motion.tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </div>
+              <div className="col-xl-4 mt-5">
+                <input
+                  type="text"
+                  className="form-control p-2 rounded"
+                  placeholder="Search by branch name..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
-              {/* Pagination */}
-              <div className="d-flex justify-content-center">
-                <button
-                  className="btn mx-2"
-                  style={{
-                    backgroundColor: "rgba(169, 65, 29, 1)",
-                    color: "white",
-                  }}
-                  onClick={nextPage}
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </button>
-                <span className="align-self-center">
-                  Page {currentPage} of {totalPages}
-                </span>
-                <button
-                  style={{
-                    backgroundColor: "rgba(169, 65, 29, 1)",
-                    color: "white",
-                  }}
-                  className="btn mx-2"
-                  onClick={prevPage}
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </button>
+              <div className="col-xl-4 mt-5 text-end">
+                <AddButton ButtonText="Add Branch" onClick={handleShowModal} />
               </div>
             </div>
-          )}
+            <div className="row">
+              <div className="col-12 mt-5">
+                <table className="table branches-table table-hover shadow">
+                  <thead>
+                    <tr>
+                      <th scope="col">Branch Name</th>
+                      <th scope="col">Address</th>
+                      <th scope="col">Branch Manager</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="branches-table-body">
+                    {currentItems.length === 0 ? (
+                      <tr>
+                        <td colSpan="4" style={{ textAlign: "center" }}>
+                          No Branches to be displayed
+                        </td>
+                      </tr>
+                    ) : (
+                      currentItems.map((branch, index) => (
+                        <motion.tr
+                          initial={{ opacity: 0, y: 50 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 100,
+                            damping: 25,
+                            delay: 0.1 * index,
+                          }} // Bounce animation with delay based on row order
+                          key={branch.id}
+                          className="branches-table-row"
+                        >
+                          <td>{branch.name.slice(0, 10)}...</td>
+                          <td>{branch.address.slice(0, 10)}...</td>
+                          <td>
+                            {branch.manager
+                              ? `${branch.manager.first_name} ${branch.manager.last_name}`
+                              : "No Manager"}
+                          </td>
+                          <td className="actions">
+                            <Link
+                              to={`/dashboard/branch-details/${branch.id}`}
+                              className="action-icon view-icon"
+                            >
+                              <motion.div
+                                whileHover={{ scale: 1.3 }}
+                                whileTap={{ scale: 0.8 }}
+                              >
+                                <img src={eye} alt="View Details" />
+                              </motion.div>
+                            </Link>
+                            <motion.div
+                              onClick={() => {
+                                handleDelete(branch.id);
+                              }}
+                              whileHover={{ scale: 1.3 }}
+                              whileTap={{ scale: 0.8 }}
+                              className="action-icon delete-icon"
+                            >
+                              <img src={deleteIcon} alt="Delete" />
+                            </motion.div>
+                          </td>
+                        </motion.tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            {/* Pagination */}
+            <div className="d-flex justify-content-center">
+              <CustomButton
+                onClick={nextPage}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </CustomButton>
+              <span className="align-self-center">
+                Page {currentPage} of {totalPages}
+              </span>
+              <CustomButton onClick={prevPage} disabled={currentPage === 1}>
+                Previous
+              </CustomButton>
+            </div>
+          </div>
         </section>
         <Toaster />
       </div>
@@ -430,4 +467,19 @@ function Branches() {
   );
 }
 
+Branches.propTypes = {
+  branchesData: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      address: PropTypes.string.isRequired,
+      manager: PropTypes.shape({
+        first_name: PropTypes.string,
+        last_name: PropTypes.string,
+      }),
+    })
+  ),
+  loading: PropTypes.bool.isRequired,
+  searchTerm: PropTypes.string,
+};
 export default Branches;

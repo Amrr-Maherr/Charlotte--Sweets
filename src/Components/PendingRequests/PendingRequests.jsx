@@ -1,193 +1,161 @@
-import { useEffect, useState } from "react";
-import "../../Style/PendingRequests/PendingRequests.css";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import "../../Style/PendingRequests/PendingRequests.css";
+import Delete from "../../Assets/Group 12.png";
 import Acc from "../../Assets/Group 13.png";
-import Del from "../../Assets/Group 12.png";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Swal from "sweetalert2"; // Import SweetAlert2
 
 function PendingRequests() {
-  const [managers, setManagers] = useState([]);
-  const [sales, setSales] = useState([]);
+  const [pendingManagers, setPendingManagers] = useState([]);
+  const [pendingSales, setPendingSales] = useState([]);
+  const [managersKey, setManagersKey] = useState(""); // Store the "key" value for managers
+  const [salesKey, setSalesKey] = useState(""); // Store the "key" value for sales
   const token = JSON.parse(localStorage.getItem("AuthToken"));
-  const [managerRole, setManagerRole] = useState("");
-  const [salesRole, setSalesRole] = useState("");
+  const [loading, setLoading] = useState(true); // Add a loading state
 
   useEffect(() => {
-    const fetchManagers = async () => {
+    const fetchPendingData = async () => {
+      setLoading(true); // Start loading
       try {
-        const response = await axios.get(
+        // Fetch pending managers
+        const managersResponse = await axios.get(
           "https://management.mlmcosmo.com/api/pending-managers",
-          { headers: { Authorization: `Bearer ${token}` } }
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
-        console.log("Managers Data:", response.data.data);
-        setManagers(response.data.data.slice(0, 3));
-        setManagerRole(response.data.key);
-      } catch (error) {
-        console.error("Error fetching managers:", error);
-        console.error("Error message:", error.response?.data?.message);
-      }
-    };
+        if (managersResponse.data && managersResponse.data.data) {
+          setPendingManagers(managersResponse.data.data.slice(0, 2)); // Get only the first two
+          setManagersKey(managersResponse.data.key || "Manager"); // Store the key, default to "Manager"
+        }
 
-    if (token) {
-      fetchManagers();
-    } else {
-      console.warn("No AuthToken found in localStorage. Managers not fetched.");
-      setManagers([]); // Set to empty array if no token
-    }
-  }, [token]);
-
-  useEffect(() => {
-    const fetchSales = async () => {
-      try {
-        const response = await axios.get(
+        // Fetch pending sales
+        const salesResponse = await axios.get(
           "https://management.mlmcosmo.com/api/pending-sales",
-          { headers: { Authorization: `Bearer ${token}` } }
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
-        console.log("Sales Data:", response.data.data);
-        setSales(response.data.data.slice(0, 3));
-        setSalesRole(response.data.key);
+        if (salesResponse.data && salesResponse.data.data) {
+          setPendingSales(salesResponse.data.data.slice(0, 2)); // Get only the first two
+          setSalesKey(salesResponse.data.key || "Sales Representative"); // Store the key, default to "Sales Representative"
+        }
       } catch (error) {
-        console.error("Error fetching sales:", error);
-        console.error("Error message:", error.response?.data?.message);
+        console.error("Error fetching pending data:", error);
+      } finally {
+        setLoading(false); // End loading regardless of success or failure
       }
     };
 
-    if (token) {
-      fetchSales();
-    } else {
-      console.warn("No AuthToken found in localStorage. Sales not fetched.");
-      setSales([]); // Set to empty array if no token
-    }
+    fetchPendingData();
   }, [token]);
 
-  const handleAcceptManager = (managerId) => {
+  // Function to handle accepting or rejecting a manager
+  const handleManagerAction = (id, action) => {
+    const endpoint =
+      action === "accept"
+        ? `https://management.mlmcosmo.com/api/accept-manager/${id}`
+        : `https://management.mlmcosmo.com/api/reject-manager/${id}`;
+
+    const confirmationText =
+      action === "accept"
+        ? "Do you want to accept this manager?"
+        : "Do you want to reject this manager?";
+
     Swal.fire({
-      title: "هل أنت متأكد؟",
-      text: "أنت على وشك قبول طلب هذا المدير!",
+      title: "Are you sure?",
+      text: confirmationText,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "نعم، قبوله!",
-      cancelButtonText: "إلغاء",
+      confirmButtonText: `Yes, ${action} it!`,
     }).then((result) => {
       if (result.isConfirmed) {
         axios
           .post(
-            `https://management.mlmcosmo.com/api/accept-manager/${managerId}`,
-            {},
+            endpoint,
+            {}, // Empty data object since it's a POST request
             {
-              // The empty object {} is the request body
               headers: { Authorization: `Bearer ${token}` },
             }
           )
           .then((response) => {
-            Swal.fire("تم القبول!", "تم قبول طلب المدير بنجاح.", "success");
-            // Update the list of managers after accepting
-            setManagers(managers.filter((manager) => manager.id !== managerId));
+            Swal.fire(
+              `${action === "accept" ? "Accepted" : "Rejected"}!`,
+              `The manager has been ${
+                action === "accept" ? "accepted" : "rejected"
+              }.`,
+              "success"
+            );
+            // Update the state to remove the manager from the list
+            setPendingManagers((prevManagers) =>
+              prevManagers.filter((manager) => manager.id !== id)
+            );
           })
           .catch((error) => {
-            console.error("Error accepting manager:", error);
-            Swal.fire("خطأ!", "حدث خطأ أثناء قبول طلب المدير.", "error");
+            console.error(`Error ${action}ing manager:`, error);
+            Swal.fire(
+              "Error!",
+              `There was an error ${action}ing the manager.`,
+              "error"
+            );
           });
       }
     });
   };
 
-  const handleDeclineManager = (managerId) => {
-    Swal.fire({
-      title: "هل أنت متأكد؟",
-      text: "أنت على وشك رفض طلب هذا المدير!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "نعم، رفضه!",
-      cancelButtonText: "إلغاء",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios
-          .post(
-            `https://management.mlmcosmo.com/api/reject-manager/${managerId}`,
-            {},
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          )
-          .then((response) => {
-            Swal.fire("تم الرفض!", "تم رفض طلب المدير بنجاح.", "success");
-            // Update the list of managers after declining
-            setManagers(managers.filter((manager) => manager.id !== managerId));
-          })
-          .catch((error) => {
-            console.error("Error declining manager:", error);
-            Swal.fire("خطأ!", "حدث خطأ أثناء رفض طلب المدير.", "error");
-          });
-      }
-    });
-  };
+  // Function to handle accepting or rejecting a sale
+  const handleSaleAction = (id, action) => {
+    const endpoint =
+      action === "accept"
+        ? `https://management.mlmcosmo.com/api/accept-sale/${id}`
+        : `https://management.mlmcosmo.com/api/reject-sale/${id}`;
 
-  const handleAcceptSale = (saleId) => {
-    Swal.fire({
-      title: "هل أنت متأكد؟",
-      text: "أنت على وشك قبول طلب هذا المندوب!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "نعم، قبوله!",
-      cancelButtonText: "إلغاء",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios
-          .post(
-            `https://management.mlmcosmo.com/api/accept-sale/${saleId}`,
-            {},
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          )
-          .then((response) => {
-            Swal.fire("تم القبول!", "تم قبول طلب المندوب بنجاح.", "success");
-            setSales(sales.filter((sale) => sale.id !== saleId));
-          })
-          .catch((error) => {
-            console.error("Error accepting sale:", error);
-            Swal.fire("خطأ!", "حدث خطأ أثناء قبول طلب المندوب.", "error");
-          });
-      }
-    });
-  };
+    const confirmationText =
+      action === "accept"
+        ? "Do you want to accept this sales representative?"
+        : "Do you want to reject this sales representative?";
 
-  const handleDeclineSale = (saleId) => {
     Swal.fire({
-      title: "هل أنت متأكد؟",
-      text: "أنت على وشك رفض طلب هذا المندوب!",
+      title: "Are you sure?",
+      text: confirmationText,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "نعم، رفضه!",
-      cancelButtonText: "إلغاء",
+      confirmButtonText: `Yes, ${action} it!`,
     }).then((result) => {
       if (result.isConfirmed) {
         axios
           .post(
-            `https://management.mlmcosmo.com/api/reject-sale/${saleId}`,
-            {},
+            endpoint,
+            {}, // Empty data object since it's a POST request
             {
-              // Changed DELETE to POST and added {} as body
               headers: { Authorization: `Bearer ${token}` },
             }
           )
           .then((response) => {
-            Swal.fire("تم الرفض!", "تم رفض طلب المندوب بنجاح.", "success");
-            setSales(sales.filter((sale) => sale.id !== saleId));
+            Swal.fire(
+              `${action === "accept" ? "Accepted" : "Rejected"}!`,
+              `The sales representative has been ${
+                action === "accept" ? "accepted" : "rejected"
+              }.`,
+              "success"
+            );
+            // Update the state to remove the sales representative from the list
+            setPendingSales((prevSales) =>
+              prevSales.filter((sale) => sale.id !== id)
+            );
           })
           .catch((error) => {
-            console.error("Error rejecting sale:", error);
-            Swal.fire("خطأ!", "حدث خطأ أثناء رفض طلب المندوب.", "error");
+            console.error(`Error ${action}ing sale:`, error);
+            Swal.fire(
+              "Error!",
+              `There was an error ${action}ing the sales representative.`,
+              "error"
+            );
           });
       }
     });
@@ -196,92 +164,86 @@ function PendingRequests() {
   return (
     <>
       <div className="PendingRequests-title">
-        <Link to="/dashboard/all-requests">شاهد الكل</Link>
-        <h5>طلبات الاضافه</h5>
+        <Link to="">View all</Link>
+        <p>Addition requests</p>
       </div>
-      <div className="main-parent pending-requests-container shadow">
-        {managers.length === 0 ? (
-          <p className="text-end p-3" style={{ fontFamily: "cairo" }}>
-            لا توجد طلبات مدراء معلقة.
-          </p>
+      <div className="PendingRequests-main-parent shadow">
+        {loading ? (
+          <p>Loading pending requests...</p>
+        ) : pendingManagers.length === 0 && pendingSales.length === 0 ? (
+          <p>No pending requests at the moment.</p>
         ) : (
-          managers.map((manager) => (
-            <div key={manager.id} className="manager-item pending-request-item">
-              <div className="manager-actions pending-requests-actions">
-                <img
-                  src={Del}
-                  alt="Decline"
-                  className="action-icon decline-icon"
-                  onClick={() => handleDeclineManager(manager.id)}
-                />
-                <img
-                  src={Acc}
-                  alt="Accept"
-                  className="action-icon accept-icon"
-                  onClick={() => handleAcceptManager(manager.id)}
-                />
-              </div>
-              <div className="manager-details pending-requests-details">
-                <div className="manager-info pending-requests-info">
-                  <h4 className="manager-name pending-requests-name">
+          <>
+            {/* Display Pending Managers */}
+            {pendingManagers.map((manager) => (
+              <div className="request-item" key={manager.id}>
+                <div className="request-actions">
+                  <div
+                    className="accept-button"
+                    onClick={() => handleManagerAction(manager.id, "accept")}
+                  >
+                    {/* Add onClick handler */}
+                    <img src={Acc} alt="Accept" />
+                  </div>
+                  <div
+                    className="delete-button"
+                    onClick={() => handleManagerAction(manager.id, "reject")}
+                  >
+                    {/* Add onClick handler */}
+                    <img src={Delete} alt="Delete" />
+                  </div>
+                </div>
+                <div className="employee-info">
+                  <p className="employee-name p-0 m-0">
                     {manager.first_name} {manager.last_name}
-                  </h4>
-                  <p className="manager-role pending-requests-role text-end">
-                    {managerRole}
                   </p>
+                  <p className="employee-title p-0 m-0">{managersKey}</p>
+                  {/* Display the "key" value */}
                 </div>
-                <div className="manager-image pending-requests-image">
+                <div className="employee-image">
                   <img
-                    src={manager.image || ""}
-                    alt={`${manager.first_name} ${manager.last_name}`}
-                    className="manager-img"
+                    src={manager.image || "URL_TO_DEFAULT_IMAGE"}
+                    alt="Employee"
                   />
                 </div>
               </div>
-            </div>
-          ))
-        )}
+            ))}
 
-        {sales.length === 0 ? (
-          <p className="text-end p-3" style={{ fontFamily: "cairo" }}>
-            لا توجد طلبات مندوبين مبيعات معلقة.
-          </p>
-        ) : (
-          sales.map((sale) => (
-            <div key={sale.id} className="manager-item pending-request-item">
-              <div className="manager-actions pending-requests-actions">
-                <img
-                  src={Del}
-                  alt="Decline"
-                  className="action-icon decline-icon"
-                  onClick={() => handleDeclineSale(sale.id)}
-                />
-                <img
-                  src={Acc}
-                  alt="Accept"
-                  className="action-icon accept-icon"
-                  onClick={() => handleAcceptSale(sale.id)}
-                />
-              </div>
-              <div className="manager-details pending-requests-details">
-                <div className="manager-info pending-requests-info">
-                  <h4 className="manager-name pending-requests-name">
-                    {sale.first_name} {sale.last_name}
-                  </h4>
-                  <p className="manager-role pending-requests-role text-end">
-                    {salesRole}
-                  </p>
+            {/* Display Pending Sales */}
+            {pendingSales.map((sale) => (
+              <div className="request-item" key={sale.id}>
+                <div className="request-actions">
+                  <div
+                    className="accept-button"
+                    onClick={() => handleSaleAction(sale.id, "accept")}
+                  >
+                    {/* Add onClick handler */}
+                    <img src={Acc} alt="Accept" />
+                  </div>
+                  <div
+                    className="delete-button"
+                    onClick={() => handleSaleAction(sale.id, "reject")}
+                  >
+                    {/* Add onClick handler */}
+                    <img src={Delete} alt="Delete" />
+                  </div>
                 </div>
-                <div className="manager-image pending-requests-image">
+                <div className="employee-info">
+                  <p className="employee-name p-0 m-0">
+                    {sale.first_name} {sale.last_name}
+                  </p>
+                  <p className="employee-title p-0 m-0">{salesKey}</p>
+                  {/* Display the "key" value */}
+                </div>
+                <div className="employee-image">
                   <img
-                    src={sale.image || ""}
-                    alt={`${sale.first_name} ${sale.last_name}`}
-                    className="manager-img"
+                    src={sale.image || "URL_TO_DEFAULT_IMAGE"}
+                    alt="Employee"
                   />
                 </div>
               </div>
-            </div>
-          ))
+            ))}
+          </>
         )}
       </div>
     </>

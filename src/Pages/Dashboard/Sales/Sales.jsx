@@ -101,7 +101,9 @@ function Sales() {
           <>
             <div className="container Sales-table-container">
               <div className="row">
-                <div className="col-xl-4 mt-5"></div>
+                <div className="col-xl-8 mt-5">
+                  <h2 className="Sales-table-title text-start">Sales List</h2>
+                </div>
                 <div className="col-xl-4 mt-5">
                   <input
                     type="text"
@@ -111,19 +113,16 @@ function Sales() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
-                <div className="col-xl-4 mt-5">
-                  <h2 className="Sales-table-title text-end">Sales List</h2>
-                </div>
               </div>
               <div className="row Sales-table-row">
                 <div className="col-12 Sales-table-col mt-5">
                   <table className="table Sales-table table-hover shadow">
                     <thead>
                       <tr>
-                        <th scope="col">Actions</th>
+                        <th scope="col">Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Phone</th>
-                        <th scope="col">Name</th>
+                        <th scope="col">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -146,13 +145,12 @@ function Sales() {
                             }}
                             key={sale.id}
                           >
+                            <td>
+                              {sale.first_name} {sale.last_name}
+                            </td>
+                            <td>{sale.email}</td>
+                            <td>{sale.phone}</td>
                             <td className="actions">
-                              <div
-                                className="action-icon delete-icon"
-                                onClick={() => handleDelete(sale.id)}
-                              >
-                                <img src={DeleteIcon} alt="Delete" />
-                              </div>
                               <Link
                                 to={`/dashboard/sales-details/${sale.id}`}
                                 className="action-icon view-icon"
@@ -161,11 +159,12 @@ function Sales() {
                                   <img src={eye} alt="" />
                                 </div>
                               </Link>
-                            </td>
-                            <td>{sale.email}</td>
-                            <td>{sale.phone}</td>
-                            <td>
-                              {sale.first_name} {sale.last_name}
+                              <div
+                                className="action-icon delete-icon"
+                                onClick={() => handleDelete(sale.id)}
+                              >
+                                <img src={DeleteIcon} alt="Delete" />
+                              </div>
                             </td>
                           </motion.tr>
                         ))

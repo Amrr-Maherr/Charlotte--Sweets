@@ -33,11 +33,11 @@ function AdDetails() {
         <div className="container single-add-container">
           <div className="row single-add-row">
             <div className="col-12 single-add-col">
-              <div className="single-add-card">
-                <div className="single-add-image">
+              <div className="single-add-card shadow">
+                <div className="single-add-image mb-3">
                   <img src={Data.image} alt={Data.title || "Ad Image"} />
                 </div>
-                <div className="single-add-title m-1">
+                <div className="single-add-title">
                   <p>{Data.title}</p>
                 </div>
               </div>

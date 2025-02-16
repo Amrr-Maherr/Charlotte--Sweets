@@ -16,14 +16,14 @@ function Chart() {
   const [isLoading, setIsLoading] = useState(true);
   const token = JSON.parse(localStorage.getItem("AuthToken"));
 
-  const COLORS = {
-    مكتملة: "rgba(244, 67, 54, 1)",
-    "قيد التنفيذ": "rgba(172, 13, 108, 1)",
-    جديدة: "rgba(55, 205, 47, 1)",
-    مرفوضة: "rgba(255, 174, 52, 1)",
-    مرتجعة: "rgba(115, 212, 233, 1)",
-    منتهيه: "rgba(99, 96, 253, 1)",
-  };
+ const COLORS = {
+   New: "rgba(55, 205, 47, 1)",
+   Completed: "rgba(244, 67, 54, 1)",
+   Pending: "rgba(172, 13, 108, 1)",
+   Delivered: "rgba(99, 96, 253, 1)",
+   Returned: "rgba(115, 212, 233, 1)",
+   Declined: "rgba(255, 174, 52, 1)",
+ };
 
   useEffect(() => {
     setIsLoading(true);
@@ -43,12 +43,12 @@ function Chart() {
       )
       .then((response) => {
         const chartData = [
-          { name: "جديدة", value: response.data.newOrdersPercentage },
-          { name: "مكتملة", value: response.data.completedOrdersPercentage },
-          { name: "قيد التنفيذ", value: response.data.pendingOrdersPercentage },
-          { name: "منتهيه", value: response.data.deliveredOrdersPercentage },
-          { name: "مرتجعة", value: response.data.returnedOrdersPercentage },
-          { name: "مرفوضة", value: response.data.declinedOrdersPercentage },
+          { name: "New", value: response.data.newOrdersPercentage },
+          { name: "Completed", value: response.data.completedOrdersPercentage },
+          { name: "Pending", value: response.data.pendingOrdersPercentage },
+          { name: "Delivered", value: response.data.deliveredOrdersPercentage },
+          { name: "Returned", value: response.data.returnedOrdersPercentage },
+          { name: "Declined", value: response.data.declinedOrdersPercentage },
         ];
 
         setData(chartData);
@@ -59,7 +59,7 @@ function Chart() {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [selectedYear]);
+  }, [selectedYear, token]);
 
   const currentYear = new Date().getFullYear();
   const futureYears = Array.from(
@@ -75,9 +75,13 @@ function Chart() {
         </>
       ) : (
         <>
-          <div className="d-flex align-items-center justify-content-between flex-column mt-4">
-            <div className="d-flex align-items-center justify-content-between w-100">
+          <div className="d-flex align-items-center justify-content-between flex-column">
+            <div
+              className="d-flex align-items-center justify-content-between"
+              style={{ marginBottom: "10px", width: "226px" }}
+            >
               <select
+                className="shadow me-auto"
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(e.target.value)}
                 style={{
@@ -103,18 +107,18 @@ function Chart() {
                   textAlign: "right",
                 }}
               >
-                مخطط بيانى
+                Chart
               </h1>
             </div>
             <div
               style={{
-                width: "100%",
-                height: "240px",
+                width: "226px",
+                height: "285px",
                 margin: "auto",
                 backgroundColor: "white",
                 borderRadius: "10px",
               }}
-              className="my-4 shadow"
+              className="shadow"
             >
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -142,7 +146,7 @@ function Chart() {
                       justifyContent: "space-around",
                       flexWrap: "wrap",
                       padding: "10px",
-                      fontSize: "12px",
+                      fontSize: "10px",
                     }}
                   />
                 </PieChart>

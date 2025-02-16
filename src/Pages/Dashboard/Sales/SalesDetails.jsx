@@ -59,7 +59,7 @@ function SalesDetails() {
               transition={{ duration: 0.5, ease: "easeInOut" }}
               className="card text-center w-50 shadow"
             >
-              <div className="card-title py-3 text-end pe-4">
+              <div className="card-title py-3 text-start p-4">
                 <h3>Sales Details</h3>
               </div>
 
@@ -80,34 +80,34 @@ function SalesDetails() {
 
               <div className="card-body">
                 <table className="table table-bordered text-end">
-                  <tbody>
+                  <tbody className="text-start">
                     <tr>
+                      <th>Name</th>
                       <td>
                         {Data?.first_name
                           ? `${Data.first_name} ${Data.last_name}`
                           : "Not Available"}
                       </td>
-                      <th>Name</th>
                     </tr>
                     <tr>
-                      <td>{Data?.orders ? Data.orders.length : 0}</td>
                       <th>Order Count</th>
+                      <td>{Data?.orders ? Data.orders.length : 0}</td>
                     </tr>
                     <tr>
-                      <td>{Data?.email ? Data.email : "Not Available"}</td>
                       <th>Email</th>
+                      <td>{Data?.email ? Data.email : "Not Available"}</td>
                     </tr>
                     <tr>
-                      <td>{Data?.phone ? Data.phone : "Not Available"}</td>
                       <th>Phone Number</th>
+                      <td>{Data?.phone ? Data.phone : "Not Available"}</td>
                     </tr>
                     <tr>
-                      <td>{Data?.status || "Not Available"}</td>
                       <th>Status</th>
+                      <td>{Data?.status || "Not Available"}</td>
                     </tr>
                     <tr>
-                      <td>{Data?.verified_at || "Not Available"}</td>
                       <th>Verification Date</th>
+                      <td>{Data?.verified_at || "Not Available"}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -123,21 +123,21 @@ function SalesDetails() {
                   <table className="table text-center table-hover" dir="rtl">
                     <thead>
                       <tr>
-                        <th>#</th>
-                        <th>Order Type</th>
-                        <th>Order Date</th>
-                        <th>Quantity</th>
                         <th>Status</th>
+                        <th>Quantity</th>
+                        <th>Order Date</th>
+                        <th>Order Type</th>
+                        <th>#</th> 
                       </tr>
                     </thead>
                     <tbody>
                       {currentOrders.map((order, index) => (
                         <tr key={index}>
-                          <td>{indexOfFirstOrder + index + 1}</td>
-                          <td>{order.order_type || "No Type"}</td>
-                          <td>{order.delivery_date || "No Date"}</td>
-                          <td>{order.quantity || "No Quantity"}</td>
                           <td>{order.status || "No Status"}</td>
+                          <td>{order.quantity || "No Quantity"}</td>
+                          <td>{order.delivery_date || "No Date"}</td>
+                          <td>{order.order_type || "No Type"}</td>
+                          <td>{indexOfFirstOrder + index + 1}</td>
                         </tr>
                       ))}
                     </tbody>

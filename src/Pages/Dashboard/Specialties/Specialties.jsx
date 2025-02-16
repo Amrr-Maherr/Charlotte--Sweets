@@ -147,11 +147,7 @@ function Specialties() {
           <>
             <div className="row">
               <div className="col-xl-4 mt-5">
-                <AddButton
-                  ButtonText="Add"
-                  data-bs-toggle="modal"
-                  data-bs-target="#addSpecialtyModal" // Modal ID here
-                />
+                <h3 className="section-title text-start">Specialties</h3>
               </div>
               <div className="col-xl-4 mt-5">
                 <input
@@ -162,8 +158,12 @@ function Specialties() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <div className="col-xl-4 mt-5">
-                <h3 className="section-title text-end">Specialties</h3>
+              <div className="col-xl-4 mt-5 text-end">
+                <AddButton
+                  ButtonText="Add"
+                  data-bs-toggle="modal"
+                  data-bs-target="#addSpecialtyModal" // Modal ID here
+                />
               </div>
             </div>
             <div className="row">
@@ -172,13 +172,13 @@ function Specialties() {
                   <thead>
                     <tr>
                       <th scope="col" className="table-header">
-                        Actions
+                        #
                       </th>
                       <th scope="col" className="table-header">
                         Specialty
                       </th>
                       <th scope="col" className="table-header">
-                        #
+                        Actions
                       </th>
                     </tr>
                   </thead>
@@ -203,6 +203,10 @@ function Specialties() {
                           key={ele.id}
                           className="specialty-row"
                         >
+                          <td className="specialty-id">
+                            {indexOfFirstItem + index + 1}
+                          </td>
+                          <td className="specialty-name">{ele.name}</td>
                           <td className="actions-cell">
                             <div
                               className="deleteIcon"
@@ -212,10 +216,6 @@ function Specialties() {
                             >
                               <img src={deleteIcon} alt="Delete" />
                             </div>
-                          </td>
-                          <td className="specialty-name">{ele.name}</td>
-                          <td className="specialty-id">
-                            {indexOfFirstItem + index + 1}
                           </td>
                         </motion.tr>
                       ))

@@ -112,7 +112,11 @@ function SalesRepresentatives() {
       ) : (
         <div className="container sales-reps-table-container">
           <div className="row sales-reps-table-row">
-            <div className="col-xl-4 mt-5"></div>
+            <div className="col-xl-8 mt-5">
+              <h1 className="sales-representatives-title text-start">
+                Delivery Order List
+              </h1>
+            </div>
             <div className="col-xl-4 mt-5">
               <input
                 type="text"
@@ -122,22 +126,17 @@ function SalesRepresentatives() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="col-xl-4 mt-5">
-              <h1 className="sales-representatives-title text-end">
-                Delivery Order List
-              </h1>
-            </div>
           </div>
           <div className="row sales-reps-table-row">
             <div className="col-12 sales-reps-table-col mt-5">
               <table className="table sales-reps-table  table-hover shadow">
                 <thead>
                   <tr>
-                    <th scope="col">Actions</th>
-                    <th scope="col">Branch</th>
-                    <th scope="col">Order Count</th>
-                    <th scope="col">Name</th>
                     <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Order Count</th>
+                    <th scope="col">Branch</th>
+                    <th scope="col">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -161,27 +160,27 @@ function SalesRepresentatives() {
                         key={rep.id}
                         className="sales-reps-table-row"
                       >
+                        <td>{indexOfFirstItem + index + 1}</td>
+                        <td>
+                          {rep.first_name} {rep.last_name}
+                        </td>
+                        <td>{rep.orders_count}</td>
+                        <td>{rep.branch.name}</td>
                         <td>
                           <div className="actions">
-                            <img
-                              src={Delete}
-                              alt="Delete"
-                              onClick={() => handleDelete(rep.id)} // Connect the delete function here
-                            />
                             <Link
                               to={`/dashboard/sales-representatives-details/${rep.id}`}
                               style={{ textDecoration: "none" }}
                             >
                               <img src={Eye} alt="" />
                             </Link>
+                            <img
+                              src={Delete}
+                              alt="Delete"
+                              onClick={() => handleDelete(rep.id)} // Connect the delete function here
+                            />
                           </div>
                         </td>
-                        <td>{rep.branch.name}</td>
-                        <td>{rep.orders_count}</td>
-                        <td>
-                          {rep.first_name} {rep.last_name}
-                        </td>
-                        <td>{indexOfFirstItem + index + 1}</td>
                       </motion.tr>
                     ))
                   )}
