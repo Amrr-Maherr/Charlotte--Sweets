@@ -28,7 +28,7 @@ function HomeStatistics() {
 
   return (
     <motion.section
-      style={{ marginTop: "47px"}}
+      style={{ marginTop: "47px "}}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
