@@ -57,7 +57,7 @@ function SalesDetails() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="card text-center w-50 shadow"
+              className="card text-center shadow w-100 w-md-75 w-lg-50" // Modified class
             >
               <div className="card-title py-3 text-start p-4">
                 <h3>Sales Details</h3>
@@ -78,39 +78,41 @@ function SalesDetails() {
                 />
               )}
 
-              <div className="card-body table-responsive">
-                <table className="table table-bordered text-end">
-                  <tbody className="text-start">
-                    <tr>
-                      <th>Name</th>
-                      <td>
-                        {Data?.first_name
-                          ? `${Data.first_name} ${Data.last_name}`
-                          : "Not Available"}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Order Count</th>
-                      <td>{Data?.orders ? Data.orders.length : 0}</td>
-                    </tr>
-                    <tr>
-                      <th>Email</th>
-                      <td>{Data?.email ? Data.email : "Not Available"}</td>
-                    </tr>
-                    <tr>
-                      <th>Phone Number</th>
-                      <td>{Data?.phone ? Data.phone : "Not Available"}</td>
-                    </tr>
-                    <tr>
-                      <th>Status</th>
-                      <td>{Data?.status || "Not Available"}</td>
-                    </tr>
-                    <tr>
-                      <th>Verification Date</th>
-                      <td>{Data?.verified_at || "Not Available"}</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="card-body ">
+                <div className="table-responsive">
+                  <table className="table table-bordered text-end">
+                    <tbody className="text-start">
+                      <tr>
+                        <th>Name</th>
+                        <td>
+                          {Data?.first_name
+                            ? `${Data.first_name} ${Data.last_name}`
+                            : "Not Available"}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Order Count</th>
+                        <td>{Data?.orders ? Data.orders.length : 0}</td>
+                      </tr>
+                      <tr>
+                        <th>Email</th>
+                        <td>{Data?.email ? Data.email : "Not Available"}</td>
+                      </tr>
+                      <tr>
+                        <th>Phone Number</th>
+                        <td>{Data?.phone ? Data.phone : "Not Available"}</td>
+                      </tr>
+                      <tr>
+                        <th>Status</th>
+                        <td>{Data?.status || "Not Available"}</td>
+                      </tr>
+                      <tr>
+                        <th>Verification Date</th>
+                        <td>{Data?.verified_at || "Not Available"}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </motion.div>
           </div>

@@ -64,7 +64,7 @@ function ChefsDetails() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="card text-center w-50 shadow"
+              className="card text-center shadow w-100 w-md-75 w-lg-50" // This line is the only change
             >
               <div className="card-title py-3 text-start p-4">
                 <h3>Chef Details</h3>
@@ -143,10 +143,7 @@ function ChefsDetails() {
             {chefData?.orders && chefData.orders.length > 0 ? (
               <>
                 <div className="table-responsive my-4 chef-info-table">
-                  <table
-                    className="table text-center table-hover"
-                    dir="rtl" // Property added here
-                  >
+                  <table className="table text-center table-hover">
                     <thead>
                       <tr>
                         <th>Status</th>
