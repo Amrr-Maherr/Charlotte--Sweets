@@ -116,61 +116,63 @@ function Sales() {
               </div>
               <div className="row Sales-table-row">
                 <div className="col-12 Sales-table-col mt-5">
-                  <table className="table Sales-table table-hover shadow">
-                    <thead>
-                      <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {currentItemsFiltered.length === 0 ? (
+                  <div className="table-responsive">
+                    <table className="table Sales-table table-hover shadow">
+                      <thead>
                         <tr>
-                          <td colSpan="4" className="text-center">
-                            No sales currently available
-                          </td>
+                          <th scope="col">Name</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Phone</th>
+                          <th scope="col">Actions</th>
                         </tr>
-                      ) : (
-                        currentItemsFiltered.map((sale, index) => (
-                          <motion.tr
-                            initial={{ opacity: 0, y: 50 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{
-                              type: "spring",
-                              stiffness: 100,
-                              damping: 25,
-                              delay: 0.1 * index,
-                            }}
-                            key={sale.id}
-                          >
-                            <td>
-                              {sale.first_name} {sale.last_name}
+                      </thead>
+                      <tbody>
+                        {currentItemsFiltered.length === 0 ? (
+                          <tr>
+                            <td colSpan="4" className="text-center">
+                              No sales currently available
                             </td>
-                            <td>{sale.email}</td>
-                            <td>{sale.phone}</td>
-                            <td className="actions">
-                              <Link
-                                to={`/dashboard/sales-details/${sale.id}`}
-                                className="action-icon view-icon"
-                              >
-                                <div className="action-icon">
-                                  <img src={eye} alt="" />
+                          </tr>
+                        ) : (
+                          currentItemsFiltered.map((sale, index) => (
+                            <motion.tr
+                              initial={{ opacity: 0, y: 50 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{
+                                type: "spring",
+                                stiffness: 100,
+                                damping: 25,
+                                delay: 0.1 * index,
+                              }}
+                              key={sale.id}
+                            >
+                              <td>
+                                {sale.first_name} {sale.last_name}
+                              </td>
+                              <td>{sale.email}</td>
+                              <td>{sale.phone}</td>
+                              <td className="actions">
+                                <Link
+                                  to={`/dashboard/sales-details/${sale.id}`}
+                                  className="action-icon view-icon"
+                                >
+                                  <div className="action-icon">
+                                    <img src={eye} alt="" />
+                                  </div>
+                                </Link>
+                                <div
+                                  className="action-icon delete-icon"
+                                  onClick={() => handleDelete(sale.id)}
+                                >
+                                  <img src={DeleteIcon} alt="Delete" />
                                 </div>
-                              </Link>
-                              <div
-                                className="action-icon delete-icon"
-                                onClick={() => handleDelete(sale.id)}
-                              >
-                                <img src={DeleteIcon} alt="Delete" />
-                              </div>
-                            </td>
-                          </motion.tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
+                              </td>
+                            </motion.tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
 
