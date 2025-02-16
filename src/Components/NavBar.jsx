@@ -17,6 +17,15 @@ function NavBar() {
     <>
       <nav className="navbar navbar-expand-lg  custom-navbar">
         <div className="container-fluid">
+          <button
+            className="btn  d-lg-none"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasScrolling"
+            aria-controls="offcanvasScrolling"
+          >
+            <i class="fa fa-bars"></i>
+          </button>
           <ul className="navbar-nav logo-image d-none d-lg-block">
             <li className="nav-item">
               <img src={logo_image} alt="Logo" />
@@ -37,20 +46,10 @@ function NavBar() {
           >
             <img src={profile_image} alt="Profile" />
           </Link>
-
-          <button
-            className="btn  d-lg-none"
-            type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasScrolling"
-            aria-controls="offcanvasScrolling"
-          >
-            <i class="fa fa-bars"></i>
-          </button>
         </div>
       </nav>
       <div
-        className="offcanvas offcanvas-end"
+        className="offcanvas offcanvas-start"
         data-bs-scroll="true"
         data-bs-backdrop="false"
         tabIndex="-1"
@@ -59,7 +58,7 @@ function NavBar() {
       >
         <div className="offcanvas-header">
           <h5 className="offcanvas-title" id="offcanvasScrollingLabel">
-            القائمه
+            Menu
           </h5>
           <button
             type="button"
@@ -71,36 +70,35 @@ function NavBar() {
         <div className="offcanvas-body">
           <ul>
             {[
-              { to: "/dashboard/home", icon: "fa-home", label: "الرئيسية" },
+              { to: "/dashboard/home", icon: "fa-home", label: "Home" },
               {
                 to: "/dashboard/branches",
                 icon: "fa-code-fork",
-                label: "الفروع",
+                label: "Branches",
               },
               {
                 to: "/dashboard/managers",
                 icon: "fa-users",
-                label: "المديرين",
+                label: "Managers",
               },
-              { to: "/dashboard/chefs", icon: "fa-cutlery", label: "الشيفات" },
+              { to: "/dashboard/chefs", icon: "fa-cutlery", label: "Chefs" },
               {
                 to: "/dashboard/sales-representatives",
                 icon: "fa-truck",
-                label: "مناديب المبيعات",
+                label: "Sales Representatives",
               },
+              { to: "/dashboard/sales", icon: "fa-line-chart", label: "Sales" },
               {
-                to: "/dashboard/sales",
-                icon: "fa-line-chart",
-                label: "السيلز",
+                to: "/dashboard/ads",
+                icon: "fa-bullhorn",
+                label: "Advertisements",
               },
-              { to: "/dashboard/ads", icon: "fa-bullhorn", label: "الاعلانات" },
               {
                 to: "/dashboard/specialties",
                 icon: "fa-briefcase",
-                label: "التخصصات",
+                label: "Specialties",
               },
-              { to: "/dashboard/flowers", icon: "fa-leaf", label: "الورود" },
-              { to: "/dashboard/products", icon: "fa-cogs", label: "المنتجات" },
+              { to: "/dashboard/profile", icon: "fa-user", label: "Profile" },
             ].map((item, index) => (
               <motion.li key={index} whileTap={{ scale: 0.9 }}>
                 <Link

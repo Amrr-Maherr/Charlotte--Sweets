@@ -28,7 +28,7 @@ function HomeStatistics() {
 
   return (
     <motion.section
-      style={{ marginTop: "47px "}}
+      style={{ marginTop: "47px " }}
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -38,12 +38,12 @@ function HomeStatistics() {
           className="row d-flex align-items-start justify-content-evenly"
           variants={itemVariants}
         >
-          <div className="col-xl-4 col-12">
+          <div className="col-xl-4 col-12 my-2">
             <motion.div variants={itemVariants}>
               <StatisticsList />
             </motion.div>
           </div>
-          <div className="col-xl-4 col-12 d-flex align-items-center justify-content-between flex-column">
+          <div className="col-xl-4 col-12 my-2 d-flex align-items-center justify-content-between flex-column">
             <motion.div variants={itemVariants}>
               <TotalPendingRequests />
             </motion.div>
@@ -51,7 +51,7 @@ function HomeStatistics() {
               <Chart />
             </motion.div>
           </div>
-          <div className="col-xl-4 col-12">
+          <div className="col-xl-4 col-12 my-2">
             <motion.div variants={itemVariants}>
               <PendingRequests />
             </motion.div>

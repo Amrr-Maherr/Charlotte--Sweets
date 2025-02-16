@@ -53,10 +53,10 @@ function StatisticsList() {
 
   return (
     <>
-      <div className="main-parent-title">
-        <h2>Statistics</h2>
+      <div className="main-parent-title "style={{width:"397px",margin:"0px auto"}}>
+        <h2 style={{fontSize:"20px",fontWeight:"700"}}>Statistics</h2>
       </div>
-      <div className="main-parent shadow ">
+      <div className="main-parent shadow mx-auto">
         <div className="child-parent">
           {Object.entries(data).map(([key, value]) => (
             <div className="child" key={key}>

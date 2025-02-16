@@ -86,46 +86,54 @@ function ChefsDetails() {
               )}
 
               <div className="card-body">
-                <table className="table table-bordered text-end">
-                  <tbody className="text-end">
-                    <tr>
-                      <td>
-                        {chefData?.first_name
-                          ? `${chefData.first_name} ${chefData.last_name}`
-                          : "Not Available"}
-                      </td>
-                      <th>Name</th>
-                    </tr>
-                    <tr>
-                      <td>{chefData?.orders ? chefData.orders.length : 0}</td>
-                      <th>Order Count</th>
-                    </tr>
-                    <tr>
-                      <td>{chefData?.branch ? chefData.email : "No Branch"}</td>
-                      <th>Email</th>
-                    </tr>
-                    <tr>
-                      <td>
-                        {chefData?.branch ? chefData.branch.phone : "No Branch"}
-                      </td>
-                      <th>Phone Number</th>
-                    </tr>
-                    <tr>
-                      <td>
-                        {chefData?.branch ? chefData.branch.name : "No Branch"}
-                      </td>
-                      <th>Branch</th>
-                    </tr>
-                    <tr>
-                      <td>{chefData?.status || "Not Available"}</td>
-                      <th>Status</th>
-                    </tr>
-                    <tr>
-                      <td>{chefData?.verified_at || "Not Available"}</td>
-                      <th>Verification Date</th>
-                    </tr>
-                  </tbody>
-                </table>
+                <div className="table-responsive">
+                  <table className="table table-bordered text-end">
+                    <tbody className="text-start">
+                      <tr>
+                        <th>Name</th>
+                        <td>
+                          {chefData?.first_name
+                            ? `${chefData.first_name} ${chefData.last_name}`
+                            : "Not Available"}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Order Count</th>
+                        <td>{chefData?.orders ? chefData.orders.length : 0}</td>
+                      </tr>
+                      <tr>
+                        <th>Email</th>
+                        <td>
+                          {chefData?.branch ? chefData.email : "No Branch"}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Phone Number</th>
+                        <td>
+                          {chefData?.branch
+                            ? chefData.branch.phone
+                            : "No Branch"}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Branch</th>
+                        <td>
+                          {chefData?.branch
+                            ? chefData.branch.name
+                            : "No Branch"}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Status</th>
+                        <td>{chefData?.status || "Not Available"}</td>
+                      </tr>
+                      <tr>
+                        <th>Verification Date</th>
+                        <td>{chefData?.verified_at || "Not Available"}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -141,21 +149,21 @@ function ChefsDetails() {
                   >
                     <thead>
                       <tr>
-                        <th>#</th>
+                        <th>Status</th>
+                        <th>Quantity</th>
                         <th>Order Type</th>
                         <th>Order Date</th>
-                        <th>Quantity</th>
-                        <th>Status</th>
+                        <th>#</th>
                       </tr>
                     </thead>
                     <tbody>
                       {currentOrders.map((order, index) => (
                         <tr key={index}>
-                          <td>{indexOfFirstOrder + index + 1}</td>
+                          <td>{order.status || "No Status"}</td>
+                          <td>{order.quantity || "No Quantity"}</td>
                           <td>{order.order_type || "No Type"}</td>
                           <td>{order.delivery_date || "No Date"}</td>
-                          <td>{order.quantity || "No Quantity"}</td>
-                          <td>{order.status || "No Status"}</td>
+                          <td>{indexOfFirstOrder + index + 1}</td>
                         </tr>
                       ))}
                     </tbody>

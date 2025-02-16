@@ -78,7 +78,7 @@ function SalesDetails() {
                 />
               )}
 
-              <div className="card-body">
+              <div className="card-body table-responsive">
                 <table className="table table-bordered text-end">
                   <tbody className="text-start">
                     <tr>
@@ -116,18 +116,18 @@ function SalesDetails() {
           </div>
 
           <div className="col-12 my-4">
-            <h3 className="mt-4 text-center">Order List</h3>
+            <h3 className="mt-4 text-center ">Order List</h3>
             {Data?.orders && Data.orders.length > 0 ? (
               <>
                 <div className="table-responsive my-4 chef-info-table">
-                  <table className="table text-center table-hover" dir="rtl">
+                  <table className="table text-center table-hover">
                     <thead>
                       <tr>
                         <th>Status</th>
                         <th>Quantity</th>
                         <th>Order Date</th>
                         <th>Order Type</th>
-                        <th>#</th> 
+                        <th>#</th>
                       </tr>
                     </thead>
                     <tbody>

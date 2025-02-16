@@ -85,25 +85,17 @@ function BranchDetails() {
                     <p className="label">Branch Manager</p>
                     <p className="label">Phone Number</p>
                   </div>
-                  <div className="branch-info">
-                    <p className="branch-name" style={{ width: "400px" }}>
-                      {data.name}
-                    </p>
-                    <p className="branch-address" style={{ width: "400px" }}>
-                      {data.address}
-                    </p>
+                  <div className="branch-info me-auto">
+                    <p className="branch-name">{data.name}</p>
+                    <p className="branch-address">{data.address}</p>
                     {data.manager ? (
-                      <p className="branch-manager" style={{ width: "400px" }}>
+                      <p className="branch-manager">
                         {data.manager.first_name} {data.manager.last_name}
                       </p>
                     ) : (
-                      <p className="branch-manager" style={{ width: "400px" }}>
-                        No Manager
-                      </p>
+                      <p className="branch-manager">No Manager</p>
                     )}
-                    <p className="branch-phone" style={{ width: "400px" }}>
-                      {data.phone}
-                    </p>
+                    <p className="branch-phone">{data.phone}</p>
                   </div>
                 </div>
               </div>

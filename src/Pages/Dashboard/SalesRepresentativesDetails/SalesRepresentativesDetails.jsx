@@ -39,18 +39,14 @@ function SalesRepresentativesDetails() {
   return (
     <section>
       <div className="container Details-container">
-        {/* Use Container */}
         <div className="row Details-row">
-          {/* Use Row */}
           <div className="col-12 Details-col">
-            <motion.div // Add motion.div here
+            <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="card text-end shadow "
-              dir="rtl"
+              className="card text-end shadow"
             >
-              {/* Use Card */}
               <div className="card-title text-start">
                 <h3>Delivery Representative Details</h3>
               </div>
@@ -69,38 +65,40 @@ function SalesRepresentativesDetails() {
                 />
               )}
               <div className="card-body">
-                <table className="table table-bordered text-end">
-                  <tbody className="text-start">
-                    <tr>
-                      <td>
-                        {Data.first_name
-                          ? `${Data.first_name} ${Data.last_name}`
-                          : "Not Available"}
-                      </td>
-                          <th>Name</th>
-                    </tr>
-                    <tr>
-                      <td>{Data.branch ? Data.branch.name : "No Branch"}</td>
-                      <th>Branch</th>
-                    </tr>
-                    <tr>
-                      <td>{Data.email || "Not Available"}</td>
-                      <th>Email</th>
-                    </tr>
-                    <tr>
-                      <td>{Data.phone || "Not Available"}</td>
-                      <th>Phone Number</th>
-                    </tr>
-                    <tr>
-                      <td>{Data.status || "Not Available"}</td>
-                      <th>Order Status</th>
-                    </tr>
-                    <tr>
-                      <td>{Data.verified_at || "Not Available"}</td>
-                      <th>Added Date</th>
-                    </tr>
-                  </tbody>
-                </table>
+                <div className="table-responsive">
+                  <table className="table table-bordered text-start">
+                    <tbody>
+                      <tr>
+                        <th>Name</th>
+                        <td>
+                          {Data.first_name
+                            ? `${Data.first_name} ${Data.last_name}`
+                            : "Not Available"}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Branch</th>
+                        <td>{Data.branch ? Data.branch.name : "No Branch"}</td>
+                      </tr>
+                      <tr>
+                        <th>Email</th>
+                        <td>{Data.email || "Not Available"}</td>
+                      </tr>
+                      <tr>
+                        <th>Phone Number</th>
+                        <td>{Data.phone || "Not Available"}</td>
+                      </tr>
+                      <tr>
+                        <th>Order Status</th>
+                        <td>{Data.status || "Not Available"}</td>
+                      </tr>
+                      <tr>
+                        <th>Added Date</th>
+                        <td>{Data.verified_at || "Not Available"}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </motion.div>
           </div>

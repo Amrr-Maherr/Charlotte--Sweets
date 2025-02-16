@@ -163,11 +163,11 @@ function PendingRequests() {
 
   return (
     <>
-      <div className="PendingRequests-title">
+      <div className="PendingRequests-title mx-auto">
         <Link to="">View all</Link>
         <p>Addition requests</p>
       </div>
-      <div className="PendingRequests-main-parent shadow">
+      <div className="PendingRequests-main-parent shadow mx-auto">
         {loading ? (
           <p>Loading pending requests...</p>
         ) : pendingManagers.length === 0 && pendingSales.length === 0 ? (
