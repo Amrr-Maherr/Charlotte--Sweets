@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Loader from "../Loader/Loader";
@@ -6,7 +6,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import L from "leaflet";
-import PropTypes from "prop-types"; // Import PropTypes
+import PropTypes from "prop-types";
 
 // Solve the Leaflet icon problem
 delete L.Icon.Default.prototype._getIconUrl;
@@ -21,21 +21,22 @@ L.Icon.Default.mergeOptions({
 const NO_LOCATION_DATA = "No valid location data available.";
 
 // Helper functions to display data conditionally
-const displayField = (label, value) => {
-  // Do not display fields containing "id" (case-insensitive)
+const FieldDisplay = ({ label, value }) => {
   if (label.toLowerCase().includes("id")) {
     return null;
   }
 
-  if (value !== null && value !== undefined && value !== "") {
-    return (
-      <li className="list-group-item d-flex justify-content-between align-items-center">
-        <strong>{label}:</strong>
-        <span>{value.toString()}</span>
-      </li>
-    );
-  }
-  return null;
+  return (
+    <li className="list-group-item d-flex justify-content-between align-items-center">
+      <strong>{label}:</strong>
+      <span>{value ?? "Not specified"}</span>{" "}
+      {/* Use nullish coalescing operator */}
+    </li>
+  );
+};
+
+const displayField = (label, value) => {
+  return <FieldDisplay label={label} value={value} />;
 };
 
 const displayObjectInfo = (label, object) => {
@@ -69,50 +70,6 @@ const displayObjectInfo = (label, object) => {
   return null;
 };
 
-const displayProductInfo = (label, product) => {
-  if (product && typeof product === "object") {
-    return (
-      <div className="mb-3">
-        <h6 className="card-subtitle mb-2 text-muted">{label}</h6>
-        {product.image && (
-          <img
-            src={product.image}
-            alt={`${label} Image`}
-            style={{
-              width: "100px",
-              height: "100px",
-              borderRadius: "10px",
-            }}
-            className="mb-2"
-          />
-        )}
-        <ul className="list-group list-group-flush">
-          {displayField(`${label} Name`, product.name)}
-          {displayField(`Description`, product.description)}
-          {/* Add more fields here as needed */}
-        </ul>
-      </div>
-    );
-  }
-  return null;
-};
-
-const displayFlowerInfo = (label, flowers) => {
-  if (flowers && typeof flowers === "object") {
-    return (
-      <div className="mb-3">
-        <h6 className="card-subtitle mb-2 text-muted">{label}</h6>
-        <ul className="list-group list-group-flush">
-          {displayField(`${label} Type`, flowers.type)}
-          {/* Add more fields here as needed */}
-        </ul>
-      </div>
-    );
-  }
-  return null;
-};
-
-//Reusable Components
 const CommonOrderInfo = ({ order }) => {
   return (
     <div className="col-md-6 px-2 mb-4">
@@ -201,7 +158,77 @@ const ImageGallery = ({ images }) => {
     </div>
   );
 };
-// Component for displaying Cake Order Details
+
+const MapComponent = ({ latitude, longitude, map_desc }) => {
+  const isValidLatLng = useMemo(() => {
+    const lat = parseFloat(latitude);
+    const lng = parseFloat(longitude);
+    return !isNaN(lat) && !isNaN(lng);
+  }, [latitude, longitude]);
+
+  const position = useMemo(() => {
+    if (!isValidLatLng) return null;
+    return [parseFloat(latitude), parseFloat(longitude)];
+  }, [isValidLatLng, latitude, longitude]);
+
+  if (!isValidLatLng || !position) {
+    return <p className="text-muted">{NO_LOCATION_DATA}</p>;
+  }
+
+  return (
+    <MapContainer
+      center={position}
+      zoom={13}
+      style={{ height: "400px", width: "100%" }}
+    >
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      />
+      <Marker position={position}>
+        <Popup>{map_desc}</Popup>
+      </Marker>
+    </MapContainer>
+  );
+};
+
+const ReturnedOrderDetails = ({ order }) => {
+  return (
+    <>
+      <h2 className="mb-4">Returned Order Details</h2>
+      <div className="row">
+        <CommonOrderInfo order={order} />
+        <PaymentInfo order={order} />
+        <PersonnelInfo order={order} />
+        <div className="col-md-4 px-2 mb-4">
+          <div className="card shadow">
+            <div className="card-body">
+              <h5 className="card-title">Return Information</h5>
+              {displayField("Problem", order.problem)}
+              {displayField("Rejection Cause", order.rejection_cause)}
+              {displayField("Is Returned", order.is_returned ? "Yes" : "No")}
+            </div>
+          </div>
+        </div>
+        <ImageGallery images={order.images} />
+      </div>
+    </>
+  );
+};
+
+ReturnedOrderDetails.propTypes = {
+  order: PropTypes.shape({
+    problem: PropTypes.string,
+    rejection_cause: PropTypes.string,
+    is_returned: PropTypes.number,
+    images: PropTypes.arrayOf(
+      PropTypes.shape({
+        image: PropTypes.string,
+      })
+    ),
+  }).isRequired,
+};
+
 const CakeOrderDetails = ({ order }) => {
   return (
     <>
@@ -211,8 +238,6 @@ const CakeOrderDetails = ({ order }) => {
         <PaymentInfo order={order} />
         <PersonnelInfo order={order} />
         <div className="col-md-4 px-2 mb-4">
-          {" "}
-          {/* New Card Container */}
           <div className="card shadow">
             <div className="card-body">
               <h5 className="card-title">Cake Information</h5>
@@ -228,7 +253,6 @@ const CakeOrderDetails = ({ order }) => {
   );
 };
 
-// Component for displaying Flower Order Details
 const FlowerOrderDetails = ({ order }) => {
   return (
     <>
@@ -238,8 +262,6 @@ const FlowerOrderDetails = ({ order }) => {
         <PaymentInfo order={order} />
         <PersonnelInfo order={order} />
         <div className="col-md-4 px-2 mb-4">
-          {" "}
-          {/* New Card Container */}
           <div className="card shadow">
             <div className="card-body">
               <h5 className="card-title">Flower Information</h5>
@@ -255,7 +277,6 @@ const FlowerOrderDetails = ({ order }) => {
   );
 };
 
-// Component for displaying Cake and Flower Order Details
 const CakeAndFlowerOrderDetails = ({ order }) => {
   return (
     <>
@@ -265,8 +286,6 @@ const CakeAndFlowerOrderDetails = ({ order }) => {
         <PaymentInfo order={order} />
         <PersonnelInfo order={order} />
         <div className="col-md-4 px-2 mb-4">
-          {" "}
-          {/* New Card Container */}
           <div className="card shadow">
             <div className="card-body">
               <h5 className="card-title">Cake Information</h5>
@@ -276,8 +295,6 @@ const CakeAndFlowerOrderDetails = ({ order }) => {
           </div>
         </div>
         <div className="col-md-4 px-2 mb-4">
-          {" "}
-          {/* New Card Container */}
           <div className="card shadow">
             <div className="card-body">
               <h5 className="card-title">Flower Information</h5>
@@ -292,12 +309,76 @@ const CakeAndFlowerOrderDetails = ({ order }) => {
     </>
   );
 };
+
 const UnsupportedOrder = ({ order }) => {
   return (
     <>
       <p>Unsupported order type: {order.order_type}</p>
     </>
   );
+};
+
+const commonOrderPropTypes = {
+  id: PropTypes.number.isRequired,
+  order_type: PropTypes.string.isRequired,
+  status: PropTypes.string,
+  customer_name: PropTypes.string,
+  customer_phone: PropTypes.string,
+  delivery_time: PropTypes.string,
+  delivery_date: PropTypes.string,
+  longitude: PropTypes.string,
+  latitude: PropTypes.string,
+  map_desc: PropTypes.string,
+  additional_data: PropTypes.string,
+  rejection_cause: PropTypes.string,
+  payment_method: PropTypes.string,
+  total_price: PropTypes.number,
+  deposit: PropTypes.number,
+  delivery_price: PropTypes.number,
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      image: PropTypes.string.isRequired,
+    })
+  ),
+  sale: PropTypes.shape({
+    id: PropTypes.number,
+    first_name: PropTypes.string,
+    last_name: PropTypes.string,
+    phone: PropTypes.string,
+    image: PropTypes.string,
+  }),
+  chef: PropTypes.shape({
+    id: PropTypes.number,
+    first_name: PropTypes.string,
+    last_name: PropTypes.string,
+    phone: PropTypes.string,
+    image: PropTypes.string,
+  }),
+  delivery: PropTypes.shape({
+    id: PropTypes.number,
+    first_name: PropTypes.string,
+    last_name: PropTypes.string,
+    phone: PropTypes.string,
+    image: PropTypes.string,
+  }),
+};
+
+const cakeOrderPropTypes = {
+  order_details: PropTypes.string,
+  cake_price: PropTypes.number,
+  is_sameday: PropTypes.number,
+};
+
+const flowerOrderPropTypes = {
+  description: PropTypes.string,
+  flower_price: PropTypes.number,
+  is_sameday: PropTypes.number,
+};
+
+const returnedOrderPropTypes = {
+  problem: PropTypes.string,
+  rejection_cause: PropTypes.string,
+  is_returned: PropTypes.number,
 };
 
 function OrderDetails() {
@@ -334,62 +415,33 @@ function OrderDetails() {
     fetchData();
   }, [id, token]);
 
-  // Define PropTypes inside the component function
-  const commonOrderPropTypes = {
-    id: PropTypes.number.isRequired,
-    order_type: PropTypes.string.isRequired,
-    status: PropTypes.string,
-    customer_name: PropTypes.string,
-    customer_phone: PropTypes.string,
-    delivery_time: PropTypes.string,
-    delivery_date: PropTypes.string,
-    longitude: PropTypes.string,
+  const renderOrderDetails = useCallback(() => {
+    if (!order) return null;
+    switch (order.order_type) {
+      case "cake":
+        return <CakeOrderDetails order={order} />;
+      case "flower":
+        return <FlowerOrderDetails order={order} />;
+      case "cake and flower":
+        return <CakeAndFlowerOrderDetails order={order} />;
+      case "returned":
+        return <ReturnedOrderDetails order={order} />;
+      default:
+        return <UnsupportedOrder order={order} />;
+    }
+  }, [order]);
+
+  OrderDetails.propTypes = {
+    ...commonOrderPropTypes,
+    ...cakeOrderPropTypes,
+    ...flowerOrderPropTypes,
+    ...returnedOrderPropTypes,
     latitude: PropTypes.string,
+    longitude: PropTypes.string,
     map_desc: PropTypes.string,
     additional_data: PropTypes.string,
+    product_id: PropTypes.string,
     rejection_cause: PropTypes.string,
-    payment_method: PropTypes.string,
-    total_price: PropTypes.number,
-    deposit: PropTypes.number,
-    delivery_price: PropTypes.number,
-    images: PropTypes.arrayOf(
-      PropTypes.shape({
-        image: PropTypes.string.isRequired,
-      })
-    ),
-    sale: PropTypes.shape({
-      id: PropTypes.number,
-      first_name: PropTypes.string,
-      last_name: PropTypes.string,
-      phone: PropTypes.string,
-      image: PropTypes.string,
-    }),
-    chef: PropTypes.shape({
-      id: PropTypes.number,
-      first_name: PropTypes.string,
-      last_name: PropTypes.string,
-      phone: PropTypes.string,
-      image: PropTypes.string,
-    }),
-    delivery: PropTypes.shape({
-      id: PropTypes.number,
-      first_name: PropTypes.string,
-      last_name: PropTypes.string,
-      phone: PropTypes.string,
-      image: PropTypes.string,
-    }),
-  };
-
-  const cakeOrderPropTypes = {
-    order_details: PropTypes.string,
-    cake_price: PropTypes.number,
-    is_sameday: PropTypes.number,
-  };
-
-  const flowerOrderPropTypes = {
-    description: PropTypes.string,
-    flower_price: PropTypes.number,
-    is_sameday: PropTypes.number,
   };
 
   const isValidLatLng = useMemo(() => {
@@ -404,19 +456,6 @@ function OrderDetails() {
     return [parseFloat(order.latitude), parseFloat(order.longitude)];
   }, [order, isValidLatLng]);
 
-  const renderOrderDetails = () => {
-    if (!order) return null;
-    switch (order.order_type) {
-      case "cake":
-        return <CakeOrderDetails order={order} />;
-      case "flower":
-        return <FlowerOrderDetails order={order} />;
-      case "cake and flower":
-        return <CakeAndFlowerOrderDetails order={order} />;
-      default:
-        return <UnsupportedOrder order={order} />;
-    }
-  };
   if (loading) {
     return <Loader />;
   }
@@ -437,9 +476,7 @@ function OrderDetails() {
       <div className="row">
         <div className="col-md-12 px-2 mb-4">
           <div className="card shadow">
-            {/* Removed h-100 */}
             <div className="card-body d-flex flex-column">
-              {/* Added flexbox */}
               <h5 className="card-title">Delivery and Map Information</h5>
               <ul className="list-group list-group-flush">
                 {displayField("Address Description", order.map_desc)}
@@ -447,23 +484,11 @@ function OrderDetails() {
                 {displayField("Product ID", order.product_id)}
                 {displayField("Rejection Cause", order.rejection_cause)}
               </ul>
-              {isValidLatLng && position ? (
-                <MapContainer
-                  center={position}
-                  zoom={13}
-                  style={{ height: "400px", width: "100%" }}
-                >
-                  <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  />
-                  <Marker position={position}>
-                    <Popup>{order.map_desc}</Popup>
-                  </Marker>
-                </MapContainer>
-              ) : (
-                <p className="text-muted">{NO_LOCATION_DATA}</p>
-              )}
+              <MapComponent
+                latitude={order.latitude}
+                longitude={order.longitude}
+                map_desc={order.map_desc}
+              />
             </div>
           </div>
         </div>
@@ -471,61 +496,5 @@ function OrderDetails() {
     </div>
   );
 }
-
-OrderDetails.propTypes = {
-  id: PropTypes.number,
-  order_type: PropTypes.string,
-  status: PropTypes.string,
-  customer_name: PropTypes.string,
-  customer_phone: PropTypes.string,
-  delivery_time: PropTypes.string,
-  delivery_date: PropTypes.string,
-  longitude: PropTypes.string,
-  latitude: PropTypes.string,
-  map_desc: PropTypes.string,
-  additional_data: PropTypes.string,
-  rejection_cause: PropTypes.string,
-  payment_method: PropTypes.string,
-  total_price: PropTypes.number,
-  deposit: PropTypes.number,
-  delivery_price: PropTypes.string,
-  sale: PropTypes.shape({
-    id: PropTypes.number,
-    first_name: PropTypes.string,
-    last_name: PropTypes.string,
-    phone: PropTypes.string,
-    image: PropTypes.string,
-  }),
-  chef: PropTypes.shape({
-    id: PropTypes.number,
-    first_name: PropTypes.string,
-    last_name: PropTypes.string,
-    phone: PropTypes.string,
-    image: PropTypes.string,
-  }),
-  delivery: PropTypes.shape({
-    id: PropTypes.number,
-    first_name: PropTypes.string,
-    last_name: PropTypes.string,
-    phone: PropTypes.string,
-    image: PropTypes.string,
-  }),
-  order_details: PropTypes.string,
-  cake_price: PropTypes.number,
-  is_sameday: PropTypes.number,
-  description: PropTypes.string,
-  flower_price: PropTypes.number,
-  images: PropTypes.arrayOf(
-    PropTypes.shape({
-      image: PropTypes.string,
-    })
-  ),
-  latitude: PropTypes.string,
-  longitude: PropTypes.string,
-  map_desc: PropTypes.string,
-  additional_data: PropTypes.string,
-  product_id: PropTypes.string,
-  rejection_cause: PropTypes.string,
-};
 
 export default OrderDetails;
