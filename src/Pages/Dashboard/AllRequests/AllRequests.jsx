@@ -29,12 +29,12 @@ function AllRequests() {
         const allRequestsData = [
           ...(managersResponse.data.data || []).map((manager) => ({
             ...manager,
-            type: "مدير",
+            type: "Manager",
             role: managersResponse.data.key,
           })),
           ...(salesResponse.data.data || []).map((sale) => ({
             ...sale,
-            type: "مندوب مبيعات",
+            type: "Sales Representative",
             role: salesResponse.data.key,
           })),
         ];
@@ -59,20 +59,20 @@ function AllRequests() {
 
   const handleAccept = (id, type) => {
     Swal.fire({
-      title: "هل أنت متأكد؟",
-      text: `هل أنت متأكد أنك تريد قبول هذا ${
-        type === "مدير" ? "المدير" : "المندوب"
-      }؟`,
+      title: "Are you sure?",
+      text: `Are you sure you want to accept this ${
+        type === "Manager" ? "manager" : "sales representative"
+      }?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "نعم، قبول!",
-      cancelButtonText: "إلغاء",
+      confirmButtonText: "Yes, accept!",
+      cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
         const endpoint =
-          type === "مدير"
+          type === "Manager"
             ? `https://management.mlmcosmo.com/api/accept-manager/${id}`
             : `https://management.mlmcosmo.com/api/accept-sale/${id}`;
 
@@ -86,8 +86,10 @@ function AllRequests() {
           )
           .then((response) => {
             Swal.fire(
-              "تم القبول!",
-              `تم قبول ${type === "مدير" ? "المدير" : "المندوب"} بنجاح.`,
+              "Accepted!",
+              `The ${
+                type === "Manager" ? "manager" : "sales representative"
+              } has been successfully accepted.`,
               "success"
             );
             setRequests(requests.filter((request) => request.id !== id));
@@ -95,8 +97,10 @@ function AllRequests() {
           .catch((error) => {
             console.error(`Error accepting ${type}:`, error);
             Swal.fire(
-              "خطأ!",
-              `حدث خطأ أثناء قبول ${type === "مدير" ? "المدير" : "المندوب"}.`,
+              "Error!",
+              `An error occurred while accepting the ${
+                type === "Manager" ? "manager" : "sales representative"
+              }.`,
               "error"
             );
           });
@@ -106,20 +110,20 @@ function AllRequests() {
 
   const handleReject = (id, type) => {
     Swal.fire({
-      title: "هل أنت متأكد؟",
-      text: `هل أنت متأكد أنك تريد رفض هذا ${
-        type === "مدير" ? "المدير" : "المندوب"
-      }؟`,
+      title: "Are you sure?",
+      text: `Are you sure you want to reject this ${
+        type === "Manager" ? "manager" : "sales representative"
+      }?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "نعم، رفض!",
-      cancelButtonText: "إلغاء",
+      confirmButtonText: "Yes, reject!",
+      cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
         const endpoint =
-          type === "مدير"
+          type === "Manager"
             ? `https://management.mlmcosmo.com/api/reject-manager/${id}`
             : `https://management.mlmcosmo.com/api/reject-sale/${id}`;
 
@@ -129,8 +133,10 @@ function AllRequests() {
           })
           .then((response) => {
             Swal.fire(
-              "تم الرفض!",
-              `تم رفض ${type === "مدير" ? "المدير" : "المندوب"} بنجاح.`,
+              "Rejected!",
+              `The ${
+                type === "Manager" ? "manager" : "sales representative"
+              } has been successfully rejected.`,
               "success"
             );
             setRequests(requests.filter((request) => request.id !== id));
@@ -138,8 +144,10 @@ function AllRequests() {
           .catch((error) => {
             console.error(`Error rejecting ${type}:`, error);
             Swal.fire(
-              "خطأ!",
-              `حدث خطأ أثناء رفض ${type === "مدير" ? "المدير" : "المندوب"}.`,
+              "Error!",
+              `An error occurred while rejecting the ${
+                type === "Manager" ? "manager" : "sales representative"
+              }.`,
               "error"
             );
           });
@@ -157,22 +165,22 @@ function AllRequests() {
         <>
           <div className="container">
             <h2
-              className="text-end py-4"
+              className="text-start py-4"
               style={{ fontSize: "20px", fontWeight: "bold" }}
             >
-              جميع الطلبات المعلقة
+              All Pending Requests
             </h2>
             {requests.length === 0 ? (
-              <p className="text-end">لا توجد طلبات معلقة.</p>
+              <p className="text-start">No pending requests.</p>
             ) : (
               <table className="table table-hover text-center AllRequests-table">
                 <thead>
                   <tr>
-                    <th style={{ width: "130px" }}>الإجراءات</th>
-                    <th>الصورة</th>
-                    <th>الفرع</th>
-                    <th>النوع</th>
-                    <th className="text-end">الاسم</th>
+                    <th style={{ width: "130px" }}>Actions</th>
+                    <th>Image</th>
+                    <th>Branch</th>
+                    <th>Type</th>
+                    <th className="text-end">Name</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -185,7 +193,7 @@ function AllRequests() {
                           <img
                             style={{ cursor: "pointer", margin: "0 5px" }}
                             src={Acc}
-                            alt="قبول"
+                            alt="Accept"
                             onClick={() =>
                               handleAccept(request.id, request.type)
                             }
@@ -193,7 +201,7 @@ function AllRequests() {
                           <img
                             style={{ cursor: "pointer", margin: "0 5px" }}
                             src={Dec}
-                            alt="رفض"
+                            alt="Reject"
                             onClick={() =>
                               handleReject(request.id, request.type)
                             }
@@ -212,7 +220,7 @@ function AllRequests() {
                         />
                       </td>
                       <td>
-                        {request.branch ? request.branch.name : "لا يوجد فرع"}
+                        {request.branch ? request.branch.name : "No branch"}
                       </td>
                       <td>{request.type}</td>
                       <td className="text-end">

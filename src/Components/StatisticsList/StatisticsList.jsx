@@ -53,7 +53,7 @@ function StatisticsList() {
 
   return (
     <>
-      <div className="main-parent-title "style={{width:"397px",margin:"0px auto"}}>
+      <div className="main-parent-title "style={{width:"350px",margin:"0px auto"}}>
         <h2 style={{fontSize:"20px",fontWeight:"700"}}>Statistics</h2>
       </div>
       <div className="main-parent shadow mx-auto">

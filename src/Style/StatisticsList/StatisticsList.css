@@ -1,5 +1,5 @@
 .main-parent {
-        width: 397px;
+        width: 350px;
         -o-border-radius: 10px;
         -webkit-border-radius: 10px;
         -moz-border-radius: 10px;
@@ -12,7 +12,7 @@
     margin-bottom: 20px;
 }
 .main-parent .child-parent {
-    width: 355px;
+    /* width: 355px; */
 }
 .main-parent .child-parent .child {
     margin-left: auto;

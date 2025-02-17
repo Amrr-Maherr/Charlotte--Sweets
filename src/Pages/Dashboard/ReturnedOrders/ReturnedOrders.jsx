@@ -69,7 +69,7 @@ function ReturnedOrders() {
                     <thead>
                       <tr>
                         <th scope="col">Order ID</th>
-                        <th scope="col">Return Date</th> {/* Example column */}
+                        <th scope="col">Order type</th> {/* Example column */}
                         <th scope="col">Actions</th>
                       </tr>
                     </thead>
@@ -98,7 +98,9 @@ function ReturnedOrders() {
                             >
                               {/* Modify here based on API fields */}
                               <td>{order.id}</td>
-                              <td>{order.return_date || "Not specified"}</td>{" "}
+                              <td>
+                                {order.Order_type || "Not specified"}
+                              </td>{" "}
                               <td className="actions">
                                 <Link
                                   to={`/dashboard/order-details/${order.id}`} // Suitable link

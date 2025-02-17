@@ -70,7 +70,7 @@ function RejectedOrders() {
                       <tr>
                         {/* Example column */}
                         <th scope="col">Order ID</th>
-                        <th scope="col">Rejection Reason</th>{" "}
+                        <th scope="col">Order type</th>{" "}
                         <th scope="col">Actions</th>
                       </tr>
                     </thead>
@@ -99,7 +99,7 @@ function RejectedOrders() {
                             >
                               {/* Modify here based on API fields */}
                               <td>{order.id}</td>
-                              <td>{order.rejection_reason || "No reason"}</td>{" "}
+                              <td>{order.order_type || "No order type"}</td>{" "}
                               <td className="actions">
                                 <Link
                                   to={`/dashboard/order-details/${order.id}`} // Suitable link

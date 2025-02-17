@@ -164,7 +164,7 @@ function PendingRequests() {
   return (
     <>
       <div className="PendingRequests-title mx-auto">
-        <Link to="">View all</Link>
+        <Link to="/dashboard/all-requests">View all</Link>
         <p>Addition requests</p>
       </div>
       <div className="PendingRequests-main-parent shadow mx-auto">
