@@ -1,5 +1,5 @@
 .PendingRequests-title {
-    width: 383px;
+    width: 350px;
         height: 37px;
         display: flex;
         align-items: flex-start;
@@ -20,7 +20,7 @@
         color: rgba(0, 0, 0, 1);
 }
 .PendingRequests-main-parent {
-    width: 397px;
+    width: 350px;
         height: auto;
         top: 518px;
         border-radius: 10px;
