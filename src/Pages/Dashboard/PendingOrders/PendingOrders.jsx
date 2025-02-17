@@ -69,7 +69,7 @@ function PendingOrders() {
                     <thead>
                       <tr>
                         <th scope="col">Order ID</th>
-                        <th scope="col">Order Date</th>
+                        <th scope="col">Order Type</th>
                         <th scope="col">Actions</th>
                       </tr>
                     </thead>
@@ -97,7 +97,7 @@ function PendingOrders() {
                               key={order.id}
                             >
                               <td>{order.id}</td>
-                              <td>{order.order_date || "Not specified"}</td>
+                              <td>{order.order_type || "Not specified"}</td>
                               <td className="actions">
                                 <Link
                                   to={`/dashboard/order-details/${order.id}`}

@@ -57,7 +57,7 @@ function SalesDetails() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="card text-center shadow w-100 w-md-75 w-lg-50" // Modified class
+              className="card text-center shadow" // Modified class
             >
               <div className="card-title py-3 text-start p-4">
                 <h3>Sales Details</h3>
@@ -125,21 +125,19 @@ function SalesDetails() {
                   <table className="table text-center table-hover">
                     <thead>
                       <tr>
-                        <th>Status</th>
-                        <th>Quantity</th>
-                        <th>Order Date</th>
-                        <th>Order Type</th>
                         <th>#</th>
+                        <th>Order Type</th>
+                        <th>Order Date</th>
+                        <th>Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       {currentOrders.map((order, index) => (
                         <tr key={index}>
-                          <td>{order.status || "No Status"}</td>
-                          <td>{order.quantity || "No Quantity"}</td>
-                          <td>{order.delivery_date || "No Date"}</td>
-                          <td>{order.order_type || "No Type"}</td>
                           <td>{indexOfFirstOrder + index + 1}</td>
+                          <td>{order.order_type || "No Type"}</td>
+                          <td>{order.delivery_date || "No Date"}</td>
+                          <td>{order.status || "No Status"}</td>
                         </tr>
                       ))}
                     </tbody>

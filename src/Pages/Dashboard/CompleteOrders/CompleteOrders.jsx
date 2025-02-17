@@ -72,7 +72,7 @@ function CompleteOrders() {
                       <tr>
                         {/* Example column */}
                         <th scope="col">Order ID</th>
-                        <th scope="col">Completion Date</th>{" "}
+                        <th scope="col">Order Type</th>{" "}
                         <th scope="col">Actions</th>
                       </tr>
                     </thead>
