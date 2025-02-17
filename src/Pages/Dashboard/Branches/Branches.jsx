@@ -400,42 +400,48 @@ function Branches() {
               </div>
               <div className="form-container">
                 <div className="mb-3">
-                  <label htmlFor="name" className="form-label">
+                  <label htmlFor="name" className="form-label text-start w-100">
                     Name
                   </label>
                   <input
                     placeholder="Enter branch name..."
                     type="text"
                     id="name"
-                    className="form-control text-end"
+                    className="form-control text-start"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required // Make the field required
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="address" className="form-label">
+                  <label
+                    htmlFor="address"
+                    className="form-label text-start w-100"
+                  >
                     Address
                   </label>
                   <input
                     placeholder="Enter branch address..."
                     type="text"
                     id="address"
-                    className="form-control text-end"
+                    className="form-control text-start"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     required // Make the field required
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="phone" className="form-label">
+                  <label
+                    htmlFor="phone"
+                    className="form-label text-start w-100"
+                  >
                     Phone Number
                   </label>
                   <input
                     placeholder="Enter branch phone number..."
                     type="text"
                     id="phone"
-                    className="form-control text-end"
+                    className="form-control text-start"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     required // Make the field required

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import "../../../Style/Specialties/Specialties.css";
 import Loader from "../Loader/Loader";
 import deleteIcon from "../../../Assets/deleteButton.svg";
@@ -7,6 +7,7 @@ import AddButton from "../../../Components/AddButton/AddButton";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
+import * as bootstrap from "bootstrap"; // Import Bootstrap's JavaScript
 
 function Specialties() {
   const [loading, setLoading] = useState(true);
@@ -14,8 +15,10 @@ function Specialties() {
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const [searchTerm, setSearchTerm] = useState(""); // State for the search term
-  const [newSpecialty, setNewSpecialty] = useState(""); // State for the new specialty name
+  const [searchTerm, setSearchTerm] = useState("");
+  const [newSpecialty, setNewSpecialty] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const modalRef = useRef(null);
 
   const fetchData = useCallback(async () => {
     try {
@@ -27,10 +30,10 @@ function Specialties() {
       );
       console.log(response.data);
       setData(response.data);
-      setLoading(false); // Stop loading after data is fetched
+      setLoading(false);
     } catch (error) {
       console.log(error.response?.data?.message || error.message);
-      setLoading(false); // Stop loading in case of error
+      setLoading(false);
     }
   }, [token]);
 
@@ -38,15 +41,11 @@ function Specialties() {
     fetchData();
   }, [token, fetchData]);
 
-  // Calculate the number of pages
   const totalPages = Math.ceil(Data.length / itemsPerPage);
-
-  // Extract items for the current page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = Data.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Pagination navigation
   const nextPage = () =>
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -69,7 +68,7 @@ function Specialties() {
           })
           .then((response) => {
             Swal.fire("Deleted!", response.data, "success");
-            setData((prevData) => prevData.filter((spec) => spec.id !== id)); // Update the state after deletion
+            setData((prevData) => prevData.filter((spec) => spec.id !== id));
           })
           .catch((error) => {
             Swal.fire(
@@ -82,18 +81,15 @@ function Specialties() {
     });
   };
 
-  // Filter specialties data based on the search term
   const filteredSpecialties = Data.filter((specialty) => {
     const specialtyName = specialty.name || "";
     return specialtyName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  // Calculate the number of pages after filtering
   const totalPagesFiltered = Math.ceil(
     filteredSpecialties.length / itemsPerPage
   );
 
-  // Extract items for the current page after filtering
   const indexOfLastItemFiltered = currentPage * itemsPerPage;
   const indexOfFirstItemFiltered = indexOfLastItemFiltered - itemsPerPage;
   const currentItemsFiltered = filteredSpecialties.slice(
@@ -101,12 +97,11 @@ function Specialties() {
     indexOfLastItemFiltered
   );
 
-  // Handel Submit Form
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
         "https://management.mlmcosmo.com/api/specialization",
-        { name: newSpecialty }, // key is name
+        { name: newSpecialty },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -115,17 +110,17 @@ function Specialties() {
       );
       console.log(response.data);
       toast.success("Specialty added successfully");
-      setData((prevData) => [...prevData, response.data]); // Update the state after adding
-      fetchData(); // Update the list of specialties after successful submission
-      setNewSpecialty(""); // Clear input field
-      // Close the modal after successful submission
-      const modal = document.getElementById("addSpecialtyModal");
-      if (modal) {
-        modal.classList.remove("show");
-        modal.style.display = "none";
-        document.body.classList.remove("modal-open");
-        document.body.style.paddingRight = "";
-        document.querySelector(".modal-backdrop")?.remove();
+      setData((prevData) => [...prevData, response.data]);
+      fetchData();
+      setNewSpecialty("");
+      setIsModalOpen(false); // Synchronously update modal state
+
+      // Close the modal using Bootstrap's JavaScript API
+      if (modalRef.current) {
+        const modalInstance = bootstrap.Modal.getInstance(modalRef.current);
+        if (modalInstance) {
+          modalInstance.hide();
+        }
       }
     } catch (error) {
       console.error("Error adding specialty:", error);
@@ -135,6 +130,14 @@ function Specialties() {
       );
     }
   };
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <section className="specialties-section">
       <Toaster />
@@ -161,8 +164,7 @@ function Specialties() {
               <div className="col-xl-4 mt-5 text-end">
                 <AddButton
                   ButtonText="Add"
-                  data-bs-toggle="modal"
-                  data-bs-target="#addSpecialtyModal" // Modal ID here
+                  onClick={openModal} // Open the modal using state
                 />
               </div>
             </div>
@@ -191,7 +193,7 @@ function Specialties() {
                       </tr>
                     ) : (
                       currentItemsFiltered.map((ele, index) => (
-                        <motion.tr // Use motion.tr here
+                        <motion.tr
                           initial={{ opacity: 0, y: 50 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{
@@ -224,7 +226,6 @@ function Specialties() {
                 </table>
               </div>
             </div>
-            {/* Pagination */}
             <div className="d-flex justify-content-center">
               <button
                 style={{
@@ -256,13 +257,14 @@ function Specialties() {
         )}
       </div>
 
-      {/* Modal */}
       <div
-        className="modal fade"
+        className={`modal fade ${isModalOpen ? "show" : ""}`}
         id="addSpecialtyModal"
         tabIndex="-1"
         aria-labelledby="addSpecialtyModalLabel"
         aria-hidden="true"
+        ref={modalRef}
+        style={{ display: isModalOpen ? "block" : "none" }}
       >
         <div className="modal-dialog">
           <div className="modal-content">
@@ -273,22 +275,21 @@ function Specialties() {
               <button
                 type="button"
                 className="btn-close"
-                data-bs-dismiss="modal"
+                onClick={closeModal}
                 aria-label="Close"
               ></button>
             </div>
             <div className="modal-body">
-              {/* Form for adding a new specialty */}
               <div className="mb-3">
                 <label
                   htmlFor="specialtyName"
-                  className="form-label text-end w-100"
+                  className="form-label text-start w-100"
                 >
                   Specialty Name
                 </label>
                 <input
                   type="text"
-                  className="form-control text-end"
+                  className="form-control text-start"
                   id="specialtyName"
                   placeholder="Enter specialty name"
                   value={newSpecialty}
@@ -296,11 +297,11 @@ function Specialties() {
                 />
               </div>
             </div>
-            <div className="modal-footer">
+            <div className="modal-footer d-flex justify-content-start">
               <button
                 type="button"
                 className="btn btn-secondary"
-                data-bs-dismiss="modal"
+                onClick={closeModal}
               >
                 Close
               </button>
