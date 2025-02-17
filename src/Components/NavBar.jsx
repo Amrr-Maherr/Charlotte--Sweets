@@ -85,7 +85,7 @@ function NavBar() {
               {
                 to: "/dashboard/sales-representatives",
                 icon: "fa-truck",
-                label: "Sales Representatives",
+                label: "Delivery",
               },
               { to: "/dashboard/sales", icon: "fa-line-chart", label: "Sales" },
               {

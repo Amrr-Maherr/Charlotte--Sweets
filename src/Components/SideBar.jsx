@@ -97,7 +97,7 @@ function SideBar() {
                   : undefined
               }
             >
-              <i className="fa fa-truck"></i> Delivery Representatives
+              <i className="fa fa-truck"></i> Delivery
             </Link>
           </motion.li>
           <motion.li whileTap={{ scale: 0.9 }}>
