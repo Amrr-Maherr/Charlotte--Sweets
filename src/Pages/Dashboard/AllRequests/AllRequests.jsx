@@ -176,16 +176,34 @@ function AllRequests() {
               <table className="table table-hover text-center AllRequests-table">
                 <thead>
                   <tr>
-                    <th style={{ width: "130px" }}>Actions</th>
+                    <th>Name</th>
+                    <th>Type</th>
                     <th>Image</th>
                     <th>Branch</th>
-                    <th>Type</th>
-                    <th className="text-end">Name</th>
+                    <th style={{ width: "130px" }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {requests.map((request) => (
                     <tr key={request.id}>
+                      <td>
+                        {request.first_name} {request.last_name}
+                      </td>
+                      <td>{request.type}</td> {/* Type */}
+                      <td>
+                        <img
+                          src={request.image || ""}
+                          alt={`${request.first_name} ${request.last_name}`}
+                          style={{
+                            width: "50px",
+                            height: "50px",
+                            borderRadius: "50%",
+                          }}
+                        />
+                      </td>
+                      <td>
+                        {request.branch ? request.branch.name : "No branch"}
+                      </td>
                       <td>
                         <div
                           style={{ display: "flex", justifyContent: "center" }}
@@ -207,24 +225,6 @@ function AllRequests() {
                             }
                           />
                         </div>
-                      </td>
-                      <td>
-                        <img
-                          src={request.image || ""}
-                          alt={`${request.first_name} ${request.last_name}`}
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            borderRadius: "50%",
-                          }}
-                        />
-                      </td>
-                      <td>
-                        {request.branch ? request.branch.name : "No branch"}
-                      </td>
-                      <td>{request.type}</td>
-                      <td className="text-end">
-                        {request.first_name} {request.last_name}
                       </td>
                     </tr>
                   ))}

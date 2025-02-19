@@ -99,8 +99,13 @@ function PaymentReports() {
     switch (field) {
       case "date":
         return "Delivery Date";
-      case "delivery_id":
-        return "Delivery ID";
+      case "delivery_id": {
+        // Find the delivery name based on the ID
+        const delivery = DeliveryData.find(
+          (d) => d.id === reportData.delivery_id
+        );
+        return delivery ? `Delivery Name` : "Delivery ID"; // Return "Delivery ID" as a fallback
+      }
       case "total":
         return "Total Revenue";
       case "cakes":
@@ -114,6 +119,17 @@ function PaymentReports() {
       default:
         return field;
     }
+  };
+
+  const getFieldValue = (field) => {
+    if (field === "delivery_id") {
+      // Find the delivery name based on the ID
+      const delivery = DeliveryData.find(
+        (d) => d.id === reportData.delivery_id
+      );
+      return delivery ? delivery.name : reportData.delivery_id; // Return delivery name if found, otherwise return the ID
+    }
+    return reportData[field];
   };
 
   const cardVariants = {
@@ -253,7 +269,7 @@ function PaymentReports() {
                         .map(([key, value]) => (
                           <tr key={key}>
                             <td>{getFieldLabel(key)}</td>
-                            <td>{value}</td>
+                            <td>{getFieldValue(key)}</td>
                           </tr>
                         ))}
                     </tbody>
