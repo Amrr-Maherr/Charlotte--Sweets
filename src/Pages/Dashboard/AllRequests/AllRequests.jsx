@@ -78,6 +78,7 @@ function AllRequests() {
 
         axios
           .post(
+            // Changed to POST
             endpoint,
             {},
             {
@@ -128,9 +129,14 @@ function AllRequests() {
             : `https://management.mlmcosmo.com/api/reject-sale/${id}`;
 
         axios
-          .delete(endpoint, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
+          .post(
+            // Changed to POST
+            endpoint,
+            {},
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          )
           .then((response) => {
             Swal.fire(
               "Rejected!",
@@ -215,7 +221,7 @@ function AllRequests() {
                             <img
                               style={{ cursor: "pointer", margin: "0 5px" }}
                               src={Acc}
-                              alt="Reject"
+                              alt="Accept"
                               onClick={() =>
                                 handleReject(request.id, request.type)
                               }
@@ -223,7 +229,7 @@ function AllRequests() {
                             <img
                               style={{ cursor: "pointer", margin: "0 5px" }}
                               src={Dec}
-                              alt="Accept"
+                              alt="Reject"
                               onClick={() =>
                                 handleAccept(request.id, request.type)
                               }
