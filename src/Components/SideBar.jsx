@@ -139,6 +139,24 @@ function SideBar() {
               <i className="fa fa-briefcase"></i> Specialties
             </Link>
           </motion.li>
+          <motion.li whileTap={{ scale: 0.9 }}>
+            <Link
+              to="/dashboard/payment-reports"
+              className={
+                location.pathname === "/dashboard/payment-reports"
+                  ? "active"
+                  : ""
+              }
+              aria-current={
+                location.pathname === "/dashboard/payment-reports"
+                  ? "page"
+                  : undefined
+              }
+            >
+              <i className="fa fa-file-text"></i> Reports{" "}
+              {/* تم تغيير الأيقونة هنا */}
+            </Link>
+          </motion.li>
           {/* Profile Link */}
           <motion.li whileTap={{ scale: 0.9 }}>
             <Link

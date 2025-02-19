@@ -32,6 +32,7 @@ import PendingOrders from "./Pages/Dashboard/PendingOrders/PendingOrders.jsx";
 import OrderDetails from "./Pages/Dashboard/OrderDetails/OrderDetails.jsx";
 import AllRequests from "./Pages/Dashboard/AllRequests/AllRequests.jsx";
 import Profile from "./Pages/Dashboard/Profile/Profile.jsx";
+import PaymentReports from "./Pages/Dashboard/PaymentReports/PaymentReports.jsx";
 
 function App() {
   return (
@@ -55,8 +56,9 @@ function App() {
             <Route path="returned-orders" element={<ReturnedOrders />} />
             <Route path="pending-orders" element={<PendingOrders />} />
             <Route path="delivered-orders" element={<DeliveredOrders />} />
-            <Route path="all-requests" element={<AllRequests/>} />
-            <Route path="profile" element={<Profile/>} />
+            <Route path="all-requests" element={<AllRequests />} />
+            <Route path="payment-reports" element={<PaymentReports/>} />
+            <Route path="profile" element={<Profile />} />
             <Route
               path="/dashboard/manager-details/:id"
               element={<Details />}

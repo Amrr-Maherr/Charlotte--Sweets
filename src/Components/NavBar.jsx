@@ -1,17 +1,75 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import logo_image from "../Assets/brand-logo.png";
 import profile_image from "../Assets/profile-image.png";
 import "../Style/NavBar.css";
+import axios from "axios";
 
 function NavBar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [activeLink, setActiveLink] = useState(location.pathname);
 
   const handleLinkClick = (to) => {
     setActiveLink(to);
   };
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    try {
+      const token = JSON.parse(localStorage.getItem("AuthToken"));
+      await axios.post(
+        "https://management.mlmcosmo.com/api/logout",
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      localStorage.removeItem("AuthToken");
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  const menuItems = [
+    { to: "/dashboard/home", icon: "fa-home", label: "Home" },
+    {
+      to: "/dashboard/branches",
+      icon: "fa-code-fork",
+      label: "Branches",
+    },
+    {
+      to: "/dashboard/managers",
+      icon: "fa-users",
+      label: "Managers",
+    },
+    { to: "/dashboard/chefs", icon: "fa-cutlery", label: "Chefs" },
+    {
+      to: "/dashboard/sales-representatives",
+      icon: "fa-truck",
+      label: "Delivery",
+    },
+    { to: "/dashboard/sales", icon: "fa-line-chart", label: "Sales" },
+    {
+      to: "/dashboard/ads",
+      icon: "fa-bullhorn",
+      label: "Advertisements",
+    },
+    {
+      to: "/dashboard/specialties",
+      icon: "fa-briefcase",
+      label: "Specialties",
+    },
+    {
+      to: "/dashboard/payment-reports",
+      icon: "fa-file-text",
+      label: "Reports",
+    },
+    { to: "/dashboard/profile", icon: "fa-user", label: "Profile" },
+  ];
 
   return (
     <>
@@ -24,7 +82,7 @@ function NavBar() {
             data-bs-target="#offcanvasScrolling"
             aria-controls="offcanvasScrolling"
           >
-            <i class="fa fa-bars"></i>
+            <i className="fa fa-bars"></i>
           </button>
           <ul className="navbar-nav logo-image d-none d-lg-block">
             <li className="nav-item">
@@ -69,37 +127,7 @@ function NavBar() {
         </div>
         <div className="offcanvas-body">
           <ul>
-            {[
-              { to: "/dashboard/home", icon: "fa-home", label: "Home" },
-              {
-                to: "/dashboard/branches",
-                icon: "fa-code-fork",
-                label: "Branches",
-              },
-              {
-                to: "/dashboard/managers",
-                icon: "fa-users",
-                label: "Managers",
-              },
-              { to: "/dashboard/chefs", icon: "fa-cutlery", label: "Chefs" },
-              {
-                to: "/dashboard/sales-representatives",
-                icon: "fa-truck",
-                label: "Delivery",
-              },
-              { to: "/dashboard/sales", icon: "fa-line-chart", label: "Sales" },
-              {
-                to: "/dashboard/ads",
-                icon: "fa-bullhorn",
-                label: "Advertisements",
-              },
-              {
-                to: "/dashboard/specialties",
-                icon: "fa-briefcase",
-                label: "Specialties",
-              },
-              { to: "/dashboard/profile", icon: "fa-user", label: "Profile" },
-            ].map((item, index) => (
+            {menuItems.map((item, index) => (
               <motion.li key={index} whileTap={{ scale: 0.9 }}>
                 <Link
                   to={item.to}
@@ -110,6 +138,11 @@ function NavBar() {
                 </Link>
               </motion.li>
             ))}
+            <motion.li whileTap={{ scale: 0.9 }}>
+              <Link to="#" className="logout-link" onClick={handleLogout}>
+                <i className="fa fa-sign-out"></i> Logout
+              </Link>
+            </motion.li>
           </ul>
         </div>
       </div>
