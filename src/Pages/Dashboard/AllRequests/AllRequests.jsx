@@ -215,17 +215,17 @@ function AllRequests() {
                             <img
                               style={{ cursor: "pointer", margin: "0 5px" }}
                               src={Acc}
-                              alt="Accept"
+                              alt="Reject"
                               onClick={() =>
-                                handleAccept(request.id, request.type)
+                                handleReject(request.id, request.type)
                               }
                             />
                             <img
                               style={{ cursor: "pointer", margin: "0 5px" }}
                               src={Dec}
-                              alt="Reject"
+                              alt="Accept"
                               onClick={() =>
-                                handleReject(request.id, request.type)
+                                handleAccept(request.id, request.type)
                               }
                             />
                           </div>
