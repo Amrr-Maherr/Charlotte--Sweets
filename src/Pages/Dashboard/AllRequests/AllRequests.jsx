@@ -173,63 +173,68 @@ function AllRequests() {
             {requests.length === 0 ? (
               <p className="text-start">No pending requests.</p>
             ) : (
-              <table className="table table-hover text-center AllRequests-table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Image</th>
-                    <th>Branch</th>
-                    <th style={{ width: "130px" }}>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {requests.map((request) => (
-                    <tr key={request.id}>
-                      <td>
-                        {request.first_name} {request.last_name}
-                      </td>
-                      <td>{request.type}</td> {/* Type */}
-                      <td>
-                        <img
-                          src={request.image || ""}
-                          alt={`${request.first_name} ${request.last_name}`}
-                          style={{
-                            width: "50px",
-                            height: "50px",
-                            borderRadius: "50%",
-                          }}
-                        />
-                      </td>
-                      <td>
-                        {request.branch ? request.branch.name : "No branch"}
-                      </td>
-                      <td>
-                        <div
-                          style={{ display: "flex", justifyContent: "center" }}
-                        >
-                          <img
-                            style={{ cursor: "pointer", margin: "0 5px" }}
-                            src={Acc}
-                            alt="Accept"
-                            onClick={() =>
-                              handleAccept(request.id, request.type)
-                            }
-                          />
-                          <img
-                            style={{ cursor: "pointer", margin: "0 5px" }}
-                            src={Dec}
-                            alt="Reject"
-                            onClick={() =>
-                              handleReject(request.id, request.type)
-                            }
-                          />
-                        </div>
-                      </td>
+              <div className="table-responsive">
+                <table className="table table-hover text-center AllRequests-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Image</th>
+                      <th>Branch</th>
+                      <th style={{ width: "130px" }}>Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {requests.map((request) => (
+                      <tr key={request.id}>
+                        <td>
+                          {request.first_name} {request.last_name}
+                        </td>
+                        <td>{request.type}</td> {/* Type */}
+                        <td>
+                          <img
+                            src={request.image || ""}
+                            alt={`${request.first_name} ${request.last_name}`}
+                            style={{
+                              width: "50px",
+                              height: "50px",
+                              borderRadius: "50%",
+                            }}
+                          />
+                        </td>
+                        <td>
+                          {request.branch ? request.branch.name : "No branch"}
+                        </td>
+                        <td>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <img
+                              style={{ cursor: "pointer", margin: "0 5px" }}
+                              src={Acc}
+                              alt="Accept"
+                              onClick={() =>
+                                handleAccept(request.id, request.type)
+                              }
+                            />
+                            <img
+                              style={{ cursor: "pointer", margin: "0 5px" }}
+                              src={Dec}
+                              alt="Reject"
+                              onClick={() =>
+                                handleReject(request.id, request.type)
+                              }
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         </>
