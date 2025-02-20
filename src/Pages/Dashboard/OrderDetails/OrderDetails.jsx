@@ -101,7 +101,6 @@ const PaymentInfo = ({ order }) => {
             {displayField("Payment Method", order.payment_method)}
             {displayField("Total Price", order.total_price)}
             {displayField("Deposit", order.deposit)}
-            {displayField("Remaining", order.remaining)}
             {displayField("Delivery Price", order.delivery_price)}
           </ul>
         </div>
@@ -120,7 +119,7 @@ const PersonnelInfo = ({ order }) => {
             {displayObjectInfo("Seller", order.sale)}
             {displayObjectInfo("Chef", order.chef)}
             {order.delivery &&
-              displayObjectInfo("Delivery Person", order.delivery)}
+              displayObjectInfo("Delivery", order.delivery)}
           </div>
         </div>
       </div>
