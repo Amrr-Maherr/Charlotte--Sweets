@@ -26,11 +26,20 @@ const FieldDisplay = ({ label, value }) => {
     return null;
   }
 
+  let displayValue = value;
+
+  if (
+    (label.toLowerCase() === "is returned" ||
+      label.toLowerCase() === "is same day") &&
+    typeof value === "number"
+  ) {
+    displayValue = value === 0 ? "No" : "Yes";
+  }
+
   return (
     <li className="list-group-item d-flex justify-content-between align-items-center">
       <strong>{label}:</strong>
-      <span>{value ?? "Not specified"}</span>{" "}
-      {/* Use nullish coalescing operator */}
+      <span>{displayValue ?? "Not specified"}</span>
     </li>
   );
 };
@@ -118,8 +127,7 @@ const PersonnelInfo = ({ order }) => {
           <div className="flex-grow-1">
             {displayObjectInfo("Seller", order.sale)}
             {displayObjectInfo("Chef", order.chef)}
-            {order.delivery &&
-              displayObjectInfo("Delivery", order.delivery)}
+            {order.delivery && displayObjectInfo("Delivery", order.delivery)}
           </div>
         </div>
       </div>
@@ -205,7 +213,7 @@ const ReturnedOrderDetails = ({ order }) => {
               <h5 className="card-title">Return Information</h5>
               {displayField("Problem", order.problem)}
               {displayField("Rejection Cause", order.rejection_cause)}
-              {displayField("Is Returned", order.is_returned ? "Yes" : "No")}
+              {displayField("Is Returned", order.is_returned)}
             </div>
           </div>
         </div>
