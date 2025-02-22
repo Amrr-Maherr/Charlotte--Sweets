@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import "../../../Style/Managers.jsx/Managers.css"; // Use the same CSS
+import "../../../Style/Managers.jsx/Managers.css";
 import axios from "axios";
 import Loader from "../Loader/Loader";
-import eye from "../../../Assets/eye.svg"; // Or a suitable icon
+import eye from "../../../Assets/eye.svg";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -12,35 +12,46 @@ function DeliveredOrders() {
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(
           "https://management.mlmcosmo.com/api/delivered-orders",
           {
             headers: { Authorization: `Bearer ${token}` },
+            params: {
+              from: fromDate,
+              to: toDate,
+            },
           }
         );
         setData(response.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching delivered orders:", error);
+        setData([]);
         setLoading(false);
       }
     };
-    fetchData();
-  }, [token]);
 
-  // Calculate the number of pages
-  const totalPages = Math.ceil(Data.length / itemsPerPage);
+    if (fromDate && toDate) {
+      fetchData();
+    } else {
+      setData([]);
+      setLoading(false);
+    }
+  }, [token, fromDate, toDate]);
 
-  // Extract items for the current page
+  const totalPages = Math.ceil(Data.length / itemsPerPage) || 1;
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = Data.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Navigate between pages
   const nextPage = () =>
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -48,31 +59,54 @@ function DeliveredOrders() {
   return (
     <>
       <section>
+        <div className="container">
+          <div className="row">
+            <div className="col-xl-12 mt-5 d-flex align-items-center justify-content-between">
+              <h1 className="Managers-title text-start">Delivered Orders</h1>
+              <div className="d-flex align-items-center">
+                <div className="mx-2">
+                  <label htmlFor="fromDate">From:</label>
+                  <input
+                    type="date"
+                    id="fromDate"
+                    className="form-control form-control-sm"
+                    value={fromDate}
+                    onChange={(e) => {
+                      setCurrentPage(1);
+                      setFromDate(e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="mx-2">
+                  <label htmlFor="toDate">To:</label>
+                  <input
+                    type="date"
+                    id="toDate"
+                    className="form-control form-control-sm"
+                    value={toDate}
+                    onChange={(e) => {
+                      setCurrentPage(1);
+                      setToDate(e.target.value);
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {loading ? (
           <Loader />
         ) : (
           <>
             <div className="container Managers-table-container vh-100">
-              {" "}
-              {/* Use the same Class */}
-              <div className="row Managers-table-row">
-                <div className="col-xl-12 mt-5">
-                  <h1 className="Managers-title text-start">
-                    Delivered Orders
-                  </h1>{" "}
-                  {/* Appropriate title */}
-                </div>
-              </div>
               <div className="row Managers-table-row">
                 <div className="col-12 Managers-table-col mt-5">
                   <table className="table Managers-table table-hover shadow">
-                    {" "}
-                    {/* Use the same Classes */}
                     <thead>
                       <tr>
                         <th scope="col">Order ID</th>
-                        <th scope="col">Order Type</th>{" "}
-                        {/* Example column */}
+                        <th scope="col">Order Type</th>
                         <th scope="col">Actions</th>
                       </tr>
                     </thead>
@@ -88,7 +122,7 @@ function DeliveredOrders() {
                       ) : (
                         <>
                           {currentItems.map((order, index) => (
-                            <motion.tr // Use motion.tr here
+                            <motion.tr
                               initial={{ opacity: 0, y: 50 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{
@@ -96,14 +130,14 @@ function DeliveredOrders() {
                                 stiffness: 100,
                                 damping: 25,
                                 delay: 0.1 * index,
-                              }} // Bounce motion with delay based on row order
+                              }}
                               key={order.id}
                             >
                               <td>{order.id}</td>
                               <td>{order.order_type}</td>
                               <td className="actions">
                                 <Link
-                                  to={`/dashboard/order-details/${order.id}`} // Suitable link
+                                  to={`/dashboard/order-details/${order.id}`}
                                   className="action-icon view-icon"
                                 >
                                   <div className="action-icon">
@@ -111,7 +145,7 @@ function DeliveredOrders() {
                                   </div>
                                 </Link>
                               </td>
-                            </motion.tr> // And close motion.tr here
+                            </motion.tr>
                           ))}
                         </>
                       )}

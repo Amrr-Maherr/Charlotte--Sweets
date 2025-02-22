@@ -12,28 +12,41 @@ function ReturnedOrders() {
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(
           "https://management.mlmcosmo.com/api/returned-orders",
           {
             headers: { Authorization: `Bearer ${token}` },
+            params: {
+              from: fromDate,
+              to: toDate,
+            },
           }
         );
         setData(response.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching returned orders:", error);
+        setData([]);
         setLoading(false);
       }
     };
-    fetchData();
-  }, [token]);
+    if (fromDate && toDate) {
+      fetchData();
+    } else {
+      setData([]);
+      setLoading(false);
+    }
+  }, [token, fromDate, toDate]);
 
   // Calculate the number of pages
-  const totalPages = Math.ceil(Data.length / itemsPerPage);
+  const totalPages = Math.ceil(Data.length / itemsPerPage) || 1;
 
   // Extract items for the current page
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -48,6 +61,41 @@ function ReturnedOrders() {
   return (
     <>
       <section>
+        <div className="container">
+          <div className="row">
+            <div className="col-xl-12 mt-5 d-flex align-items-center justify-content-between">
+              <h1 className="Managers-title text-start">Returned Orders</h1>
+              <div className="d-flex align-items-center">
+                <div className="mx-2">
+                  <label htmlFor="fromDate">From:</label>
+                  <input
+                    type="date"
+                    id="fromDate"
+                    className="form-control form-control-sm"
+                    value={fromDate}
+                    onChange={(e) => {
+                      setCurrentPage(1);
+                      setFromDate(e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="mx-2">
+                  <label htmlFor="toDate">To:</label>
+                  <input
+                    type="date"
+                    id="toDate"
+                    className="form-control form-control-sm"
+                    value={toDate}
+                    onChange={(e) => {
+                      setCurrentPage(1);
+                      setToDate(e.target.value);
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         {loading ? (
           <Loader />
         ) : (
@@ -55,12 +103,7 @@ function ReturnedOrders() {
             <div className="container Managers-table-container vh-100">
               {" "}
               {/* Use the same Class */}
-              <div className="row Managers-table-row">
-                <div className="col-xl-12 mt-5">
-                  <h1 className="Managers-title text-start">Returned Orders</h1>{" "}
-                  {/* Appropriate title */}
-                </div>
-              </div>
+              <div className="row Managers-table-row"></div>
               <div className="row Managers-table-row">
                 <div className="col-12 Managers-table-col mt-5">
                   <table className="table Managers-table table-hover shadow">
