@@ -101,6 +101,7 @@ const CommonOrderInfo = ({ order }) => {
 };
 
 const PaymentInfo = ({ order }) => {
+  const remaining = order.total_price - order.deposit;
   return (
     <div className="col-md-6 px-2 mb-4">
       <div className="card shadow">
@@ -111,6 +112,7 @@ const PaymentInfo = ({ order }) => {
             {displayField("Total Price", order.total_price)}
             {displayField("Deposit", order.deposit)}
             {displayField("Delivery Price", order.delivery_price)}
+            {displayField("Remaining", remaining)}
           </ul>
         </div>
       </div>
