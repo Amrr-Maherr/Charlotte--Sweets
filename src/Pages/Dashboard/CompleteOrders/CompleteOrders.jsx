@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import "../../../Style/Managers.jsx/Managers.css"; // Use the same CSS
+import "../../../Style/Managers.jsx/Managers.css";
 import axios from "axios";
 import Loader from "../Loader/Loader";
-import eye from "../../../Assets/eye.svg"; // Or a suitable icon
+import eye from "../../../Assets/eye.svg";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -12,7 +12,7 @@ function CompleteOrders() {
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const [searchTerm, setSearchTerm] = useState(""); // State for search term
+  const [searchTerm, setSearchTerm] = useState(""); // State for product name search
   const [filteredData, setFilteredData] = useState([]); // State for filtered data
 
   useEffect(() => {
@@ -35,27 +35,32 @@ function CompleteOrders() {
   }, [token]);
 
   useEffect(() => {
-    // Update filtered data whenever Data or searchTerm changes
+    // Function to filter data based on product name
     const filterData = () => {
-      const filtered = Data.filter((order) => {
-        // Customize the search logic here
-        return (
-          order.id.toString().includes(searchTerm) || // Search by order ID
-          (order.order_type &&
-            order.order_type.toLowerCase().includes(searchTerm.toLowerCase())) // Search by order type
-        );
-      });
+      let filtered = Data;
+
+      // Filter by product name if a search term is entered
+      if (searchTerm) {
+        filtered = filtered.filter((order) => {
+          // Adjust this logic based on your actual data structure
+          // Assuming each order has an array of products, and each product has a name
+          if (order.products && Array.isArray(order.products)) {
+            return order.products.some((product) =>
+              product.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+          }
+          return false; // Exclude orders without products or where products is not an array
+        });
+      }
+
       setFilteredData(filtered);
-      setCurrentPage(1); // Reset to first page when filtering
+      setCurrentPage(1); // Reset to the first page after filtering
     };
 
     filterData();
   }, [Data, searchTerm]);
 
-  // Calculate the number of pages based on filtered data
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
-  // Extract items for the current page from filtered data
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
@@ -87,7 +92,7 @@ function CompleteOrders() {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Search orders..."
+                    placeholder="Search by product name..."
                     value={searchTerm}
                     onChange={handleSearchChange}
                   />

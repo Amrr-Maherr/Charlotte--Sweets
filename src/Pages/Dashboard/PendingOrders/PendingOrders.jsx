@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import "../../../Style/Managers.jsx/Managers.css"; // Use the same CSS
+import "../../../Style/Managers.jsx/Managers.css";
 import axios from "axios";
 import Loader from "../Loader/Loader";
-import eye from "../../../Assets/eye.svg"; // Or a suitable icon
+import eye from "../../../Assets/eye.svg";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -11,7 +11,9 @@ function PendingOrders() {
   const [loading, setLoading] = useState(true);
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [searchTerm, setSearchTerm] = useState(""); // State for Order Type search
+  const [filteredData, setFilteredData] = useState([]); // State for filtered data
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +25,7 @@ function PendingOrders() {
           }
         );
         setData(response.data);
+        setFilteredData(response.data); // Initialize filtered data with all data
         setLoading(false);
       } catch (error) {
         console.error("Error fetching pending orders:", error);
@@ -32,18 +35,42 @@ function PendingOrders() {
     fetchData();
   }, [token]);
 
-  // Calculate the number of pages
-  const totalPages = Math.ceil(Data.length / itemsPerPage);
+  useEffect(() => {
+    // Function to filter data based on Order Type
+    const filterData = () => {
+      let filtered = Data;
 
-  // Extract items for the current page
+      // Filter by Order Type if a search term is entered
+      if (searchTerm) {
+        filtered = filtered.filter((order) => {
+          // Check if order.order_type exists and includes the search term
+          return (
+            order.order_type &&
+            order.order_type.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+        });
+      }
+
+      setFilteredData(filtered);
+      setCurrentPage(1); // Reset to the first page after filtering
+    };
+
+    filterData();
+  }, [Data, searchTerm]);
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = Data.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   // Navigate between pages
   const nextPage = () =>
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   return (
     <>
@@ -53,19 +80,23 @@ function PendingOrders() {
         ) : (
           <>
             <div className="container Managers-table-container vh-100">
-              {" "}
-              {/* Use the same Class */}
-              <div className="row Managers-table-row">
-                <div className="col-xl-12 mt-5">
-                  <h1 className="Managers-title text-start">Pending Orders</h1>{" "}
-                  {/* Appropriate title */}
+              <div className="row Managers-table-row d-flex align-items-center">
+                <div className="col-6 mt-5">
+                  <h1 className="Managers-title text-start">Pending Orders</h1>
+                </div>
+                <div className="col-6 mt-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search by order type..."
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                  />
                 </div>
               </div>
               <div className="row Managers-table-row">
                 <div className="col-12 Managers-table-col mt-5">
                   <table className="table Managers-table table-hover shadow">
-                    {" "}
-                    {/* Use the same Classes */}
                     <thead>
                       <tr>
                         <th scope="col">Order ID</th>
@@ -78,7 +109,7 @@ function PendingOrders() {
                         <>
                           <tr>
                             <td colSpan="3" className="text-center">
-                              No pending orders currently
+                              No pending orders currently match your search
                             </td>
                           </tr>
                         </>
@@ -116,6 +147,7 @@ function PendingOrders() {
                   </table>
                 </div>
               </div>
+
               {/* Pagination */}
               <div className="d-flex justify-content-center">
                 <button

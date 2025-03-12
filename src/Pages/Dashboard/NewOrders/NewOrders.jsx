@@ -11,7 +11,7 @@ function NewOrders() {
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const [searchDate, setSearchDate] = useState(""); // State for date input
+  const [searchTerm, setSearchTerm] = useState(""); // State for Order Type search
   const [filteredData, setFilteredData] = useState([]); // State for filtered data
 
   useEffect(() => {
@@ -36,24 +36,31 @@ function NewOrders() {
     fetchData();
   }, [token]);
 
-  // Function to handle date search
-  const handleDateSearch = (e) => {
-    const date = e.target.value;
-    setSearchDate(date);
+  useEffect(() => {
+    // Function to filter data based on Order Type
+    const filterData = () => {
+      let filtered = Data;
 
-    if (date) {
-      const filtered = Data.filter((order) => {
-        if (order.delivery_date) {
-          return order.delivery_date.includes(date); // Check if delivery_date includes the search date
-        }
-        return false; // Exclude orders without a delivery_date
-      });
+      // Filter by Order Type if a search term is entered
+      if (searchTerm) {
+        filtered = filtered.filter((order) => {
+          return (
+            order.order_type &&
+            order.order_type.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+        });
+      }
+
       setFilteredData(filtered);
       setCurrentPage(1); // Reset to the first page after filtering
-    } else {
-      // If the search date is empty, reset the filtered data to the original data
-      setFilteredData(Data);
-    }
+    };
+
+    filterData();
+  }, [searchTerm, Data]);
+
+  // Function to handle Order Type search
+  const handleOrderTypeSearch = (e) => {
+    setSearchTerm(e.target.value);
   };
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -80,17 +87,18 @@ function NewOrders() {
             <h1>New Orders</h1>
           </div>
 
-          {/* Date Search Input */}
+          {/* Order Type Search Input */}
           <div className="col-6 mt-3">
-            <label htmlFor="dateSearch" className="form-label">
-              Search by Delivery Date:
+            <label htmlFor="orderTypeSearch" className="form-label">
+              Search by Order Type:
             </label>
             <input
-              type="date"
+              type="text"
               className="form-control"
-              id="dateSearch"
-              value={searchDate}
-              onChange={handleDateSearch}
+              id="orderTypeSearch"
+              placeholder="Enter order type"
+              value={searchTerm}
+              onChange={handleOrderTypeSearch}
             />
           </div>
 
