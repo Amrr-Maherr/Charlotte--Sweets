@@ -5,6 +5,9 @@ import Loader from "../Loader/Loader";
 import eye from "../../../Assets/eye.svg";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 
 function CompleteOrders() {
   const [Data, setData] = useState([]);
@@ -12,7 +15,7 @@ function CompleteOrders() {
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const [searchTerm, setSearchTerm] = useState(""); // State for product name search
+  const [selectedDate, setSelectedDate] = useState(null); // State for selected date
   const [filteredData, setFilteredData] = useState([]); // State for filtered data
 
   useEffect(() => {
@@ -35,21 +38,18 @@ function CompleteOrders() {
   }, [token]);
 
   useEffect(() => {
-    // Function to filter data based on product name
+    // Function to filter data based on completion date
     const filterData = () => {
       let filtered = Data;
 
-      // Filter by product name if a search term is entered
-      if (searchTerm) {
+      // Filter by completion date if a date is selected
+      if (selectedDate) {
+        const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
         filtered = filtered.filter((order) => {
-          // Adjust this logic based on your actual data structure
-          // Assuming each order has an array of products, and each product has a name
-          if (order.products && Array.isArray(order.products)) {
-            return order.products.some((product) =>
-              product.name.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-          }
-          return false; // Exclude orders without products or where products is not an array
+          return (
+            order.completion_date &&
+            order.completion_date.includes(formattedDate)
+          );
         });
       }
 
@@ -58,7 +58,7 @@ function CompleteOrders() {
     };
 
     filterData();
-  }, [Data, searchTerm]);
+  }, [Data, selectedDate]);
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -70,8 +70,8 @@ function CompleteOrders() {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
   };
 
   return (
@@ -89,12 +89,15 @@ function CompleteOrders() {
                   </h1>
                 </div>
                 <div className="col-6 mt-3">
-                  <input
-                    type="text"
+                  <label htmlFor="completionDateSearch" className="form-label">
+                    Search by Completion Date:
+                  </label>
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={handleDateChange}
+                    dateFormat="yyyy-MM-dd"
                     className="form-control"
-                    placeholder="Search by product name..."
-                    value={searchTerm}
-                    onChange={handleSearchChange}
+                    placeholderText="Select completion date"
                   />
                 </div>
               </div>

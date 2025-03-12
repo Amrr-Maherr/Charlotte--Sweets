@@ -114,10 +114,10 @@ function Managers() {
           <>
             <div className="container Managers-table-container vh-100">
               <div className="row Managers-table-row">
-                <div className="col-xl-4 mt-5">
+                <div className="col-6 mt-5">
                   <h1 className="Managers-title text-start">Managers</h1>
                 </div>
-                <div className="col-xl-4 mt-5">
+                <div className="col-6 mt-5">
                   <input
                     type="text"
                     className="form-control p-2 rounded"

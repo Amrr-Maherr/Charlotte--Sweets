@@ -120,7 +120,7 @@ function SalesRepresentatives() {
             <div className="col-xl-4 mt-5">
               <input
                 type="text"
-                className="form-control p-2 rounded text-end"
+                className="form-control p-2 rounded text-start"
                 placeholder="Search by sales representative name..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}

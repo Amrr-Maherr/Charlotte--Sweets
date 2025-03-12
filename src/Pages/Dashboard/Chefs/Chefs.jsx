@@ -109,7 +109,7 @@ function Chefs() {
                 <div className="col-xl-4 mt-5">
                   <input
                     type="text"
-                    className="form-control p-2 rounded"
+                    className="form-control p-2 rounded text-start"
                     placeholder="Search by chef name..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}

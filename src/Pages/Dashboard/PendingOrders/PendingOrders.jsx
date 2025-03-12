@@ -5,6 +5,9 @@ import Loader from "../Loader/Loader";
 import eye from "../../../Assets/eye.svg";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 
 function PendingOrders() {
   const [Data, setData] = useState([]);
@@ -12,7 +15,7 @@ function PendingOrders() {
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
-  const [searchTerm, setSearchTerm] = useState(""); // State for Order Type search
+  const [selectedDate, setSelectedDate] = useState(null); // State for selected date
   const [filteredData, setFilteredData] = useState([]); // State for filtered data
 
   useEffect(() => {
@@ -36,18 +39,15 @@ function PendingOrders() {
   }, [token]);
 
   useEffect(() => {
-    // Function to filter data based on Order Type
+    // Function to filter data based on order date
     const filterData = () => {
       let filtered = Data;
 
-      // Filter by Order Type if a search term is entered
-      if (searchTerm) {
+      // Filter by order date if a date is selected
+      if (selectedDate) {
+        const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
         filtered = filtered.filter((order) => {
-          // Check if order.order_type exists and includes the search term
-          return (
-            order.order_type &&
-            order.order_type.toLowerCase().includes(searchTerm.toLowerCase())
-          );
+          return order.order_date && order.order_date.includes(formattedDate);
         });
       }
 
@@ -56,7 +56,7 @@ function PendingOrders() {
     };
 
     filterData();
-  }, [Data, searchTerm]);
+  }, [Data, selectedDate]);
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -68,8 +68,8 @@ function PendingOrders() {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
   };
 
   return (
@@ -85,12 +85,15 @@ function PendingOrders() {
                   <h1 className="Managers-title text-start">Pending Orders</h1>
                 </div>
                 <div className="col-6 mt-3">
-                  <input
-                    type="text"
+                  <label htmlFor="orderDateSearch" className="form-label">
+                    Search by Order Date:
+                  </label>
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={handleDateChange}
+                    dateFormat="yyyy-MM-dd"
                     className="form-control"
-                    placeholder="Search by order type..."
-                    value={searchTerm}
-                    onChange={handleSearchChange}
+                    placeholderText="Select order date"
                   />
                 </div>
               </div>

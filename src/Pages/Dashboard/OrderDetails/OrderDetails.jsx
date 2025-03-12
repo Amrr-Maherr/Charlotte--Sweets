@@ -109,9 +109,11 @@ const PaymentInfo = ({ order }) => {
           <h5 className="card-title">Payment Information</h5>
           <ul className="list-group list-group-flush flex-grow-1">
             {displayField("Payment Method", order.payment_method)}
+            {displayField("Cake Price", order.cake_price)}
+            {displayField("Flower Price", order.flower_price)}
+            {displayField("Delivery Price", order.delivery_price)}
             {displayField("Total Price", order.total_price)}
             {displayField("Deposit", order.deposit)}
-            {displayField("Delivery Price", order.delivery_price)}
             {displayField("Remaining", remaining)}
           </ul>
         </div>

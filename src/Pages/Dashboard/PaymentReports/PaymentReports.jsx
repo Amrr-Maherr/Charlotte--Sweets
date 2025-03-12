@@ -16,6 +16,7 @@ function PaymentReports() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isChecked, setIsChecked] = useState(false); // State for the checkbox
+  const [ordersData, setOrdersData] = useState([]);
 
   const DELIVERY_API_ENDPOINT =
     "https://management.mlmcosmo.com/api/all-deliveries";
@@ -77,6 +78,16 @@ function PaymentReports() {
       const data = response.data;
       setReportData(data);
       setIsChecked(data["is completed"] === 1); // Set isChecked based on "is completed"
+
+      // Assuming the 'orders' field contains order details
+      if (data.orders && Array.isArray(data.orders)) {
+        setOrdersData(data.orders);
+        console.log("Orders Data:", data.orders); // Log orders data to console
+      } else {
+        setOrdersData([]); // Set to empty array if no orders or not an array
+      }
+      console.log("Report Data:", data); // Log report data to console
+
       Swal.fire({
         icon: "success",
         title: "Success!",
@@ -122,6 +133,8 @@ function PaymentReports() {
   };
 
   const getFieldValue = (field) => {
+    if (!reportData) return null; // Return null if reportData is null
+
     if (field === "delivery_id") {
       // Find the delivery name based on the ID
       const delivery = DeliveryData.find(
@@ -129,12 +142,32 @@ function PaymentReports() {
       );
       return delivery ? delivery.name : reportData.delivery_id; // Return delivery name if found, otherwise return the ID
     }
-    return reportData[field];
+
+    const value = reportData[field];
+
+    // Check if the value is an object and try to convert it to a string
+    if (typeof value === "object" && value !== null) {
+      // If it's a Date object, format it
+      if (value instanceof Date) {
+        return moment(value).format("YYYY-MM-DD HH:mm:ss");
+      }
+      // Otherwise, try to stringify the object (but be aware of potential issues)
+      return JSON.stringify(value);
+    }
+
+    return value;
   };
 
   const cardVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.5 } },
+    hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+      },
+    },
   };
 
   const handleCheckboxChange = async (event) => {
@@ -265,7 +298,10 @@ function PaymentReports() {
                     </thead>
                     <tbody>
                       {Object.entries(reportData)
-                        .filter(([key, value]) => key !== "is completed")
+                        .filter(
+                          ([key, value]) =>
+                            key !== "is completed" && key !== "orders"
+                        )
                         .map(([key, value]) => (
                           <tr key={key}>
                             <td>{getFieldLabel(key)}</td>
@@ -294,6 +330,51 @@ function PaymentReports() {
               </div>
             </motion.div>
           )}
+          <motion.div
+            className="mt-3"
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <div className="card shadow">
+              <div className="card-body">
+                <h5 className="card-title">Orders Data:</h5>
+                <table className="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Total Price</th>
+                      <th>Deposit</th>
+                      <th>Remaining</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ordersData.length > 0 ? (
+                      ordersData.map((order) => {
+                        // Calculate remaining if not available
+                        const remaining = order.total_price - order.deposit;
+
+                        return (
+                          <tr key={order.id}>
+                            <td>{order.id}</td>
+                            <td>{order.total_price || "N/A"}</td>
+                            <td>{order.deposit || "N/A"}</td>
+                            <td>{remaining || "N/A"}</td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <tr>
+                        <td colSpan="4" className="text-center">
+                          No orders found for this delivery and date.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
     </>

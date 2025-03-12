@@ -4,6 +4,9 @@ import "../../../Style/NewOrders/NewOrders.css";
 import Eye from "../../../Assets/eye.svg";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 
 function NewOrders() {
   const [Data, setData] = useState([]);
@@ -11,7 +14,7 @@ function NewOrders() {
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const [searchTerm, setSearchTerm] = useState(""); // State for Order Type search
+  const [selectedDate, setSelectedDate] = useState(null); // State for selected date
   const [filteredData, setFilteredData] = useState([]); // State for filtered data
 
   useEffect(() => {
@@ -37,16 +40,16 @@ function NewOrders() {
   }, [token]);
 
   useEffect(() => {
-    // Function to filter data based on Order Type
+    // Function to filter data based on Delivery Date
     const filterData = () => {
       let filtered = Data;
 
-      // Filter by Order Type if a search term is entered
-      if (searchTerm) {
+      // Filter by Delivery Date if a date is selected
+      if (selectedDate) {
+        const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
         filtered = filtered.filter((order) => {
           return (
-            order.order_type &&
-            order.order_type.toLowerCase().includes(searchTerm.toLowerCase())
+            order.delivery_date && order.delivery_date.includes(formattedDate)
           );
         });
       }
@@ -56,11 +59,11 @@ function NewOrders() {
     };
 
     filterData();
-  }, [searchTerm, Data]);
+  }, [selectedDate, Data]);
 
-  // Function to handle Order Type search
-  const handleOrderTypeSearch = (e) => {
-    setSearchTerm(e.target.value);
+  // Function to handle Delivery Date selection
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
   };
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -87,18 +90,17 @@ function NewOrders() {
             <h1>New Orders</h1>
           </div>
 
-          {/* Order Type Search Input */}
+          {/* Delivery Date Search Input */}
           <div className="col-6 mt-3">
-            <label htmlFor="orderTypeSearch" className="form-label">
-              Search by Order Type:
+            <label htmlFor="deliveryDateSearch" className="form-label">
+              Search by Delivery Date:
             </label>
-            <input
-              type="text"
+            <DatePicker
+              selected={selectedDate}
+              onChange={handleDateChange}
+              dateFormat="yyyy-MM-dd"
               className="form-control"
-              id="orderTypeSearch"
-              placeholder="Enter order type"
-              value={searchTerm}
-              onChange={handleOrderTypeSearch}
+              placeholderText="Select a date"
             />
           </div>
 

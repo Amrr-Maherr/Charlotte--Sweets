@@ -5,6 +5,9 @@ import Loader from "../Loader/Loader";
 import eye from "../../../Assets/eye.svg";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 
 function RejectedOrders() {
   const [Data, setData] = useState([]);
@@ -12,12 +15,13 @@ function RejectedOrders() {
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
-  const [searchTerm, setSearchTerm] = useState(""); // State for Order Type search
+  const [selectedDate, setSelectedDate] = useState(null); // State for selected date
   const [filteredData, setFilteredData] = useState([]); // State for filtered data
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(
           "https://management.mlmcosmo.com/api/rejected-orders",
           {
@@ -36,16 +40,16 @@ function RejectedOrders() {
   }, [token]);
 
   useEffect(() => {
-    // Function to filter data based on Order Type
+    // Function to filter data based on rejection date
     const filterData = () => {
       let filtered = Data;
 
-      // Filter by Order Type if a search term is entered
-      if (searchTerm) {
+      // Filter by rejection date if a date is selected
+      if (selectedDate) {
+        const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
         filtered = filtered.filter((order) => {
           return (
-            order.order_type &&
-            order.order_type.toLowerCase().includes(searchTerm.toLowerCase())
+            order.rejection_date && order.rejection_date.includes(formattedDate)
           );
         });
       }
@@ -55,7 +59,7 @@ function RejectedOrders() {
     };
 
     filterData();
-  }, [Data, searchTerm]);
+  }, [Data, selectedDate]);
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -67,8 +71,8 @@ function RejectedOrders() {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
   };
 
   return (
@@ -84,12 +88,15 @@ function RejectedOrders() {
                   <h1 className="Managers-title text-start">Rejected Orders</h1>
                 </div>
                 <div className="col-6 mt-3">
-                  <input
-                    type="text"
+                  <label htmlFor="rejectionDateSearch" className="form-label">
+                    Search by Rejection Date:
+                  </label>
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={handleDateChange}
+                    dateFormat="yyyy-MM-dd"
                     className="form-control"
-                    placeholder="Search by order type..."
-                    value={searchTerm}
-                    onChange={handleSearchChange}
+                    placeholderText="Select rejection date"
                   />
                 </div>
               </div>
