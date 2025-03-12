@@ -11,6 +11,8 @@ function NewOrders() {
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const [searchDate, setSearchDate] = useState(""); // State for date input
+  const [filteredData, setFilteredData] = useState([]); // State for filtered data
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +25,7 @@ function NewOrders() {
           }
         );
         setData(response.data);
+        setFilteredData(response.data); // Initialize filtered data with all data
         setLoading(false);
       } catch (error) {
         console.error("Error fetching new orders:", error);
@@ -33,10 +36,30 @@ function NewOrders() {
     fetchData();
   }, [token]);
 
-  const totalPages = Math.ceil(Data.length / itemsPerPage);
+  // Function to handle date search
+  const handleDateSearch = (e) => {
+    const date = e.target.value;
+    setSearchDate(date);
+
+    if (date) {
+      const filtered = Data.filter((order) => {
+        if (order.delivery_date) {
+          return order.delivery_date.includes(date); // Check if delivery_date includes the search date
+        }
+        return false; // Exclude orders without a delivery_date
+      });
+      setFilteredData(filtered);
+      setCurrentPage(1); // Reset to the first page after filtering
+    } else {
+      // If the search date is empty, reset the filtered data to the original data
+      setFilteredData(Data);
+    }
+  };
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = Data.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   const nextPage = () => {
     if (currentPage < totalPages) {
@@ -53,9 +76,24 @@ function NewOrders() {
     <>
       <div className="container new-order-container">
         <div className="row new-order-row">
-          <div className="col-12 mt-5 text-start new-order-title">
+          <div className="col-6 mt-5 text-start new-order-title">
             <h1>New Orders</h1>
           </div>
+
+          {/* Date Search Input */}
+          <div className="col-6 mt-3">
+            <label htmlFor="dateSearch" className="form-label">
+              Search by Delivery Date:
+            </label>
+            <input
+              type="date"
+              className="form-control"
+              id="dateSearch"
+              value={searchDate}
+              onChange={handleDateSearch}
+            />
+          </div>
+
           <div className="col-12 mt-5">
             <table className="table text-center new-order-table">
               <thead>
