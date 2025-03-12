@@ -12,6 +12,8 @@ function CompleteOrders() {
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const [searchTerm, setSearchTerm] = useState(""); // State for search term
+  const [filteredData, setFilteredData] = useState([]); // State for filtered data
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,18 +34,40 @@ function CompleteOrders() {
     fetchData();
   }, [token]);
 
-  // Calculate the number of pages
-  const totalPages = Math.ceil(Data.length / itemsPerPage);
+  useEffect(() => {
+    // Update filtered data whenever Data or searchTerm changes
+    const filterData = () => {
+      const filtered = Data.filter((order) => {
+        // Customize the search logic here
+        return (
+          order.id.toString().includes(searchTerm) || // Search by order ID
+          (order.order_type &&
+            order.order_type.toLowerCase().includes(searchTerm.toLowerCase())) // Search by order type
+        );
+      });
+      setFilteredData(filtered);
+      setCurrentPage(1); // Reset to first page when filtering
+    };
 
-  // Extract items for the current page
+    filterData();
+  }, [Data, searchTerm]);
+
+  // Calculate the number of pages based on filtered data
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  // Extract items for the current page from filtered data
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = Data.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   // Navigate between pages
   const nextPage = () =>
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   return (
     <>
@@ -53,26 +77,29 @@ function CompleteOrders() {
         ) : (
           <>
             <div className="container Managers-table-container vh-100">
-              {" "}
-              {/* Use the same Class */}
-              <div className="row Managers-table-row">
-                <div className="col-xl-12 mt-5">
+              <div className="row Managers-table-row d-flex align-items-center">
+                <div className="col-6 mt-5">
                   <h1 className="Managers-title text-start">
                     Completed Orders
-                  </h1>{" "}
-                  {/* Appropriate title */}
+                  </h1>
+                </div>
+                <div className="col-6 mt-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search orders..."
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                  />
                 </div>
               </div>
               <div className="row Managers-table-row">
                 <div className="col-12 Managers-table-col mt-5">
                   <table className="table Managers-table table-hover shadow">
-                    {" "}
-                    {/* Use the same Classes */}
                     <thead>
                       <tr>
-                        {/* Example column */}
                         <th scope="col">Order ID</th>
-                        <th scope="col">Order Type</th>{" "}
+                        <th scope="col">Order Type</th>
                         <th scope="col">Actions</th>
                       </tr>
                     </thead>
@@ -81,14 +108,14 @@ function CompleteOrders() {
                         <>
                           <tr>
                             <td colSpan="3" className="text-center">
-                              No completed orders currently
+                              No completed orders currently match your search
                             </td>
                           </tr>
                         </>
                       ) : (
                         <>
                           {currentItems.map((order, index) => (
-                            <motion.tr // Use motion.tr here
+                            <motion.tr
                               initial={{ opacity: 0, y: 50 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{
@@ -96,17 +123,14 @@ function CompleteOrders() {
                                 stiffness: 100,
                                 damping: 25,
                                 delay: 0.1 * index,
-                              }} // Bounce motion with delay based on row order
+                              }}
                               key={order.id}
                             >
-                              {/* Modify here based on API fields */}
                               <td>{order.id}</td>
-                              <td>
-                                {order.order_type || "Not specified"}
-                              </td>{" "}
+                              <td>{order.order_type || "Not specified"}</td>
                               <td className="actions">
                                 <Link
-                                  to={`/dashboard/order-details/${order.id}`} // Suitable link
+                                  to={`/dashboard/order-details/${order.id}`}
                                   className="action-icon view-icon"
                                 >
                                   <div className="action-icon">
@@ -114,7 +138,7 @@ function CompleteOrders() {
                                   </div>
                                 </Link>
                               </td>
-                            </motion.tr> // And close motion.tr here
+                            </motion.tr>
                           ))}
                         </>
                       )}
@@ -122,6 +146,7 @@ function CompleteOrders() {
                   </table>
                 </div>
               </div>
+
               {/* Pagination */}
               <div className="d-flex justify-content-center">
                 <button
