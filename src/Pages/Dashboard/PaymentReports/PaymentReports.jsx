@@ -367,7 +367,7 @@ function PaymentReports() {
                       })
                     ) : (
                       <tr>
-                        <td colSpan="4" className="text-center">
+                        <td colSpan="12" className="text-center">
                           No orders found for this delivery and date.
                         </td>
                       </tr>
