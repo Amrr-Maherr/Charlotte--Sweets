@@ -22,10 +22,6 @@ export default function Business() {
     "https://management.mlmcosmo.com/api/deliveries";
 
   useEffect(() => {
-    const fetchBusinessData = async () => {
-      // No initial fetch, data will be fetched on button click
-    };
-
     const fetchDeliveries = async () => {
       try {
         const response = await axios.get(DELIVERIES_API_ENDPOINT, {
@@ -43,31 +39,25 @@ export default function Business() {
     };
 
     fetchDeliveries();
-    fetchBusinessData(); // Fetch deliveries on component mount
+    handleGetReport(); // Fetch all data on component mount
   }, [token]);
 
   const handleGetReport = async () => {
-    if (!fromDate || !toDate) {
-      Swal.fire({
-        icon: "warning",
-        title: "Warning",
-        text: "Please select both 'From' and 'To' dates!",
-      });
-      return;
-    }
     setLoading(true);
     setError(null);
     try {
-      // Format dates to 'YYYY-MM-DD'
-      const formattedFromDate = moment(fromDate).format("YYYY-MM-DD");
-      const formattedToDate = moment(toDate).format("YYYY-MM-DD");
-
       // Prepare query parameters
-      const params = {
-        from: formattedFromDate,
-        to: formattedToDate,
-        delivery_id: selectedDelivery, // Use selectedDelivery state here
-      };
+      const params = {};
+
+      if (fromDate) {
+        params.from = moment(fromDate).format("YYYY-MM-DD");
+      }
+      if (toDate) {
+        params.to = moment(toDate).format("YYYY-MM-DD");
+      }
+      if (selectedDelivery) {
+        params.delivery_id = selectedDelivery;
+      }
 
       const response = await axios.get(BUSINESS_API_ENDPOINT, {
         headers: { Authorization: `Bearer ${token}` },
@@ -104,6 +94,7 @@ export default function Business() {
   const handleToDateChange = (date) => {
     setToDate(date);
   };
+
   const getFieldLabel = (field) => {
     switch (field) {
       case "from":
