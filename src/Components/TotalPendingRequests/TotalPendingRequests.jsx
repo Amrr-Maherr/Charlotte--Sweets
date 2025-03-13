@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "../../Style/TotalPendingRequests/TotalPendingRequests.css";
 import axios from "axios";
-import "font-awesome/css/font-awesome.min.css"; // Import Font Awesome CSS
 
 function TotalPendingRequests() {
   const [Data, setData] = useState({ sales: 0, managers: 0 }); // Initialize with default values

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "../../Style/StatisticsList/StatisticsList.css";
-import "font-awesome/css/font-awesome.min.css"; // تأكد من استيراد Font Awesome
+
 
 function StatisticsList() {
   const [loading, setLoading] = useState(true);
