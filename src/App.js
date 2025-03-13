@@ -33,6 +33,7 @@ import OrderDetails from "./Pages/Dashboard/OrderDetails/OrderDetails.jsx";
 import AllRequests from "./Pages/Dashboard/AllRequests/AllRequests.jsx";
 import Profile from "./Pages/Dashboard/Profile/Profile.jsx";
 import PaymentReports from "./Pages/Dashboard/PaymentReports/PaymentReports.jsx";
+import Business from "./Pages/Dashboard/Business/Business.jsx";
 
 function App() {
   return (
@@ -59,6 +60,7 @@ function App() {
             <Route path="all-requests" element={<AllRequests />} />
             <Route path="payment-reports" element={<PaymentReports/>} />
             <Route path="profile" element={<Profile />} />
+            <Route path="business" element={<Business />} />
             <Route
               path="/dashboard/manager-details/:id"
               element={<Details />}

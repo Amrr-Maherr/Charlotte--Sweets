@@ -69,6 +69,8 @@ function NavBar() {
       label: "Reports",
     },
     { to: "/dashboard/profile", icon: "fa-user", label: "Profile" },
+    // Add Business here
+    { to: "/dashboard/business", icon: "fa-building", label: "Business" },
   ];
 
   return (

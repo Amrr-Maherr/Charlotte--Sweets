@@ -153,8 +153,21 @@ function SideBar() {
                   : undefined
               }
             >
-              <i className="fa fa-file-text"></i> Reports{" "}
-              {/* تم تغيير الأيقونة هنا */}
+              <i className="fa fa-file-text"></i> Reports
+            </Link>
+          </motion.li>
+          {/* Business Link */}
+          <motion.li whileTap={{ scale: 0.9 }}>
+            <Link
+              to="/dashboard/business"
+              className={
+                location.pathname === "/dashboard/business" ? "active" : ""
+              }
+              aria-current={
+                location.pathname === "/dashboard/business" ? "page" : undefined
+              }
+            >
+              <i className="fa fa-building"></i> Business
             </Link>
           </motion.li>
           {/* Profile Link */}
