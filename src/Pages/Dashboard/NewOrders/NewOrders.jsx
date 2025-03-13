@@ -111,6 +111,7 @@ function NewOrders() {
                   <th>#</th>
                   <th>Order Type</th>
                   <th>Price</th>
+                  <th>Delivery date</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -130,6 +131,7 @@ function NewOrders() {
                     <td>{order.id}</td>
                     <td>{order.order_type || "No Type"}</td>
                     <td>{order.total_price || "No Price"}</td>
+                    <td>{order.delivery_date || "No Price"}</td>
                     <td>
                       <div className="actions">
                         <Link to={`/dashboard/order-details/${order.id}`}>

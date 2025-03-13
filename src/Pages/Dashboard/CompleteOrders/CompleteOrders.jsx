@@ -107,6 +107,7 @@ function CompleteOrders() {
                       <tr>
                         <th scope="col">Order ID</th>
                         <th scope="col">Order Type</th>
+                        <th scope="col">Delivery date</th>
                         <th scope="col">Actions</th>
                       </tr>
                     </thead>
@@ -114,7 +115,7 @@ function CompleteOrders() {
                       {currentItems.length === 0 ? (
                         <>
                           <tr>
-                            <td colSpan="3" className="text-center">
+                            <td colSpan="12" className="text-center">
                               No completed orders currently match your search
                             </td>
                           </tr>
@@ -135,6 +136,7 @@ function CompleteOrders() {
                             >
                               <td>{order.id}</td>
                               <td>{order.order_type || "Not specified"}</td>
+                              <td>{order.delivery_date || "Not specified"}</td>
                               <td className="actions">
                                 <Link
                                   to={`/dashboard/order-details/${order.id}`}

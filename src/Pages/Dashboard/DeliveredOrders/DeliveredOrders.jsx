@@ -7,26 +7,29 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 function DeliveredOrders() {
-  const [Data, setData] = useState([]);
+  const [Data, setData] = useState([]); // Set initial state to empty array
   const [loading, setLoading] = useState(true);
   const token = JSON.parse(localStorage.getItem("AuthToken"));
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [initialLoad, setInitialLoad] = useState(true); // Track initial load
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
+        const params = {};
+        if (fromDate && toDate) {
+          params.from = fromDate;
+          params.to = toDate;
+        }
         const response = await axios.get(
           "https://management.mlmcosmo.com/api/delivered-orders",
           {
             headers: { Authorization: `Bearer ${token}` },
-            params: {
-              from: fromDate,
-              to: toDate,
-            },
+            params: params,
           }
         );
         setData(response.data);
@@ -38,13 +41,9 @@ function DeliveredOrders() {
       }
     };
 
-    if (fromDate && toDate) {
-      fetchData();
-    } else {
-      setData([]);
-      setLoading(false);
-    }
-  }, [token, fromDate, toDate]);
+    fetchData();
+    setInitialLoad(false); // Set initialLoad to false after first load
+  }, [token, fromDate, toDate]); // Run useEffect when token, fromDate, or toDate change
 
   const totalPages = Math.ceil(Data.length / itemsPerPage) || 1;
 
@@ -107,6 +106,7 @@ function DeliveredOrders() {
                       <tr>
                         <th scope="col">Order ID</th>
                         <th scope="col">Order Type</th>
+                        <th scope="col">delivery date</th>
                         <th scope="col">Actions</th>
                       </tr>
                     </thead>
@@ -114,7 +114,7 @@ function DeliveredOrders() {
                       {currentItems.length === 0 ? (
                         <>
                           <tr>
-                            <td colSpan="3" className="text-center">
+                            <td colSpan="12" className="text-center">
                               No delivered orders currently
                             </td>
                           </tr>
@@ -135,6 +135,7 @@ function DeliveredOrders() {
                             >
                               <td>{order.id}</td>
                               <td>{order.order_type}</td>
+                              <td>{order.delivery_date}</td>
                               <td className="actions">
                                 <Link
                                   to={`/dashboard/order-details/${order.id}`}

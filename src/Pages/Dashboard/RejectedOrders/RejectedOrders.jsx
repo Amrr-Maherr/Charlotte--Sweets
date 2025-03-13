@@ -107,6 +107,7 @@ function RejectedOrders() {
                       <tr>
                         <th scope="col">Order ID</th>
                         <th scope="col">Order type</th>
+                        <th scope="col">Delivery date</th>
                         <th scope="col">Actions</th>
                       </tr>
                     </thead>
@@ -114,7 +115,7 @@ function RejectedOrders() {
                       {currentItems.length === 0 ? (
                         <>
                           <tr>
-                            <td colSpan="3" className="text-center">
+                            <td colSpan="12" className="text-center">
                               No rejected orders currently match your search
                             </td>
                           </tr>
@@ -135,6 +136,7 @@ function RejectedOrders() {
                             >
                               <td>{order.id}</td>
                               <td>{order.order_type || "No order type"}</td>
+                              <td>{order.delivery_date || "No order type"}</td>
                               <td className="actions">
                                 <Link
                                   to={`/dashboard/order-details/${order.id}`}

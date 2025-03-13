@@ -14,19 +14,22 @@ function ReturnedOrders() {
   const itemsPerPage = 5;
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [initialLoad, setInitialLoad] = useState(true); // Track initial load
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
+        const params = {};
+        if (fromDate && toDate) {
+          params.from = fromDate;
+          params.to = toDate;
+        }
         const response = await axios.get(
           "https://management.mlmcosmo.com/api/returned-orders",
           {
             headers: { Authorization: `Bearer ${token}` },
-            params: {
-              from: fromDate,
-              to: toDate,
-            },
+            params: params,
           }
         );
         setData(response.data);
@@ -37,12 +40,9 @@ function ReturnedOrders() {
         setLoading(false);
       }
     };
-    if (fromDate && toDate) {
-      fetchData();
-    } else {
-      setData([]);
-      setLoading(false);
-    }
+
+    fetchData();
+    setInitialLoad(false); // Set initialLoad to false after first load
   }, [token, fromDate, toDate]);
 
   // Calculate the number of pages
