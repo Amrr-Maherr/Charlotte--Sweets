@@ -49,7 +49,7 @@ function RejectedOrders() {
         const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
         filtered = filtered.filter((order) => {
           return (
-            order.rejection_date && order.rejection_date.includes(formattedDate)
+            order.delivery_date && order.delivery_date.includes(formattedDate)
           );
         });
       }
