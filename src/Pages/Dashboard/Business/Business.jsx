@@ -12,10 +12,14 @@ export default function Business() {
   const [businessData, setBusinessData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [deliveries, setDeliveries] = useState([]); // State for delivery persons
-  const [selectedDelivery, setSelectedDelivery] = useState(""); // State for selected delivery person
-  const [fromDate, setFromDate] = useState(null); // State for "From" date
-  const [toDate, setToDate] = useState(null); // State for "To" date
+  const [deliveries, setDeliveries] = useState([]);
+  const [selectedDelivery, setSelectedDelivery] = useState("");
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [searchId, setSearchId] = useState(""); // State for search input
+  const [filteredOrders, setFilteredOrders] = useState([]); // State for filtered orders
 
   const BUSINESS_API_ENDPOINT = "https://management.mlmcosmo.com/api/business";
   const DELIVERIES_API_ENDPOINT =
@@ -39,14 +43,24 @@ export default function Business() {
     };
 
     fetchDeliveries();
-    handleGetReport(); // Fetch all data on component mount
+    handleGetReport();
   }, [token]);
+
+  useEffect(() => {
+    if (businessData && businessData.orders) {
+      const filtered = businessData.orders.filter((order) =>
+        String(order.id).includes(searchId)
+      );
+      setFilteredOrders(filtered);
+    } else {
+      setFilteredOrders([]);
+    }
+  }, [businessData, searchId]);
 
   const handleGetReport = async () => {
     setLoading(true);
     setError(null);
     try {
-      // Prepare query parameters
       const params = {};
 
       if (fromDate) {
@@ -61,7 +75,7 @@ export default function Business() {
 
       const response = await axios.get(BUSINESS_API_ENDPOINT, {
         headers: { Authorization: `Bearer ${token}` },
-        params: params, // Send query parameters
+        params: params,
       });
       setBusinessData(response.data);
       console.log("Business Data:", response.data);
@@ -95,6 +109,19 @@ export default function Business() {
     setToDate(date);
   };
 
+  const handleShowDetails = (order) => {
+    setSelectedOrder(order);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchId(event.target.value);
+  };
+
   const getFieldLabel = (field) => {
     switch (field) {
       case "from":
@@ -126,7 +153,8 @@ export default function Business() {
 
   const getFieldValue = (field) => {
     if (!businessData) return null;
-    return businessData[field] || "N/A";
+    const value = businessData[field];
+    return value === null ? "Not Found" : value;
   };
 
   const cardVariants = {
@@ -139,6 +167,24 @@ export default function Business() {
         duration: 0.5,
       },
     },
+  };
+
+  const renderOrderDetail = (label, value) => {
+    const displayValue = value === null ? "Not Found" : value;
+    return (
+      <tr>
+        <th
+          style={{
+            width: "30%",
+            textAlign: "center",
+            backgroundColor: "#f2f2f2",
+          }}
+        >
+          {label}
+        </th>
+        <td style={{ width: "70%" }}>{displayValue}</td>
+      </tr>
+    );
   };
 
   return (
@@ -247,7 +293,7 @@ export default function Business() {
                   </thead>
                   <tbody>
                     {Object.keys(businessData)
-                      .filter((key) => key !== "orders") // Exclude orders from main table
+                      .filter((key) => key !== "orders")
                       .map((key) => (
                         <tr key={key}>
                           <td>{getFieldLabel(key)}</td>
@@ -276,30 +322,58 @@ export default function Business() {
             <div className="card shadow">
               <div className="card-body">
                 <h5 className="card-title">Orders Data:</h5>
+                {/* Search Input */}
+                <div className="mb-3">
+                  <label htmlFor="searchId" className="form-label">
+                    Search by Order ID:
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="searchId"
+                    placeholder="Enter Order ID"
+                    value={searchId}
+                    onChange={handleSearchChange}
+                  />
+                </div>
                 <table className="table table-striped text-center">
                   <thead>
                     <tr>
                       <th>Order ID</th>
-                      <th>Order Details</th>
-                      <th>Customer Name</th>
                       <th>Total Price</th>
-                      <th>Payment Method</th>
+                      <th>Deposit</th>
+                      <th>Remaining</th>
+                      <th>Type</th>
+                      <th>Details</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {businessData.orders.length > 0 ? (
-                      businessData.orders.map((order) => (
-                        <tr key={order.id}>
-                          <td>{order.id}</td>
-                          <td>{order.order_details}</td>
-                          <td>{order.customer_name}</td>
-                          <td>{order.total_price}</td>
-                          <td>{order.payment_method}</td>
-                        </tr>
-                      ))
+                    {filteredOrders.length > 0 ? (
+                      filteredOrders.map((order) => {
+                        const remaining = order.total_price - order.deposit;
+
+                        return (
+                          <tr key={order.id}>
+                            <td>{order.id}</td>
+                            <td>{order.total_price}</td>
+                            <td>{order.deposit}</td>
+                            <td>{remaining || "N/A"}</td>
+                            <td>{order.payment_method}</td>
+                            <td>
+                              <button
+                                type="button"
+                                className="btn btn-primary btn-sm"
+                                onClick={() => handleShowDetails(order)}
+                              >
+                                Show Details
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })
                     ) : (
                       <tr>
-                        <td colSpan="5" className="text-center">
+                        <td colSpan="6" className="text-center">
                           No orders found.
                         </td>
                       </tr>
@@ -311,6 +385,134 @@ export default function Business() {
           </motion.div>
         )}
       </div>
+
+      {/* Bootstrap Modal */}
+      <div
+        className={`modal fade ${showModal ? "show" : ""}`}
+        style={{ display: showModal ? "block" : "none" }}
+        tabIndex="-1"
+        role="dialog"
+      >
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Order Details</h5>
+            </div>
+            <div className="modal-body">
+              {selectedOrder && (
+                <table
+                  className="table table-bordered"
+                  style={{ width: "100%", fontSize: "14px" }}
+                >
+                  <tbody style={{ wordBreak: "break-word" }}>
+                    {renderOrderDetail("Order ID", selectedOrder.id)}
+                    {renderOrderDetail(
+                      "Order Details",
+                      selectedOrder.order_details
+                    )}
+                    <tr>
+                      <th
+                        style={{
+                          width: "30%",
+                          textAlign: "center",
+                          backgroundColor: "#f2f2f2",
+                        }}
+                      >
+                        Image
+                      </th>
+                      <td style={{ width: "70%" }}>
+                        {selectedOrder.image ? (
+                          <img
+                            src={selectedOrder.image}
+                            alt="Order"
+                            style={{ maxWidth: "100px", maxHeight: "100px" }}
+                          />
+                        ) : (
+                          "Not Found"
+                        )}
+                      </td>
+                    </tr>
+                    {renderOrderDetail(
+                      "Description",
+                      selectedOrder.description
+                    )}
+                    {renderOrderDetail(
+                      "Is Sameday",
+                      selectedOrder.is_sameday ? "Yes" : "No"
+                    )}
+                    {renderOrderDetail("From", selectedOrder.from)}
+                    {renderOrderDetail("To", selectedOrder.to)}
+                    {renderOrderDetail(
+                      "Delivery Date",
+                      selectedOrder.delivery_date
+                    )}
+                    {renderOrderDetail("Order Type", selectedOrder.order_type)}
+                    {renderOrderDetail("Cake Price", selectedOrder.cake_price)}
+                    {renderOrderDetail(
+                      "Flower Price",
+                      selectedOrder.flower_price
+                    )}
+                    {renderOrderDetail(
+                      "Delivery Price",
+                      selectedOrder.delivery_price
+                    )}
+                    {renderOrderDetail("Deposit", selectedOrder.deposit)}
+                    {renderOrderDetail(
+                      "Total Price",
+                      selectedOrder.total_price
+                    )}
+                    {renderOrderDetail(
+                      "Customer Name",
+                      selectedOrder.customer_name
+                    )}
+                    {renderOrderDetail(
+                      "Customer Phone",
+                      selectedOrder.customer_phone
+                    )}
+                    {renderOrderDetail(
+                      "Additional Data",
+                      selectedOrder.additional_data
+                    )}
+                    {renderOrderDetail("Branch ID", selectedOrder.branch_id)}
+                    {renderOrderDetail(
+                      "Is Returned",
+                      selectedOrder.is_returned ? "Yes" : "No"
+                    )}
+                    {renderOrderDetail("Problem", selectedOrder.problem)}
+                    {renderOrderDetail(
+                      "Rejection Cause",
+                      selectedOrder.rejection_cause
+                    )}
+                    {renderOrderDetail("Status", selectedOrder.status)}
+                    {renderOrderDetail(
+                      "Is Completed",
+                      selectedOrder.is_completed ? "Yes" : "No"
+                    )}
+                    {renderOrderDetail(
+                      "Payment Method",
+                      selectedOrder.payment_method
+                    )}
+                    {renderOrderDetail("Sale ID", selectedOrder.sale_id)}
+                    {renderOrderDetail("Manager ID", selectedOrder.manager_id)}
+                    {renderOrderDetail("Created At", selectedOrder.created_at)}
+                    {renderOrderDetail("Updated At", selectedOrder.updated_at)}
+                  </tbody>
+                </table>
+              )}
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={handleCloseModal}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {showModal && <div className="modal-backdrop fade show"></div>}
     </section>
   );
 }
