@@ -47,8 +47,7 @@ function CompleteOrders() {
         const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
         filtered = filtered.filter((order) => {
           return (
-            order.completion_date &&
-            order.completion_date.includes(formattedDate)
+            order.delivery_date && order.delivery_date.includes(formattedDate)
           );
         });
       }

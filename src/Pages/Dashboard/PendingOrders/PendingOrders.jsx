@@ -47,7 +47,9 @@ function PendingOrders() {
       if (selectedDate) {
         const formattedDate = moment(selectedDate).format("YYYY-MM-DD");
         filtered = filtered.filter((order) => {
-          return order.order_date && order.order_date.includes(formattedDate);
+          return (
+            order.delivery_date && order.delivery_date.includes(formattedDate)
+          );
         });
       }
 
