@@ -104,7 +104,6 @@ export default function Business() {
   const handleToDateChange = (date) => {
     setToDate(date);
   };
-
   const getFieldLabel = (field) => {
     switch (field) {
       case "from":
