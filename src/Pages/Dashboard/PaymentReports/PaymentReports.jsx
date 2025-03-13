@@ -339,13 +339,14 @@ function PaymentReports() {
             <div className="card shadow">
               <div className="card-body">
                 <h5 className="card-title">Orders Data:</h5>
-                <table className="table table-striped">
+                <table className="table table-striped text-center">
                   <thead>
                     <tr>
                       <th>Order ID</th>
                       <th>Total Price</th>
                       <th>Deposit</th>
                       <th>Remaining</th>
+                      <th>Type</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -360,6 +361,7 @@ function PaymentReports() {
                             <td>{order.total_price || "N/A"}</td>
                             <td>{order.deposit || "N/A"}</td>
                             <td>{remaining || "N/A"}</td>
+                            <td>{order.payment_method || "N/A"}</td>
                           </tr>
                         );
                       })
